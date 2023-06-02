@@ -16,7 +16,7 @@ export default class example extends Component {
             slider1ActiveSlide: SLIDER_1_FIRST_ITEM
         };
     }
-
+//실험
     _renderItem ({item, index}) {
         return <SliderEntry data={item} even={(index + 1) % 2 === 0} />;
     }
