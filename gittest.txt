@@ -1,4 +1,4 @@
-git 연동 테스트
+  -- git 연동 테스트 --
 
 git init : 현재 디렉토리를 Git 저장소로 초기화
 
@@ -22,12 +22,12 @@ git branch (branch_name) : 새로운 브랜치 생성
 
 git checkout (branch_name) : 지정한 브랜치로 전환 - 작업 디렉토리의 파일들이 선택한 브랜치의 최신 커밋과 일치하도록 변경
 
--- complete --
+  -- complete --
 
 + git push --set-upstream origin minseok
 + git push : 로컬 저장소의 커밋 기록을 원격 저장소로 전송하는 역할
-=> (파일 업데이트 하는 코드)'
+=> (파일 업데이트 하는 코드)
 
--- file 수정해서 다시 올리고 싶을 때 --
+  -- file 수정해서 다시 올리고 싶을 때 --
 
 git add (file_name) -> git commit -m "(같이 보내고 싶은 메세지)" -> git push (커밋 기록을 저장소로 전송)
