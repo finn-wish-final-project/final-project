@@ -1,28 +1,29 @@
 git 연동 테스트
 
-git init 
+git init : 현재 디렉토리를 Git 저장소로 초기화
 
-git status
+git status : 현재 작업 디렉토리의 상태를 확인 - 수정 내용, 스테이징 영역 확인
 
-git config --global user.name "(name)"
+git config --global user.name "(name)" : 사용자 이름을 설정 - 이름을 커밋에 기록
 
-git config --global user.email "(email)"
+git config --global user.email "(email)" : 사용자 이메일 설정 - 커밋에 기록
 
-git remote add origin "(gitgub <>code url)"
+git remote add origin "(gitgub <>code url)" : 원격 저장소인 origin을 추가 - Github URL을 지정하여 원격 저장소와 연결
 
-git add (file_name)
+git add (file_name) : 파일을 스테이징 영역에 추가 - 스테이징 영역에 있는 파일은 다음 커밋에 포함
 
-git status
+git status : //
 
-git commit -m "(send message)"
+git commit -m "(send message)" : 스테이징 영역에 있는 파일들을 커밋하여 버전을 기록 - 메시지를 포함하여 작성
 
-git branch
+git branch : 현재 저장소에 있는 모든 브랜치 목록을 표시
 
-git branch (branch_name)
+git branch (branch_name) : 새로운 브랜치 생성
 
-git checkout (branch_name)
+git checkout (branch_name) : 지정한 브랜치로 전환 - 작업 디렉토리의 파일들이 선택한 브랜치의 최신 커밋과 일치하도록 변경
 
 -- complete --
 
 + git push --set-upstream origin minseok
-+ git push => 파일 업데이트 하는 코드
++ git push : 로컬 저장소의 커밋 기록을 원격 저장소로 전송하는 역할
+=> (파일 업데이트 하는 코드)
