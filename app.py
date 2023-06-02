@@ -16,7 +16,15 @@ app=Flask(__name__)
 app.config["JWT_SECRET_KEY"]="finnwishprojectjwtsecretkey"
 bcrypt=Bcrypt(app)
 jwt=JWTManager(app)
+
 ## 홈화면 정보
+# @app.route('/', method=['GET'])
+# def home():
+#   connection = pymysql.connect(host=host, user=user, password=password, database=database)
+#   conn=connection.cursor(pymysql.cursors.DictCursor)
+
+
+
 ## 사전정보
 
 
@@ -69,10 +77,14 @@ def signup():
       ## 비밀번호 hash 
       hash_pw=bcrypt.generate_password_hash(user_pw)
 
+      default_image="./static/user_image/기본 프로필.png"
       query=f"insert into userlogin (email,password,birth,name,phone) values (%s,%s,%s,%s,%s);"
+      query_act=f"insert into useract (point,userimage) values (%s,%s);"
       conn.execute(query,(user_email,hash_pw,user_birth,user_name,user_phone))
+      conn.execute(query_act,(0,default_image))
       connection.commit()
       connection.close()
+      
       return jsonify(msg="회원가입이 완료되었습니다.")
 
     else:
