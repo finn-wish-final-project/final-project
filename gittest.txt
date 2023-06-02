@@ -1,1 +1,25 @@
 git 연동 테스트
+
+git init 
+
+git status
+
+git config --global user.name "(name)"
+
+git config --global user.email "(email)"
+
+git remote add origin "(gitgub <>code url)"
+
+git add (file_name)
+
+git status
+
+git commit -m "(send message)"
+
+git branch
+
+git branch (branch_name)
+
+git checkout (branch_name)
+
+-- complete --
