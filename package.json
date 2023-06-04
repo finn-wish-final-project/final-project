@@ -10,6 +10,7 @@
     "lint": "eslint ."
   },
   "dependencies": {
+    "porp-types": "^0.0.1-security",
     "react": "17.0.2",
     "react-native": "0.68.2",
     "react-native-anchor-carousel": "^4.0.1",
