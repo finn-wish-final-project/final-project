@@ -1,5 +1,8 @@
 from flask import Flask, request, jsonify, render_template
 import pymysql
+
+from validation import *
+
 # from test import Hello
 
 
@@ -22,7 +25,7 @@ def signup():
         connection = pymysql.connect(host='localhost', port=3306, db='finnwish', user='root', passwd='1807992102', charset='utf8')
         cursor = connection.cursor(pymysql.cursors.DictCursor)
 
-        sql = "INSERT INTO USER_ID (EMAIL, PASSWORD, USER_BIRTH, USER_NAME, PHONE_NUM) VALUES (%s, %s, %s, %s, %s)"
+        sql = "INSERT INTO USER_LOGIN (EMAIL, PASSWORD, USER_BIRTH, USER_NAME, PHONE) VALUES (%s, %s, %s, %s, %s)"
         cursor.execute(sql, (user_id, user_pw, user_birth, user_name, user_phone))
         connection.commit()
         
@@ -31,63 +34,9 @@ def signup():
         return jsonify({'message': '회원가입이 완료되었습니다.'})
     else:
         return jsonify({'message': '양식에 맞게 다시 입력해 주세요.'})
-
-# 올바른 이메일 형식인지 확인
-def email_validation(email):
-    email = email
-    if '@' in email and  5 < len(email) < 30:
-        return True
-    else:
-        return False
     
-# 중복 이메일 주소 가입 방지    
-def email_overlap(email):
-    connection = pymysql.connect(host='localhost', port=3306, db='finnwish', user='root', passwd='1807992102', charset='utf8')
-    cursor = connection.cursor(pymysql.cursors.DictCursor)
-
-    sql = "SELECT * FROM USER_ID WHERE EMAIL = %s"
-    cursor.execute(sql, (email,))
-    result = cursor.fetchone()
-
-    connection.close()
-
-    if result:
-        return False 
-    # jsonify({'message': '이미 사용 중인 이메일 주소입니다.'})
-    else:
-        return True
-    
-# 최소 비밀번호 길이 확인
-def pw_validation(password):
-    if len(password) >= 4:
-        return True
-    else: 
-        return False 
-    # jsonify({'message': '비밀번호를 4자 이상 입력해 주세요.'})
-
-# 유저 이름 입력 정보 확인
-def name_validation(name):
-    if len(name) >= 1:
-        return True 
-    else:
-        return False 
-    # jsonify({'message':'이름을 1자리 이상 입력해 주세요.'})
-
-# 생일 6자리로 입력 확인
-def birth_validation(birth):
-    if len(birth) == 6:
-        return True 
-    else:
-        return False 
-    # jsonify({'message':'생일을 6자리 숫자로 입력해 주세요.'})
-
-# 전화번호 양식 확인
-def phone_validation(phone):
-    if 3 <= len(phone) <= 11:
-        return True 
-    else:
-        return False 
-    # jsonify({'message':'( - ) 기호 없이 전화번호만 입력해 주세요'})
+if __name__ == "__main__":
+    app.run(host='localhost', port='5000', debug=True)
 
 # 로그인 API 엔드포인트
 @app.route('/login', methods=['POST'])
@@ -100,7 +49,7 @@ def login():
     connection = pymysql.connect(host='localhost', port=3306, db='finnwish', user='root', passwd='1807992102', charset='utf8')
     cursor = connection.cursor(pymysql.cursors.DictCursor)
 
-    sql = "SELECT * FROM USER_ID WHERE EMAIL = %s AND PASSWORD = %s"
+    sql = "SELECT * FROM USER_LOGIN WHERE EMAIL = %s AND PASSWORD = %s"
     cursor.execute(sql, (user_id, user_pw))
     result = cursor.fetchone()
 
@@ -108,7 +57,8 @@ def login():
    
     # 사용자 정보를 데이터베이스에서 검증
     if result: 
-        return jsonify({'message': f'{user_name}님 반갑습니다.'})
+        return render_template('login.html', user_name=user_name)
+    # jsonify({'message': f'{user_name}님 반갑습니다.'})
     else:
         return jsonify({'message': '아이디 또는 비밀번호가 잘못 입력되었습니다.'})
     
