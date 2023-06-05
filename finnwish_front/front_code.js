@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 // import PropTypes from 'prop-types';
 import { View, ScrollView, Text, SafeAreaView, StatusBar } from 'react-native';
 import Carousel  from 'react-native-snap-carousel';
@@ -8,18 +8,25 @@ import styles from '../styles/index.style'
 import { ENTRIES1 } from '../static/entries';
 
 
+
 // 슬라이더 첫 번째 항목 지정 (ENTRIES1의 데이터가 나오는 순서)
 // 체크 : 근데 13줄이랑 17줄 없어도 되는 거 아냐 ? 어차피 entries reverse로 보내주면 우리가 원하는 순서대로 나오는데
 // const SLIDER_1_FIRST_ITEM =1;
 
 
 const Card_Study = () => {
-    // const [slider1ActiveSlide, setSlider1ActiveSlide] = useState(SLIDER_1_FIRST_ITEM);
+  const [data1,setData] = useState([]);
+      // const [slider1ActiveSlide, setSlider1ActiveSlide] = useState(SLIDER_1_FIRST_ITEM);
     // 현재 활성화된 슬라이더 값을 1로 지정. 1부터 좌라락 나오겠지. 근데 없어도 되는 거 아니냐고
 
     const _renderItem = ({item, index}) => {
         return <SliderEntry data={item} even={(index + 1) % 2 === 0} />;
     }; // item을 data prop으로 전달. 홀짝도 전달
+
+    useEffect(() => {
+      sendData();
+    }, []);
+  
 
     const sendData=()=>{
       let data={userid:1};
@@ -36,8 +43,8 @@ const Card_Study = () => {
           return response.json();
       }).then(
         (result)=>{
-          console.log(result);
-          layoutExample(result);
+          console.log('1111',result);
+          setData(result);
         }
       ).catch(
         (error)=>{
@@ -47,6 +54,7 @@ const Card_Study = () => {
     };
 
     const layoutExample = (data) => {
+        
         const items = data.slice().reverse(); // slice : 복사본 만드는 거. 데이터 역순
 
         console.log("layoutExample:",items);
@@ -87,7 +95,7 @@ const Card_Study = () => {
                 
                 {/* 체크 : ScrollView를 꼭 써야 하나 ? */}
                 <ScrollView style="flex:1">
-                  { sendData() }
+                  { layoutExample(data1) }
                 </ScrollView>
 
                 {/* <ScrollView
