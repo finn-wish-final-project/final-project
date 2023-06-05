@@ -1,6 +1,6 @@
 from flask import Flask,render_template,request,Response,jsonify
 from flask_bcrypt import Bcrypt
-from flask_jwt_extended import JWTManager,create_access_token
+from flask_jwt_extended import JWTManager,create_access_token,jwt_required,get_jwt_identity
 import pymysql
 
 from validation.validation import email_validation,password_validation,name_validation
@@ -11,6 +11,7 @@ host = 'localhost'
 user = 'root'
 password = 'tyt7539695'
 database = 'finnwish'
+ip="192.168.0.25"
 
 app=Flask(__name__)
 app.config["JWT_SECRET_KEY"]="finnwishprojectjwtsecretkey"
@@ -20,8 +21,7 @@ jwt=JWTManager(app)
 ## 홈화면 정보
 # @app.route('/', method=['GET'])
 # def home():
-#   connection = pymysql.connect(host=host, user=user, password=password, database=database)
-#   conn=connection.cursor(pymysql.cursors.DictCursor)
+  
 
 
 
@@ -43,10 +43,10 @@ def signin():
   conn.execute(query)
   result=conn.fetchall()
   connection.close()
-  print(result)
+  # print(result)
   if bcrypt.check_password_hash(result[0]['password'], user_pw):
     return jsonify(username=result[0]['name'],
-    access_token=create_access_token(identity=user_email, expires_delta=False),
+    access_token=create_access_token(identity=result[0]['userid'] , expires_delta=False),
     msg="로그인 되었습니다.")
   else:
     return jsonify(msg="비밀번호가 틀렸습니다.")
@@ -94,12 +94,37 @@ def signup():
   else:
     return jsonify(msg="로그인 폼에 맞게 작성해주세요.")
   
-@app.route('/')
+@app.route('/home/word', methods=['GET','POST'])
+@jwt_required()
 def app_home():
-  page=f"""
-  <h1> hello </h1>
-  """
-  return page
+  data=request.get_json()
+  cur_user=get_jwt_identity()
+  
+  connection = pymysql.connect(host=host, user=user, password=password, database=database)
+  conn=connection.cursor(pymysql.cursors.DictCursor)
+  query=f'select dict from useract where userid="{cur_user}"'
+  conn.execute(query)
+  result=conn.fetchall()
+  connection.close()
+  word_list=result[0]['dict']
+  if word_list==None:
+    
+  
+
+  return jsonify([{
+    "title" :'입금',
+    "subtitle": '돈을 들여놓거나 넣어줌, 또는 그돈'
+  },
+  {
+    "title" : '출금',
+    "subtitle" : '돈을 내어 쓰거나 내어 줌. 또는 그 돈. 일반적으로 은행에서 돈을 빼서 가져가는 의미로 쓰임'
+  },
+  {
+    "title" :'이체(송금)',
+    "subtitle": '계좌 따위에 들어 있는 돈을 다른 계좌 따위로 옮김'
+  },])
 
 if __name__=='__main__':
-  app.run(debug=True, host='localhost', port=5000)
+  app.run(debug=True, host="192.168.0.25", port=5000)
+
+  
