@@ -31,3 +31,8 @@ git checkout (branch_name) : 지정한 브랜치로 전환 - 작업 디렉토리
   -- file 수정해서 다시 올리고 싶을 때 --
 
 git add (file_name) -> git commit -m "(같이 보내고 싶은 메세지)" -> git push (커밋 기록을 저장소로 전송)
+
+  -- 경로 오류 발생했을 때 --
+
+git pull origin minseok
+git push origin minseok
