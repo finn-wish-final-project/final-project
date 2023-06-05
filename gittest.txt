@@ -34,5 +34,7 @@ git add (file_name) -> git commit -m "(같이 보내고 싶은 메세지)" -> gi
 
   -- 경로 오류 발생했을 때 --
 
-git pull origin minseok
-git push origin minseok
+git pull origin minseok: git 저장소에서 최신 변경 사항을 가져와 현재 작업 중인 로컬 브랜치에 병합하는 기능
+                         명령 실행 시 원격 저장소의 최신 변경 사항이 로컬 작업 디렉토리로 업데이트됨
+                         
+git push origin minseok: 현재 작업 중인 로컬 브랜치의 커밋들을 브랜치로 전송하는 기능
