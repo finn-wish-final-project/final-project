@@ -11,7 +11,7 @@ host = 'localhost'
 user = 'root'
 password = 'tyt7539695'
 database = 'finnwish'
-ip="192.168.0.25"
+ip="192.168.0.79"
 
 app=Flask(__name__)
 app.config["JWT_SECRET_KEY"]="finnwishprojectjwtsecretkey"
@@ -105,26 +105,27 @@ def app_home():
   query=f'select dict from useract where userid="{cur_user}"'
   conn.execute(query)
   result=conn.fetchall()
-  connection.close()
+  # print(result)
   word_list=result[0]['dict']
   if word_list==None:
+    query1=f'select title,subtitle from dict limit 3;'
+    conn.execute(query1)
+    result_word=conn.fetchall()
+    connection.close()
+    # print(result_word)
+    return jsonify(result_word)
+  else:
+    dict_list=int(result[0]['dict'][-2])
+    query2=f'select title,subtitle from dict where wordid>{dict_list} limit 3;'
+    conn.execute(query2)
+    result_word=conn.fetchall()
+    connection.close()
+    return jsonify(result_word)
     
+
   
 
-  return jsonify([{
-    "title" :'입금',
-    "subtitle": '돈을 들여놓거나 넣어줌, 또는 그돈'
-  },
-  {
-    "title" : '출금',
-    "subtitle" : '돈을 내어 쓰거나 내어 줌. 또는 그 돈. 일반적으로 은행에서 돈을 빼서 가져가는 의미로 쓰임'
-  },
-  {
-    "title" :'이체(송금)',
-    "subtitle": '계좌 따위에 들어 있는 돈을 다른 계좌 따위로 옮김'
-  },])
-
 if __name__=='__main__':
-  app.run(debug=True, host="192.168.0.25", port=5000)
+  app.run(debug=True, host=ip, port=5000)
 
   
