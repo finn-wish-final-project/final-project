@@ -1,8 +1,8 @@
 import React, {useRef, useState} from 'react';
 import { Button, DrawerLayoutAndroid,Drawer, Text, StyleSheet, View, TouchableOpacity} from 'react-native';
-import { createBottomTabNavigator } from "@react-navigation/bottom-tabs";
+// import { createBottomTabNavigator } from "@react-navigation/bottom-tabs";
 
-const Tab = createBottomTabNavigator();
+// const Tab = createBottomTabNavigator();
 
 function Challenge({navigation}){
   return(
