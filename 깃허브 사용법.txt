@@ -1,0 +1,36 @@
+깃 파일 생성
+  1. 처음 해당 프로젝트 파일에 들어감
+  2. cmd창에 git init
+  3. git status 쳐보면 빨간 글씨가 나옴 그게 너네 파일안에 아직 안올린것
+
+깃 깃허브랑 연결
+  1.처음 로그인 : 
+    git config --global user.name "너네 이름"
+    git config --global user.email "너네 이메일"
+
+  2. 레파지토리 연결
+    git remote add origin "우리 프로젝트 주소인데 깃허브 들어가서 [<>Code] 버튼 눌러보면 HTTPS 주소 나옴"
+  
+  3. 깃 브랜치 생성
+    1. git branch를 쳐본다.
+    2. 내 branch가 있으면 git checkout [브랜치명]으로 들어가서 작업
+    3. 브랜치가 없을때는 git branch [브랜치명] 새로운 브랜치 생성 우리는 각자 이름
+
+  4. commit하기
+    1.git status로 commit할 파일들 보기
+    2. 다 올릴꺼면 git add .  로 하면 모든파일 올라감
+    3. 하나만 올리려면 git add [파일명]으로 올림
+    4. git commit -m "올릴때 메세지" 메세지는 파일 밖에 설명으로 적혀짐
+    5. git push origin 브랜치명 으로 올리면 끝~
+
+깃 내려받기
+	1. 새로운 환경에서 git init
+	2. 아이디 이메일은 필요 x 왜? 우리가 선언할떄 global 로 했기 때문에
+	3. git remote add origin 추가
+	4. git pull origin 내려받고 싶은 branch
+		ex) git pull origin chanseop ==>이런식
+
+git pull과 git clone의 차이
+git pull은 특정한 값만 받아올수 있고 만약 작업중인것이 있으면 덮어써진다.
+git clone은 그냥 깃헙 저장소 모든 것을 내 로컬 저장소와 같은 형태로 만들어 버린다.
+만약 작업중인것이 존재하면 날라가버림

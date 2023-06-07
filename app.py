@@ -2,25 +2,33 @@ from flask import Flask,render_template,request,Response,jsonify
 from flask_bcrypt import Bcrypt
 from flask_jwt_extended import JWTManager,create_access_token,jwt_required,get_jwt_identity
 import pymysql
+from dotenv import load_dotenv
+import os 
+
 
 from validation.validation import email_validation,password_validation,name_validation
 
 ## jwt 확인:https://m.blog.naver.com/shino1025/221954027152
 
-host = 'localhost'
-user = 'root'
-password = 'tyt7539695'
-database = 'finnwish'
-ip="192.168.0.79"
+load_dotenv()
+
+host = os.environ.get('DB_HOST')
+user = os.environ.get('DB_USER')
+password = os.environ.get('DB_PASSWORD')
+database = os.environ.get('DB_DATABASE')
+ip=os.environ.get('IP')
 
 app=Flask(__name__)
-app.config["JWT_SECRET_KEY"]="finnwishprojectjwtsecretkey"
+app.config["JWT_SECRET_KEY"]=os.environ.get('JWT_HASH')
 bcrypt=Bcrypt(app)
 jwt=JWTManager(app)
 
-## 홈화면 정보
-# @app.route('/', method=['GET'])
-# def home():
+## 사전
+## 스크랩
+## 챌린지
+## 마이페이지
+## 매점
+## 뉴스보기
   
 
 
@@ -93,7 +101,8 @@ def signup():
 
   else:
     return jsonify(msg="로그인 폼에 맞게 작성해주세요.")
-  
+
+## 홈화면 구현
 @app.route('/home/word', methods=['GET','POST'])
 @jwt_required()
 def app_home():
