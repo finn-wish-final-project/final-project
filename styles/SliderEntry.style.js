@@ -8,7 +8,7 @@ function wp (percentage) {
     return Math.round(value);
 }
 //카드 크기
-const slideHeight = viewportHeight * 0.6;  //0.36 카드 높이
+const slideHeight = viewportHeight * 0.55;  //0.36 카드 높이
 const slideWidth = wp(75);
 const itemHorizontalMargin = wp(2);
 
