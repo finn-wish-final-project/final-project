@@ -5,7 +5,6 @@ import pymysql
 from dotenv import load_dotenv
 import os 
 
-
 from validation.validation import email_validation,password_validation,name_validation
 
 ## jwt 확인:https://m.blog.naver.com/shino1025/221954027152
@@ -102,16 +101,17 @@ def signup():
   else:
     return jsonify(msg="로그인 폼에 맞게 작성해주세요.")
 
-## 홈화면 구현
-@app.route('/home/word', methods=['GET','POST'])
-@jwt_required()
+# 홈화면 구현
+@app.route('/home', methods=['GET','POST'])
+# @jwt_required()
 def app_home():
   data=request.get_json()
-  cur_user=get_jwt_identity()
+  data=data['userid']
+  # cur_user=get_jwt_identity()
   
   connection = pymysql.connect(host=host, user=user, password=password, database=database)
   conn=connection.cursor(pymysql.cursors.DictCursor)
-  query=f'select dict from useract where userid="{cur_user}"'
+  query=f'select dict from useract where userid="{data}"'
   conn.execute(query)
   result=conn.fetchall()
   # print(result)
@@ -131,6 +131,7 @@ def app_home():
     connection.close()
     return jsonify(result_word)
     
+
 
   
 
