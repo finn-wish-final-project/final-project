@@ -23,7 +23,7 @@ export default StyleSheet.create({
         width: itemWidth,
         height: slideHeight,
         paddingHorizontal: itemHorizontalMargin,
-        paddingBottom: 18 // needed for shadow
+        paddingBottom: 18, // needed for shadow
     },
     
 
@@ -38,7 +38,7 @@ export default StyleSheet.create({
         borderBottomLeftRadius: entryBorderRadius,  //모서리 둥글게
         borderBottomRightRadius: entryBorderRadius,
         borderTopLeftRadius: entryBorderRadius,
-        borderTopRightRadius: entryBorderRadius
+        borderTopRightRadius: entryBorderRadius,
     },
     textContainerEven: {
         backgroundColor: colors.yellowgreen //바탕색
@@ -47,7 +47,7 @@ export default StyleSheet.create({
         color: colors.yellowgreen, //글자색
         fontSize: wp(10),
         fontWeight: 'bold',
-        letterSpacing: 0.5
+        letterSpacing: 0.5,
     },
     titleEven: {
         color: 'white'

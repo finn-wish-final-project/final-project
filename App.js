@@ -1,95 +1,149 @@
-import React, { Component } from 'react';
-import { View, ScrollView, Text, StatusBar, SafeAreaView,TouchableOpacity } from 'react-native';
-import Carousel from 'react-native-snap-carousel';
-import { sliderWidth, itemWidth } from './styles/SliderEntry.style';
-import SliderEntry from './components/SliderEntry';
-import styles from './styles/index.style';
-import {ENTRIES1} from './static/entries';
+import React, {useRef, useState} from 'react';
+import { Button, DrawerLayoutAndroid, Text, StyleSheet, View, TouchableOpacity} from 'react-native';
+import Card_Study from './Home/Card_Study';
+import BottomBar from './Home/Bottom_Bar';
+import styles2 from './styles/index.style';
 
-const SLIDER_1_FIRST_ITEM = 1;
-
-export default class example extends Component {
-
-    constructor (props) {
-        super(props);
-        this.state = {
-            slider1ActiveSlide: SLIDER_1_FIRST_ITEM,
-            toggle: false
-        };
-    }
-
-    _renderItem ({item, index}) {
-        return <SliderEntry 
-        data={item} 
-        even={(index + 1) % 2 === 0} 
-        />;
-    }
-
-    layoutExample (type) {
-        const items = ENTRIES1.slice().reverse(); // ENTRIES1 배열을 역순으로 복사하여 entries 변수에 할당
-
-        return (
-            <View style={[styles.exampleContainer, styles.exampleContainerLight]}>
-                <StatusBar
-                      translucent={true}
-                      backgroundColor={'lightgrey'}
-                      barStyle={'dark-content'}
-                    />
-                <Text style={[styles.title, styles.titleDark]}>{`FINNWISH`}</Text>
-                
-                  <Carousel
-                    data={items}
-                    renderItem={this._renderItem}
-                    sliderWidth={sliderWidth}
-                    itemWidth={itemWidth}
-                    containerCustomStyle={styles.slider}
-                    contentContainerCustomStyle={styles.sliderContentContainer}
-                    useExperimentalSnap={true}
-                    layout={type}
-                    firstItem={items.length - 1}
-                        containerCustomStyle2={{
-                            transform: [{ scaleX: -1 }]
-                        }}
-                    loop={false} 
-                  />   
-            </View>
-        );
-    }
+import Icon from 'react-native-vector-icons/FontAwesome';
 
 
-    render () {
-        const cardStudy = this.layoutExample('stack');
-          
-        return (
-            <SafeAreaView style={styles.safeArea}>
-                <View style={styles.container}>
-                    <StatusBar
-                      translucent={true}
-                      backgroundColor={'#ffffff'}
-                      barStyle={'dark-content'}
-                    />
-                    <ScrollView
-                      style={styles.scrollview}
-                      scrollEventThrottle={200}
-                      directionalLockEnabled={true}
-                    >{ cardStudy }
-                    </ScrollView>
-                </View>
 
-                <View style={styles.menuBar}>
-                    <TouchableOpacity style={styles.menuButton}>
-                    <Text style={styles.menuButtonText}>사전</Text>
-                    </TouchableOpacity>
-                    <TouchableOpacity style={styles.menuButton}>
-                    <Text style={styles.menuButtonText}>메뉴</Text>
-                    </TouchableOpacity>
-                    <TouchableOpacity style={styles.menuButton}>
-                    <Text style={styles.menuButtonText}>챌린지</Text>
-                    </TouchableOpacity>
-                </View>
-            </SafeAreaView>
-            
-        );
-    }
+// const Home = () => {
+//   const drawer = useRef(null);
+//   const [drawerPosition, setDrawerPosition] = useState('right');
+
+
+//   const navigationView = () => (
+//     <View style={[styles.container, styles.navigationContainer]}>
+//       <Text style={styles.paragraph}>여기 우리 필요한거 마이페이지랑 추가해야 하고요</Text>
+//       <Button
+//         title="Close drawer"
+//         onPress={() => drawer.current.closeDrawer()} //https://focus-on-my.tistory.com/246 페이지 옮기는 방법
+//       />
+//     </View>
+//   );
+
+//   return (
+//     <DrawerLayoutAndroid
+//       ref={drawer}
+//       drawerWidth={300}
+//       drawerPosition={drawerPosition}
+//       renderNavigationView={navigationView}>
+//       <View style={styles.container}>
+//         <TouchableOpacity onPress={() =>  navigation.navigate('OtherScreen')} style = {styles2.toggleArea}>
+//           <Icon name="bars" size={32} color="darkgreen" onPress={() => drawer.current.openDrawer()} />
+//           {/* <Image source={require('./static/img/toggle.png')} style = {styles2.toggleImage}/> */}
+//         </TouchableOpacity>
+
+//         <View style = {{ flex:1 }}>
+//           <Card_Study />
+//           <BottomBar />
+//         </View>
+        
+//       </View>
+//     </DrawerLayoutAndroid>
+//   );
+// };
+
+// const styles = StyleSheet.create({
+//   container: {
+//     flex: 1,
+//     alignItems: 'center',
+//     justifyContent: 'center',
+//     padding: 16,
+//     backgroundColor:'white'
+//   },
+//   navigationContainer: {
+//     backgroundColor: '#ecf0f1',
+//   },
+//   paragraph: {
+//     padding: 16,
+//     fontSize: 15,
+//     textAlign: 'center',
+//   },
+// });
+
+// export default App;
+
+
+import "react-native-gesture-handler";
+// import React from "react";
+import { NavigationContainer } from "@react-navigation/native";
+import { createStackNavigator } from "@react-navigation/stack";
+import { createBottomTabNavigator } from "@react-navigation/bottom-tabs";
+import Dic from "./Screens/Dictionary";
+import Challenge from "./Screens/Challenge";
+import { createDrawerNavigator } from "@react-navigation/drawer";
+import My_Chanllenge from './Mypage_Slide/My_Challenge';
+import News_scrap from './Mypage_Slide/News_scrap';
+
+const Drawer = createDrawerNavigator();
+const Stack = createStackNavigator();
+const Tab = createBottomTabNavigator();
+
+// yellowgreen: '#28794D',
+//     green: '#CBE6D7',
+const TabNavigator =()=> {
+  return(
+    <>
+      <Drawer.Navigator 
+      
+      screenOptions={{
+        drawerActiveBackgroundColor:'#CBE6D7', //커서 올라가있는 칸 전체 색
+        drawerActiveTintColor:'#28794D', // 커서 올라가있는 글자색
+        
+      }}
+      initialRouteName="Home"
+      >
+        <Drawer.Screen name="Home" component={Card_Study} options={{ title: 'FINN WISH',headerTitleAlign: 'center',headerTitleStyle:{color:'darkgreen',fontWeight:'bold',fontSize:25}, }} />
+        <Drawer.Screen name="My Chanllenge" component={My_Chanllenge} />
+        <Drawer.Screen name="News scrap" component={News_scrap} />
+      </Drawer.Navigator>
+    </>
+  )
 }
 
+
+export default function App() {
+  return (
+    <NavigationContainer>
+      <Tab.Navigator initialRouteName="Home">
+        <Tab.Screen name="Dictionary" component={Dic} />
+        <Tab.Screen  name="Home" component={TabNavigator} options={{ headerShown: false }} />
+        <Tab.Screen name="Challenge" component={Challenge} />
+        
+      </Tab.Navigator>
+    </NavigationContainer>
+  );
+}
+
+// import { createDrawerNavigator } from '@react-navigation/drawer';
+// import { createStackNavigator } from '@react-navigation/stack';
+// import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
+// import { NavigationContainer } from '@react-navigation/native';
+
+// const Drawer = createDrawerNavigator();
+// const Stack = createStackNavigator();
+// const Tab = createBottomTabNavigator();
+
+// const TabNavigator = () => {
+//   return (
+//     <Drawer.Navigator initialRouteName="Home">
+//       <Drawer.Screen name="FinnWish" component={Card_Study} /> 
+//       <Drawer.Screen name="Dictionary" component={Dic} /> 
+//       <Drawer.Screen name="Challenge" component={Challenge} /> 
+//     </Drawer.Navigator>
+//   );
+// }
+
+// export default function App() {
+//   return (
+//     <NavigationContainer>
+//       <Tab.Navigator initialRouteName="Home">
+//         <Tab.Screen name="Dictionary" component={Dic} /> 
+//         <Tab.Screen name="Home" component={TabNavigator} options={{ headerShown: false }} /> 
+//         <Tab.Screen name="Challenge" component={Challenge} /> 
+//       </Tab.Navigator>
+//     </NavigationContainer>
+//   );
+// }
