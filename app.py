@@ -8,9 +8,8 @@ from validation import *
 default_image = './templates/CSS/기본.png'
 
 app = Flask(__name__)
-app.config['JSON_AS_ASCII'] = False
 # jsonify 한글 인코딩이 변경되어 비정상 출력 문제 해결 코드
-
+app.config['JSON_AS_ASCII'] = False
 app.config['SECRET_KEY'] = 'secret_key'
 app.config['BCRYPT_LEVEL'] = 10
 
@@ -28,6 +27,8 @@ def signup():
     user_phone = data['PHONE_NUM']
     hashed_pw = bcrypt.generate_password_hash(user_pw)
     # hashed_pw = bcrypt.hashpw(str(user_pw).encode('utf8'), bcrypt.gensalt())
+    # generate_password_hash(): 주어진 비밀번호를 안전하게 해시화된 문자열로 변환 
+    # -> 해시화된 비밀번호는 안전한 저장을 위해 데이터베이스에 저장됨
     
     # 유효성 검사 
     if email_validation(user_id) and email_overlap(user_id) and pw_validation(user_pw) and name_validation(user_name) and birth_validation(user_birth) and phone_validation(user_phone):
@@ -69,9 +70,6 @@ def signup():
     else:
         return jsonify({'message': '양식에 맞게 다시 입력해 주세요.'})
     
-if __name__ == "__main__":
-    app.run(host='localhost', port='5000', debug=True)
-
 # 로그인 API 엔드포인트
 @app.route('/login', methods=['POST'])
 def login():
@@ -89,10 +87,12 @@ def login():
     # bcrypt.hashpw(): 인코딩 실시
     # 두번 째 파라미터 bcrypt.gensalt(): salt 값 설정
     
+    # sql = f'SELECT * FROM USER_LOGIN WHERE EMAIL = "{user_id}"'
     sql = "SELECT * FROM USER_LOGIN WHERE EMAIL = %s"
     # SELECT *는 검색 결과로 모든 열을 반환하라는 의미
     # 이메일과 비밀번호가 일치하는 사용자의 모든 정보를 가져옴
-
+    
+    # cursor.execute(sql)
     cursor.execute(sql, (user_id,))
     db_data = cursor.fetchall()
     # 커서를 통해 실행된 쿼리결과에서 행(row)을 가져오는 메서드
@@ -109,6 +109,7 @@ def login():
     if len(db_data) > 0: 
         result = bcrypt.check_password_hash(db_data[0]['PASSWORD'], user_pw)
         # 암호 일치 확인 방법 bcrypt.checkpw(): 첫번째 파라미터와 두번째 파라미터로 비교하고자 하는 bytes-string 입력
+        # check_password_hash(pwhash, password): 사용자가 제출한 비밀번호를 확인할 때
         if result:
             user_name = db_data[0]['USER_NAME']
             return jsonify({'message': f'{user_name}님 반갑습니다.'})
@@ -119,6 +120,7 @@ def login():
     
 if __name__ == "__main__":
     app.run(host='localhost', port='5000', debug=True)
+## 이거는 마지막에서만 선언
 
 # payload = {
 #    'id': 'hi',
