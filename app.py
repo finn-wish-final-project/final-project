@@ -1,14 +1,20 @@
 from flask import Flask, request, jsonify, render_template
+from flask_bcrypt import Bcrypt
 import pymysql
+import jwt
 
 from validation import *
 
-# from test import Hello
-
+default_image = './templates/CSS/기본.png'
 
 app = Flask(__name__)
-# jsonify 한글 인코딩이 변경되어 비정상 출력 문제 해결 코드
 app.config['JSON_AS_ASCII'] = False
+# jsonify 한글 인코딩이 변경되어 비정상 출력 문제 해결 코드
+
+app.config['SECRET_KEY'] = 'secret_key'
+app.config['BCRYPT_LEVEL'] = 10
+
+bcrypt = Bcrypt(app)
 
 # 회원가입 API 엔드포인트
 @app.route('/signup', methods=['POST']) ## POST 방식으로 오는 입력만 받음
@@ -20,7 +26,9 @@ def signup():
     user_birth = data['USER_BIRTH']
     user_name = data['USER_NAME']
     user_phone = data['PHONE_NUM']
-   
+    hashed_pw = bcrypt.generate_password_hash(user_pw)
+    # hashed_pw = bcrypt.hashpw(str(user_pw).encode('utf8'), bcrypt.gensalt())
+    
     # 유효성 검사 
     if email_validation(user_id) and email_overlap(user_id) and pw_validation(user_pw) and name_validation(user_name) and birth_validation(user_birth) and phone_validation(user_phone):
         connection = pymysql.connect(host='localhost', port=3306, db='finnwish', user='root', passwd='1807992102', charset='utf8')
@@ -29,10 +37,13 @@ def signup():
         # connection.cursor : 연결된 데이터베이스에 대한 커서 객체 생성
         # pymysql.cursors.DictCursor : 딕셔너리 형태로 결과를 반환
 
-        sql = "INSERT INTO USER_LOGIN (EMAIL, PASSWORD, USER_BIRTH, USER_NAME, PHONE_NUM) VALUES (%s, %s, %s, %s, %s)"
+        sql = "INSERT INTO USER_LOGIN (EMAIL, PASSWORD, USER_BIRTH, USER_NAME, PHONE_NUM) VALUES (%s, %s, %s, %s, %s);" 
+        sql_act = "INSERT INTO USER_ACT (USER_POINT, USER_IMAGE) values (%s,%s);"
+        # %s : 플레이스홀더, SQL 쿼리 실행 시 동적으로 값을 대체하는 데 사용 
         # sql : 삽일할 데이터를 포함하는 SQL 쿼리문 정의
         # INSERT INTO TABLE () : USER_LOGIN 테이블에 (각 컬럼) 해당되는 값을 삽입
-        cursor.execute(sql, (user_id, user_pw, user_birth, user_name, user_phone))
+        cursor.execute(sql, (user_id, hashed_pw, user_birth, user_name, user_phone))
+        cursor.execute(sql_act,(0, default_image))
         # cursor.execute : 커서를 사용하여 SQL 쿼리문을 실행, 두 번째 매개변수에는 쿼리문의 플레이스홀더에 해당하는 값들 전달
         
         connection.commit()
@@ -64,30 +75,57 @@ if __name__ == "__main__":
 # 로그인 API 엔드포인트
 @app.route('/login', methods=['POST'])
 def login():
-    data = request.get_json()
-    user_id = data['EMAIL']
-    user_pw = data['PASSWORD']
-    user_name = data['USER_NAME']
-
     connection = pymysql.connect(host='localhost', port=3306, db='finnwish', user='root', passwd='1807992102', charset='utf8')
     cursor = connection.cursor(pymysql.cursors.DictCursor)
 
-    sql = "SELECT * FROM USER_LOGIN WHERE EMAIL = %s AND PASSWORD = %s"
-    cursor.execute(sql, (user_id, user_pw))
-    result = cursor.fetchone()
+    data = request.get_json()
+    user_id = data['EMAIL']
+    user_pw = data['PASSWORD']
+    
+    ## encoded_pw = str(user_pw).encode('utf8')
+    # str 객체 내 메소드인 encode()를 이용하여 UTF-8 방식으로 인코딩 해준 값을 넣어줌
+    # hashed_password = bcrypt.hashpw('password'.encode('utf8'), bcrypt.gensalt())
+    ## hashed_pw = bcrypt.check_password_hash(encoded_pw, bcrypt.gensalt())
+    # bcrypt.hashpw(): 인코딩 실시
+    # 두번 째 파라미터 bcrypt.gensalt(): salt 값 설정
+    
+    sql = "SELECT * FROM USER_LOGIN WHERE EMAIL = %s"
+    # SELECT *는 검색 결과로 모든 열을 반환하라는 의미
+    # 이메일과 비밀번호가 일치하는 사용자의 모든 정보를 가져옴
 
+    cursor.execute(sql, (user_id,))
+    db_data = cursor.fetchall()
+    # 커서를 통해 실행된 쿼리결과에서 행(row)을 가져오는 메서드
+    # 호출될 때마다 결과 집합에서 한 번에 하나의 행을 가져옴
+    
     connection.close()
-   
+
+    ## encoded = jwt.encode(json, 'Secret Key', algorithm='HS256')
+    # 인코딩 하고자 하는 dict 객체, 시크릿 키, 알고리즘 방식 삽입
+    ## decoded = jwt.decode(encoded, 'Secret Key', algorithm='HS256')
+    # 디코딩 하고자 하는 str 객체, 시크릿 키, 알고리즘 방식 삽입
+
     # 사용자 정보를 데이터베이스에서 검증
-    if result: 
-        return render_template('login.html', user_name=user_name)
-    # jsonify({'message': f'{user_name}님 반갑습니다.'})
+    if len(db_data) > 0: 
+        result = bcrypt.check_password_hash(db_data[0]['PASSWORD'], user_pw)
+        # 암호 일치 확인 방법 bcrypt.checkpw(): 첫번째 파라미터와 두번째 파라미터로 비교하고자 하는 bytes-string 입력
+        if result:
+            user_name = db_data[0]['USER_NAME']
+            return jsonify({'message': f'{user_name}님 반갑습니다.'})
+        else:
+            return jsonify({'message': '비밀번호를 다시 입력해주세요.'})
     else:
-        return jsonify({'message': '아이디 또는 비밀번호가 잘못 입력되었습니다.'})
+        return jsonify({'message': '아이디를 다시 입력해주세요.'})
     
 if __name__ == "__main__":
     app.run(host='localhost', port='5000', debug=True)
 
+# payload = {
+#    'id': 'hi',
+#    'exp': 'hello + time'     
+# }
+# SECRET_KEY = '휴'
+# token = jwt.encode(payload, SECRET_KEY, algorithm='HS256')
 
 # 코드를 작성한 파일을 실행하거나 flask run 명령을 사용하여 Flask 애플리케이션을 실행합니다.
 # Postman, cURL 또는 웹 브라우저와 같은 도구를 사용하여 회원가입과 로그인 API 엔드포인트를 호출합니다.
