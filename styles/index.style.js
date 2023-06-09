@@ -122,7 +122,33 @@ export default StyleSheet.create({
       toggleImage : {
         height : 20,
         width : 20,
+      },
+
+      loading_container : {
+        flex: 1,
+        justifyContent: 'center',
+        alignItems: 'center',
+      },
+
+      loading_img : {
+        width: 300,
+        height : 300,
+        resizeMode: 'contain',
       }
      
 });
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
