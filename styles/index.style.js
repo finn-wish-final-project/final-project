@@ -29,6 +29,7 @@ export default StyleSheet.create({
         backgroundColor: colors.background,
     },
     scrollview:{
+
         flex:1,
         backgroundColor:'black'
     },
@@ -37,13 +38,15 @@ export default StyleSheet.create({
         paddingVertical: 30,
         
         
+        
     },
     exampleContainerDark: {
         backgroundColor: colors.yellowgreen,
         
     },
     exampleContainerLight: {
-        backgroundColor: '#FFFFFF'   //배경색
+        backgroundColor: '#FFFFFF',   //배경색
+        // height:90
     },
     title: {
         paddingHorizontal: 30,
@@ -66,7 +69,7 @@ export default StyleSheet.create({
         textAlign: 'center'
     },
     slider: {
-        marginTop: 15,
+        marginTop: 0, // 뉴스 때문에 15 -> 0 변경함
         marginBottom:hp(13), // 내가 바라는거!
         
         // marginBottom:15, 
@@ -74,7 +77,7 @@ export default StyleSheet.create({
     },
     // 카드 위치 조정
     sliderContentContainer: {
-        paddingVertical: 50, // for custom animation
+        paddingVertical: 40, // 뉴스 때문에 50 -> 40 변경함
         
     },
     paginationContainer: {
@@ -87,42 +90,32 @@ export default StyleSheet.create({
         borderRadius: 4,
         marginHorizontal: 8
     },
-    menuBar: {
-        position: 'absolute',
-        left: 0,
-        right: 0,
-        bottom: viewportHeight-800, 
-        height: 70, //메뉴바 높이넓이
-        flexDirection: 'row',
-        justifyContent: 'space-around',
-        borderTopWidth: 1,
-        borderTopColor:colors.green,
-        paddingTop: 10,
-        backgroundColor:colors.green
-      },
-      menuButton: {
-        paddingVertical: 5,
-      },
-      menuButtonText: {
-        fontSize: 16,
-      },
-      logoImage : {
-        height : 25,
-        width : 25
-      },
-      toggleArea : {
-        position : 'absolute',
-        zIndex: 999,
-        right : 30,
-        height : 30,
-        width : 30,
-        top : 50,
-        // backgroundColor : '#ffff00'
-      },
-      toggleImage : {
-        height : 20,
-        width : 20,
-      }
-     
+     // 사전
+      CardContainer: {
+        elevation: 5, // 그림자
+        borderRadius: 10,
+        // borderWidth: 0.5,
+        // borderColor: '#d6d7da', 
+        margin: 20,
+        height : 130,
+        backgroundColor : '#DBEDE3',
+        display:'flex',
+        justifyContent: 'center',
+        alignItems: 'center',
+    },
+    CardTitle: {
+        width: '100%',
+        fontWeight: 'bold',
+        fontSize: 23,
+        color : '#143C26',
+        paddingHorizontal: 10,
+        paddingBottom: 7
+    },
+    CardContent: {
+        width: '100%',
+        color : '#507557',
+        fontSize: 18,
+        paddingHorizontal : 10
+    },
 });
 
