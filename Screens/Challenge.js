@@ -1,25 +1,5 @@
-// import React, {useRef, useState} from 'react';
-// import { Button, DrawerLayoutAndroid,Drawer, Text, StyleSheet, View, TouchableOpacity} from 'react-native';
-// // import { createBottomTabNavigator } from "@react-navigation/bottom-tabs";
-
-// // const Tab = createBottomTabNavigator();
-
-// function Challenge({navigation}){
-//   return(
-//       <>
-//           <View>
-//               <Text>I'm Challenge</Text>
-
-//           </View>
-//       </>
-//   );
-// }
-// export default Challenge;
-
-
-
 import React, { useState, useEffect } from 'react';
-import { StyleSheet, Text, View, ScrollView, Image } from 'react-native';
+import { Text, View, ScrollView, Image } from 'react-native';
 import styles from '../styles/Challenge.style'
 
 const Challenge = () => {
@@ -31,7 +11,7 @@ const Challenge = () => {
         
         <View style = {styles.ChallengeContainer1}>
           <Text style={styles.CardTitle}> 💸 계좌 개설하기 </Text>
-          <Text> 100Point</Text>
+          <Text style = {styles.Point}> 100Point</Text>
         </View>
 
         <View style = {styles.ChallengeContainer2}>

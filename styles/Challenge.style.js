@@ -1,4 +1,4 @@
-import { StyleSheet ,Dimensions } from 'react-native';
+import { StyleSheet } from 'react-native';
 
 
 
@@ -49,5 +49,8 @@ export default StyleSheet.create({
   ChallengeTxt : {
       flexDirection: 'column',
       flexShrink: 1,
+  },
+  Point : {
+    marginLeft:-70
   }
 });
