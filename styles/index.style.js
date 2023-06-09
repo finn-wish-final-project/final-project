@@ -146,10 +146,11 @@ export default StyleSheet.create({
         // borderColor: '#d6d7da', 
         margin: 20,
         height : 130,
-        backgroundColor : '#DBEDE3',
+        backgroundColor : '#DBEDE3', //
         display:'flex',
         justifyContent: 'center',
-        alignItems: 'center',
+        // alignItems: 'center',
+        overflow: 'visible'
     },
     CardTitle: {
         width: '100%',
@@ -157,15 +158,17 @@ export default StyleSheet.create({
         fontSize: 23,
         color : '#143C26',
         paddingHorizontal: 10,
-        paddingBottom: 7
+        paddingBottom: 7,
+        
     },
     CardContent: {
         width: '100%',
         color : '#507557',
         fontSize: 18,
-        paddingHorizontal : 10
+        padding : 10,
+        flexShrink: 1,
     },
-     
+
 });
 
 

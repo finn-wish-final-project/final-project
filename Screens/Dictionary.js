@@ -38,7 +38,7 @@ const CardView = () => {
   
 
   return(
-    <ScrollView contentContainerStyle={styles.scrollViewContent}>
+    <ScrollView>
       {data1.map((entry, index) => (
         <View style={styles.CardContainer} key={index}>
           <Text style={styles.CardTitle}>{entry.title}</Text>
@@ -46,14 +46,6 @@ const CardView = () => {
         </View>
       ))}
     </ScrollView>
-    // <ScrollView>
-    //     {Entires1.map((entry, index) => ( // key={index} : index를 사용하여 각 항목에 대한 유일한 키를 지정
-    //       <View style={styles.CardContainer} key={index}> 
-    //         <Text style={styles.CardTitle}>{entry.title}</Text>
-    //         <Text style={styles.CardContent}>{entry.subtitle}</Text>
-    //       </View>
-    //     ))}
-    // </ScrollView>
     )
 }
 
