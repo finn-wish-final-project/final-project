@@ -31,7 +31,7 @@ const Card_Study = () => {
     const sendData=()=>{
       let data={userid:1};
        
-      fetch('http://192.168.0.25:5000/home/word',{
+      fetch('http://192.168.0.25:5000/home/',{
         method:'POST',
         headers:{
           'Content-Type':'application/json',

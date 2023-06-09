@@ -22,19 +22,77 @@ app.config["JWT_SECRET_KEY"]=os.environ.get('JWT_HASH')
 bcrypt=Bcrypt(app)
 jwt=JWTManager(app)
 
-## 사전
-## 스크랩
+
+## 퀴즈 던져주기
+## 퀴즈풀면 사전에 저장
 ## 챌린지
 ## 마이페이지
 ## 매점
 ## 뉴스보기
   
+## 뉴스 스크랩 - 저장
+# @app.route('/news/save', methods=['GET','POST'])
+# # @jwt_required()
+# def save_scrap():
 
 
 
-## 사전정보
+## 뉴스스크랩-보기
+@app.route('/news/show', methods=['GET','POST'])
+# @jwt_required()
+def show_scrap():
+  data=request.get_json()
+  data=data['userid']
+  #cur_user=get_jwt_identity()
 
+  connection = pymysql.connect(host=host, user=user, password=password, database=database)
+  conn=connection.cursor(pymysql.cursors.DictCursor)
+  query=f'select scrap from useract where userid="{data}";'
+  conn.execute(query)
+  result=conn.fetchall()
+  user_scrap=result[0]['scrap']
+  # print(user_scrap)
+  if user_scrap==None:
+    connection.close()
+    return jsonify(msg="등록된 스크랩이 없습니다.")
+  else:
+    user_scrap=user_scrap.replace("[","(").replace("]",")")
+    query1=f'select title,article,image from news where newsid in {user_scrap};'
+    conn.execute(query1)
+    news_list=conn.fetchall()
+    connection.close()
+    return jsonify(news_list)
 
+## user 사전보기
+@app.route('/dict', methods=['GET','POST'])
+# @jwt_required()
+def dictionary():
+  data=request.get_json()
+  data=data['userid']
+  # cur_user=get_jwt_identity()
+
+  connection= pymysql.connect(host=host, user=user, password=password, database=database)
+  conn=connection.cursor(pymysql.cursors.DictCursor)
+  query=f'select dict from useract where userid="{data}";'
+  conn.execute(query)
+  result=conn.fetchall()
+  user_dict=result[0]['dict']
+  
+  
+  # print(user_dict)
+  # 유져 dict안에 값이 없으면
+  if user_dict==None:
+    connection.close()
+    return jsonify(msg="등록된 단어가 없습니다.")
+  # 유져 dict안에 값이 있으면
+  else:
+    user_dict=user_dict.replace("[","(").replace("]",")")
+    query1=f'select title,subtitle from dict where wordid in {user_dict};'
+    conn.execute(query1)
+    dict_list=conn.fetchall()
+    # print(dict_list)
+    connection.close()
+    return jsonify(dict_list)
 
 ## 로그인
 @app.route('/signin', methods=['POST'])
@@ -57,7 +115,7 @@ def signin():
     msg="로그인 되었습니다.")
   else:
     return jsonify(msg="비밀번호가 틀렸습니다.")
-  
+
 ## 회원가입
 @app.route('/signup', methods=['POST'])
 def signup():
@@ -102,11 +160,12 @@ def signup():
     return jsonify(msg="로그인 폼에 맞게 작성해주세요.")
 
 # 홈화면 구현
-@app.route('/home', methods=['GET','POST'])
+@app.route('/home/word', methods=['GET','POST'])
 # @jwt_required()
 def app_home():
   data=request.get_json()
   data=data['userid']
+  print(data)
   # cur_user=get_jwt_identity()
   
   connection = pymysql.connect(host=host, user=user, password=password, database=database)
