@@ -3,7 +3,7 @@ import pymysql
 # 올바른 이메일 형식인지 확인
 def email_validation(email):
     email = email
-    if '@' in email and  5 < len(email) < 30:
+    if '@' in email and  5 < len(email) < 40:
         return True
     else:
         return False
@@ -21,25 +21,22 @@ def email_overlap(email):
 
     if result:
         return False 
-    # jsonify({'message': '이미 사용 중인 이메일 주소입니다.'})
     else:
         return True
     
 # 최소 비밀번호 길이 확인
 def pw_validation(password):
-    if len(password) >= 4:
+    if 30 >= len(password) >= 4:
         return True
     else: 
         return False 
-    # jsonify({'message': '비밀번호를 4자 이상 입력해 주세요.'})
-
+    
 # 유저 이름 입력 정보 확인
 def name_validation(name):
-    if len(name) >= 1:
+    if 30 >= len(name) >= 1:
         return True 
     else:
         return False 
-    # jsonify({'message':'이름을 1자리 이상 입력해 주세요.'})
 
 # 생일 6자리로 입력 확인
 def birth_validation(birth):
@@ -47,7 +44,6 @@ def birth_validation(birth):
         return True 
     else:
         return False 
-    # jsonify({'message':'생일을 6자리 숫자로 입력해 주세요.'})
 
 # 전화번호 양식 확인
 def phone_validation(phone):
@@ -55,4 +51,4 @@ def phone_validation(phone):
         return True 
     else:
         return False 
-    # jsonify({'message':'( - ) 기호 없이 전화번호만 입력해 주세요'})
+    
