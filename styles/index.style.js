@@ -1,4 +1,4 @@
-import { StyleSheet,Dimensions } from 'react-native';
+import { StyleSheet ,Dimensions } from 'react-native';
 
 const { width: viewportWidth, height: viewportHeight } = Dimensions.get('window');
 
@@ -10,6 +10,7 @@ function hp (percentage){
     const value = (percentage * viewportHeight) /100;
     return Math.round(value);
 }
+
 // 색깔이름 들어간 부분도 다 바꿔줘야함
 export const colors = {
     yellowgreen: '#28794D',
@@ -20,18 +21,26 @@ export const colors = {
 export default StyleSheet.create({
     safeArea: {
         flex: 1,
-        backgroundColor: colors.yellowgreen
+        backgroundColor: colors.yellowgreen,
+        
     },
     container: {
         flex: 1,
-        backgroundColor: colors.background
+        backgroundColor: colors.background,
+    },
+    scrollview:{
+        flex:1,
+        backgroundColor:'black'
     },
 
     exampleContainer: {
-        paddingVertical: 30
+        paddingVertical: 30,
+        
+        
     },
     exampleContainerDark: {
-        backgroundColor: colors.yellowgreen
+        backgroundColor: colors.yellowgreen,
+        
     },
     exampleContainerLight: {
         backgroundColor: '#FFFFFF'   //배경색
@@ -40,9 +49,9 @@ export default StyleSheet.create({
         paddingHorizontal: 30,
         backgroundColor: 'transparent', //투명하게 
         color: 'rgba(255, 255, 255, 0.9)',
-        fontSize: 20,
+        fontSize: 17.5,
         fontWeight: 'bold',
-        textAlign: 'center',
+        textAlign: 'center'
     },
     titleDark: {
         color: colors.yellowgreen
@@ -58,18 +67,19 @@ export default StyleSheet.create({
     },
     slider: {
         marginTop: 15,
-        marginBottom:wp(20), // 내가 바라는거!
+        marginBottom:hp(13), // 내가 바라는거!
         
         // marginBottom:15, 
         overflow: 'visible' // for custom animations
     },
     // 카드 위치 조정
     sliderContentContainer: {
-        paddingVertical: "15%",
+        paddingVertical: 50, // for custom animation
         
     },
     paginationContainer: {
-        paddingVertical: 8
+        paddingVertical: 8,
+        
     },
     paginationDot: {
         width: 8,
@@ -78,21 +88,25 @@ export default StyleSheet.create({
         marginHorizontal: 8
     },
     menuBar: {
+        position: 'absolute',
+        left: 0,
+        right: 0,
+        bottom: viewportHeight-800, 
+        height: 70, //메뉴바 높이넓이
         flexDirection: 'row',
         justifyContent: 'space-around',
         borderTopWidth: 1,
-        borderTopColor: '#ccc',
+        borderTopColor:colors.green,
         paddingTop: 10,
-        paddingBottom:5,
         backgroundColor:colors.green
       },
       menuButton: {
-        paddingVertical: 10,
+        paddingVertical: 5,
       },
       menuButtonText: {
         fontSize: 16,
       },
-    logoImage : {
+      logoImage : {
         height : 25,
         width : 25
       },
@@ -109,4 +123,5 @@ export default StyleSheet.create({
         height : 20,
         width : 20,
       }
+     
 });

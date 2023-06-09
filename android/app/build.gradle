@@ -82,7 +82,7 @@ project.ext.react = [
     enableHermes: false,  // clean and rebuild if changing
 ]
 project.ext.vectoricons = [
-   iconFontNames: [ 'Ionicons.ttf', 'FontAwesome.ttf' ]
+   iconFontNames: [ 'Ionicons.ttf', 'FontAwesome.ttf','MaterialCommunityIcons.ttf' ]
 ]
 
 apply from: "../../node_modules/react-native/react.gradle"

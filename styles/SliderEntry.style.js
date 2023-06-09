@@ -1,6 +1,7 @@
-import { StyleSheet, Dimensions} from 'react-native';
+import { StyleSheet, Dimensions, Platform } from 'react-native';
 import { colors } from './index.style';
 
+const IS_IOS = Platform.OS === 'ios';
 const { width: viewportWidth, height: viewportHeight } = Dimensions.get('window');
 
 function wp (percentage) {
@@ -8,7 +9,7 @@ function wp (percentage) {
     return Math.round(value);
 }
 //카드 크기
-const slideHeight = viewportHeight * 0.55;  //0.36 카드 높이
+const slideHeight = viewportHeight * 0.6;  //0.36 카드 높이
 const slideWidth = wp(75);
 const itemHorizontalMargin = wp(2);
 
@@ -22,8 +23,10 @@ export default StyleSheet.create({
         width: itemWidth,
         height: slideHeight,
         paddingHorizontal: itemHorizontalMargin,
-        paddingBottom: 18 // needed for shadow
+        paddingBottom: 18, // needed for shadow
     },
+    
+
 
     textContainer: {
         ...StyleSheet.absoluteFillObject,  //내용을 container에 꽉 채우기
@@ -31,7 +34,7 @@ export default StyleSheet.create({
         paddingTop: 20 - entryBorderRadius, 
         paddingBottom: 20,
         paddingHorizontal: 16,
-        backgroundColor: colors.green, //바탕색
+        backgroundColor: colors.green, //2번(짝수)카드색
         borderBottomLeftRadius: entryBorderRadius,  //모서리 둥글게
         borderBottomRightRadius: entryBorderRadius,
         borderTopLeftRadius: entryBorderRadius,
@@ -45,7 +48,6 @@ export default StyleSheet.create({
         fontSize: wp(10),
         fontWeight: 'bold',
         letterSpacing: 0.5,
-        fontStyle: 'italic'
     },
     titleEven: {
         color: 'white'
