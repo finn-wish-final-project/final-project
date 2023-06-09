@@ -94,6 +94,19 @@
 // export default Card_Study;
 
 
+
+
+
+
+
+
+
+
+
+
+
+
+
 import React, { useState, useEffect } from 'react';
 // import PropTypes from 'prop-types';
 import { View, ScrollView, Text, SafeAreaView, StatusBar } from 'react-native';
@@ -149,15 +162,15 @@ const Card_Study = () => {
     );
   };
 
-  const layoutExample = (data2) => {
+  const layoutExample = (data) => {
       
-      const items = data2.slice().reverse(); // slice : 복사본 만드는 거. 데이터 역순
+      const items = data.slice().reverse(); // slice : 복사본 만드는 거. 데이터 역순
 
       console.log("layoutExample:",items);
 
       return ( // 체크 : 바로 밑에 View style에 exampleContainerLight은 없어도 되는거 아냐?
           <View style={[styles.exampleContainer, styles.exampleContainerLight]}> 
-              <Text style={[styles.title, styles.titleDark]}>{`FINN WISH`}</Text>
+              <Text style={[styles.title, styles.titleDark]}>{`오늘의 끝장단어`}</Text>
               <Carousel
                 data={items}
                 renderItem={_renderItem}
@@ -188,19 +201,10 @@ const Card_Study = () => {
                 backgroundColor={'#ffffff'}
                 barStyle={'dark-content'}
               />
-              
-              {/* 체크 : ScrollView를 꼭 써야 하나 ? */}
+
               <View style="flex:1">
                 { layoutExample(data1) }
               </View>
-
-              {/* <ScrollView
-                style={styles.scrollview}
-                scrollEventThrottle={200}
-                directionalLockEnabled={true} //수직 스크롤만 가능
-              >
-              { layoutExample('stack') }
-              </ScrollView> */}
           </View>
       </SafeAreaView>
   );
@@ -208,13 +212,3 @@ const Card_Study = () => {
 }
 
 export default Card_Study;
-
-
-
-
-
-
-
-
-
-

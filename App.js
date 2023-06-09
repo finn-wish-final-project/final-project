@@ -98,7 +98,7 @@
 
 
 import React, { useState, useEffect } from 'react';
-import { View} from 'react-native';
+import { View } from 'react-native';
 import Icon from 'react-native-vector-icons/Ionicons';
 
 import "react-native-gesture-handler";
@@ -118,7 +118,25 @@ const Tab = createBottomTabNavigator();
 //     green: '#CBE6D7',
 
 export default function App() {
+  const [loading, setLoading] = useState(true);
 
+  useEffect(() => {
+    // 3초 후에 로딩 상태를 false로 변경
+    const timer = setTimeout(() => {
+      setLoading(false);
+    }, 1500);
+
+    return () => clearTimeout(timer);
+  }, []);
+
+  if (loading) {
+    // 로딩 중일 때 로딩 화면 표시
+    return (
+      <View style={{ flex: 1 }}>
+        <Loading />
+      </View>
+    );
+  }
 
   return (
     <NavigationContainer>
