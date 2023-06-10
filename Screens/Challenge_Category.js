@@ -53,6 +53,9 @@ import styles from '../styles/Challenge_Category';
 import { useNavigation } from '@react-navigation/native';
 import { createStackNavigator } from '@react-navigation/stack';
 import Challenge from './Challenge';
+import Challenge2 from './Challenge2';
+import Challenge3 from './Challenge3';
+import Challenge4 from './Challenge4';
 
 const Stack = createStackNavigator();
 
@@ -79,21 +82,21 @@ const Challenge_Category = () => {
 
         <TouchableOpacity
           style={styles.textContainer2}
-          onPress={() => navigation.navigate('Challenge')}
+          onPress={() => navigation.navigate('Challenge2')}
         >
           <Text style={styles.text}>투자</Text>
         </TouchableOpacity>
 
         <TouchableOpacity
           style={styles.textContainer3}
-          onPress={() => navigation.navigate('Challenge')}
+          onPress={() => navigation.navigate('Challenge3')}
         >
           <Text style={styles.text}>무언가</Text>
         </TouchableOpacity>
 
         <TouchableOpacity
           style={styles.textContainer4}
-          onPress={() => navigation.navigate('Challenge')}
+          onPress={() => navigation.navigate('Challenge4')}
         >
           <Text style={styles.text}>무언가</Text>
         </TouchableOpacity>
@@ -107,6 +110,9 @@ const Challenge_Stack = () => {
     <Stack.Navigator>
       <Stack.Screen name="Home" component={Challenge_Category} options={{ headerShown: false }}/>
       <Stack.Screen name="Challenge" component={Challenge} options={{ headerShown: false }} />
+      <Stack.Screen name="Challenge2" component={Challenge2} options={{ headerShown: false }} />
+      <Stack.Screen name="Challenge3" component={Challenge3} options={{ headerShown: false }} />
+      <Stack.Screen name="Challenge4" component={Challenge4} options={{ headerShown: false }} />
     </Stack.Navigator>
   );
 };
