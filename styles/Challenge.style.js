@@ -1,13 +1,11 @@
 import { StyleSheet } from 'react-native';
 
-
-
 export default StyleSheet.create({
   ChallengeCardContainer : {
     elevation: 5, // 그림자
     borderRadius: 10,
     margin: 20,
-    height : 230,
+    height : 220,
     backgroundColor : '#ffffff',
     display:'flex',
     justifyContent: 'center',
@@ -34,7 +32,8 @@ export default StyleSheet.create({
       width : 150,
       height : 140,
       marginLeft : 10,    
-      borderRadius : 7    
+      borderRadius : 7,
+      marginBottom : 17    
   },
   ChallengeContainer1 : {
       marginTop : 10,
@@ -49,8 +48,10 @@ export default StyleSheet.create({
   ChallengeTxt : {
       flexDirection: 'column',
       flexShrink: 1,
+      marginBottom : 20
   },
   Point : {
-    marginLeft:-70
+    marginLeft:-70,
+    fontSize : 15
   }
 });

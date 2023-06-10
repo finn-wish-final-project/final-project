@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { StyleSheet, Text, View, ScrollView } from 'react-native';
-import styles from '../styles/index.style'
+import styles from '../styles/Dictionary.style'
 
 const CardView = () => {
   const [data1,setData] = useState([]);

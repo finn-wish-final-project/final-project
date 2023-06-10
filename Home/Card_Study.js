@@ -33,7 +33,7 @@ const Card_Study = () => {
     const sendData = async () => {
       try {
         const access_token = await AsyncStorage.getItem('access_token');
-        const data = { };
+        const data = {userid:1};
     
         fetch('http://192.168.0.189:5000/home/word', {
           method: 'POST',
