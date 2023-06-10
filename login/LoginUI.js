@@ -9,7 +9,7 @@ import SignupUI from '../login/SignupUI';
 
 // // 안시 쓰기전
 
-export default function LoginUI ({ setHasToken }) {
+export default function LoginUI ({ setHasToken,SignupUI }) {
   const [email, setemail] = React.useState('');
   const [password, setPassword] = React.useState('');
 
@@ -121,4 +121,3 @@ const theme = {
         },
 }
 );
-

@@ -107,11 +107,12 @@ import TabNavigator2 from './navigations/tab_navigator2';
 import TabNavigator3 from './navigations/tab_navigator3'
 import Loading from './login/Loading';
 import LoginUI from './login/LoginUI';
+import StackNavigation from './navigations/login_navigator';
 
 const Tab = createBottomTabNavigator();
 
 // 토큰 제거
-AsyncStorage.removeItem('access_token');
+// AsyncStorage.removeItem('access_token');
 
 // yellowgreen: '#28794D',
 //     green: '#CBE6D7',
@@ -168,7 +169,7 @@ export default function App() {
       </Tab.Navigator>
         ):(
           // access_token이 없는 경우, 비인증 컴포넌트를 표시
-          <LoginUI setHasToken={setHasToken}/>
+          <StackNavigation setHasToken={setHasToken}/>
         )}      
       </NavigationContainer>
     );
