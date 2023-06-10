@@ -4,6 +4,7 @@ from flask_jwt_extended import JWTManager,create_access_token,jwt_required,get_j
 import pymysql
 from dotenv import load_dotenv
 import os 
+import ast
 
 from validation.validation import email_validation,password_validation,name_validation
 
@@ -28,7 +29,37 @@ jwt=JWTManager(app)
 ## 챌린지
 ## 마이페이지
 ## 매점
-## 뉴스보기
+
+
+## 홈-뉴스보기
+@app.route('/home/news', methods=['GET','POST'])
+@jwt_required()
+def home_news():
+  data=request.get_json()
+  data=data['userid']
+  cur_user=get_jwt_identity()
+  print(cur_user)
+
+  connection=pymysql.connect(host=host, user=user, password=password, database=database)
+  conn=connection.cursor(pymysql.cursors.DictCursor)
+  query=f'select dict from useract where userid="{cur_user}";'
+  conn.execute(query)
+  result=conn.fetchall()
+  word_list=result[0]['dict']
+  if word_list==None:
+    query1=f'select title,article from news limit 1;'
+    conn.execute(query1)
+    result_news=conn.fetchall()
+    connection.close()
+    return jsonify(result_news)
+  else:
+    word_list=ast.literal_eval(word_list)
+    news_num=int(len(word_list)/3)+1
+    query2=f'select title,article from news where newsid={news_num};'
+    conn.execute(query2)
+    news_result=conn.fetchall()
+    connection.close()
+    return jsonify(news_result)
   
 ## 뉴스 스크랩 - 저장
 # @app.route('/news/save', methods=['GET','POST'])
@@ -119,20 +150,21 @@ def signin():
 ## 회원가입
 @app.route('/signup', methods=['POST'])
 def signup():
+
   ## db연결
   connection = pymysql.connect(host=host, user=user, password=password, database=database)
   conn=connection.cursor(pymysql.cursors.DictCursor)
 
   ## json받아와서 인지값 넣기
   user_data=request.get_json()
-  # print(user_data)
+  print(user_data)
   user_email=user_data['email']
   user_pw=user_data['password']
   user_birth=user_data['birth']
   user_name=user_data['name']
   user_phone=user_data['phone']
   
-  ## 유효성 검사
+  # 유효성 검사
   if email_validation(user_email) and password_validation(user_pw) and name_validation(user_name):
     ## db에 중복 아이디 있는지 검사
     query=f"select * from userlogin where email= '{user_email}';"
@@ -161,16 +193,17 @@ def signup():
 
 # 홈화면 구현
 @app.route('/home/word', methods=['GET','POST'])
-# @jwt_required()
+@jwt_required()
 def app_home():
-  data=request.get_json()
-  data=data['userid']
-  print(data)
-  # cur_user=get_jwt_identity()
+  # data=request.get_json()
+  # data=data['userid']
+  # print(data)
+  cur_user=get_jwt_identity()
+  # print(cur_user)
   
   connection = pymysql.connect(host=host, user=user, password=password, database=database)
   conn=connection.cursor(pymysql.cursors.DictCursor)
-  query=f'select dict from useract where userid="{data}"'
+  query=f'select dict from useract where userid="{cur_user}"'
   conn.execute(query)
   result=conn.fetchall()
   # print(result)
