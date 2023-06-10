@@ -24,42 +24,13 @@ bcrypt=Bcrypt(app)
 jwt=JWTManager(app)
 
 
-## 퀴즈 던져주기
-## 퀴즈풀면 사전에 저장
+
 ## 챌린지
 ## 마이페이지
 ## 매점
 
 
-## 홈-뉴스보기
-@app.route('/home/news', methods=['GET','POST'])
-@jwt_required()
-def home_news():
-  data=request.get_json()
-  data=data['userid']
-  cur_user=get_jwt_identity()
-  print(cur_user)
-
-  connection=pymysql.connect(host=host, user=user, password=password, database=database)
-  conn=connection.cursor(pymysql.cursors.DictCursor)
-  query=f'select dict from useract where userid="{cur_user}";'
-  conn.execute(query)
-  result=conn.fetchall()
-  word_list=result[0]['dict']
-  if word_list==None:
-    query1=f'select title,article from news limit 1;'
-    conn.execute(query1)
-    result_news=conn.fetchall()
-    connection.close()
-    return jsonify(result_news)
-  else:
-    word_list=ast.literal_eval(word_list)
-    news_num=int(len(word_list)/3)+1
-    query2=f'select title,article from news where newsid={news_num};'
-    conn.execute(query2)
-    news_result=conn.fetchall()
-    connection.close()
-    return jsonify(news_result)
+## 퀴즈풀면 사전에 저장
   
 ## 뉴스 스크랩 - 저장
 # @app.route('/news/save', methods=['GET','POST'])
@@ -67,18 +38,18 @@ def home_news():
 # def save_scrap():
 
 
-
+####################################### USERACT API ##################################################
 ## 뉴스스크랩-보기
 @app.route('/news/show', methods=['GET','POST'])
-# @jwt_required()
+@jwt_required()
 def show_scrap():
   data=request.get_json()
   data=data['userid']
-  #cur_user=get_jwt_identity()
+  cur_user=get_jwt_identity()
 
   connection = pymysql.connect(host=host, user=user, password=password, database=database)
   conn=connection.cursor(pymysql.cursors.DictCursor)
-  query=f'select scrap from useract where userid="{data}";'
+  query=f'select scrap from useract where userid="{cur_user}";'
   conn.execute(query)
   result=conn.fetchall()
   user_scrap=result[0]['scrap']
@@ -88,7 +59,7 @@ def show_scrap():
     return jsonify(msg="등록된 스크랩이 없습니다.")
   else:
     user_scrap=user_scrap.replace("[","(").replace("]",")")
-    query1=f'select title,article,image from news where newsid in {user_scrap};'
+    query1=f'select title,article,image from news where newsid in {user_scrap};'    # 뉴스 db에서 useract에 scrap에 있는 배열안에 newsid들로 검색
     conn.execute(query1)
     news_list=conn.fetchall()
     connection.close()
@@ -96,21 +67,21 @@ def show_scrap():
 
 ## user 사전보기
 @app.route('/dict', methods=['GET','POST'])
-# @jwt_required()
+@jwt_required()
 def dictionary():
   data=request.get_json()
   data=data['userid']
-  # cur_user=get_jwt_identity()
+  cur_user=get_jwt_identity()
 
   connection= pymysql.connect(host=host, user=user, password=password, database=database)
   conn=connection.cursor(pymysql.cursors.DictCursor)
-  query=f'select dict from useract where userid="{data}";'
+  query=f'select dict from useract where userid="{cur_user}";'
   conn.execute(query)
   result=conn.fetchall()
   user_dict=result[0]['dict']
-  
-  
   # print(user_dict)
+
+
   # 유져 dict안에 값이 없으면
   if user_dict==None:
     connection.close()
@@ -125,6 +96,83 @@ def dictionary():
     connection.close()
     return jsonify(dict_list)
 
+## 퀴즈 던져주기
+
+
+
+######################################################################################################
+
+
+
+###################################### HOME API ######################################################
+## 홈-뉴스보기
+@app.route('/home/news', methods=['GET','POST'])
+@jwt_required()
+def home_news():
+  data=request.get_json()
+  data=data['userid']
+  cur_user=get_jwt_identity()
+  # print(cur_user)
+
+  connection=pymysql.connect(host=host, user=user, password=password, database=database)
+  conn=connection.cursor(pymysql.cursors.DictCursor)
+  query=f'select dict from useract where userid="{cur_user}";'
+  conn.execute(query)
+  result=conn.fetchall()
+  word_list=result[0]['dict']
+  # 초기 사용자일때
+  if word_list==None:
+    query1=f'select title,article from news limit 1;'
+    conn.execute(query1)
+    result_news=conn.fetchall()
+    connection.close()
+    return jsonify(result_news)
+  # 만약에 과거에 퀴즈까지 통과한 단어가 있을때.
+  else:
+    word_list=ast.literal_eval(word_list)
+    news_num=int(len(word_list)/3)+1    # 자신이 가지고 있는 단어 리스트에 나누기 3을 하고 1을 더하면 필요한 뉴스가 나온다.
+    query2=f'select title,article from news where newsid={news_num};'
+    conn.execute(query2)
+    news_result=conn.fetchall()
+    connection.close()
+    return jsonify(news_result)
+
+# 홈화면 구현
+@app.route('/home/word', methods=['GET','POST'])
+@jwt_required()
+def app_home():
+  # data=request.get_json()
+  # data=data['userid']
+  # print(data)
+  cur_user=get_jwt_identity()
+  # print(cur_user)
+  
+  connection = pymysql.connect(host=host, user=user, password=password, database=database)
+  conn=connection.cursor(pymysql.cursors.DictCursor)
+  query=f'select dict from useract where userid="{cur_user}"'
+  conn.execute(query)
+  result=conn.fetchall()
+  # print(result)
+  word_list=result[0]['dict']
+  if word_list==None:
+    query1=f'select title,subtitle from dict limit 3;'
+    conn.execute(query1)
+    result_word=conn.fetchall()
+    connection.close()
+    # print(result_word)
+    return jsonify(result_word)
+  else:
+    dict_list=int(result[0]['dict'][-2])
+    query2=f'select title,subtitle from dict where wordid>{dict_list} limit 3;'
+    conn.execute(query2)
+    result_word=conn.fetchall()
+    connection.close()
+    return jsonify(result_word)
+#####################################################################################################
+
+
+
+################################# JWT TOKEN 필요X ####################################################
 ## 로그인
 @app.route('/signin', methods=['POST'])
 def signin():
@@ -143,7 +191,7 @@ def signin():
   if bcrypt.check_password_hash(result[0]['password'], user_pw):
     return jsonify(username=result[0]['name'],
     access_token=create_access_token(identity=result[0]['userid'] , expires_delta=False),
-    msg="로그인 되었습니다.")
+    msg="로그인 되었습니다.")       # jwt토큰 보내줌
   else:
     return jsonify(msg="비밀번호가 틀렸습니다.")
 
@@ -190,38 +238,8 @@ def signup():
 
   else:
     return jsonify(msg="로그인 폼에 맞게 작성해주세요.")
+#####################################################################################################
 
-# 홈화면 구현
-@app.route('/home/word', methods=['GET','POST'])
-@jwt_required()
-def app_home():
-  # data=request.get_json()
-  # data=data['userid']
-  # print(data)
-  cur_user=get_jwt_identity()
-  # print(cur_user)
-  
-  connection = pymysql.connect(host=host, user=user, password=password, database=database)
-  conn=connection.cursor(pymysql.cursors.DictCursor)
-  query=f'select dict from useract where userid="{cur_user}"'
-  conn.execute(query)
-  result=conn.fetchall()
-  # print(result)
-  word_list=result[0]['dict']
-  if word_list==None:
-    query1=f'select title,subtitle from dict limit 3;'
-    conn.execute(query1)
-    result_word=conn.fetchall()
-    connection.close()
-    # print(result_word)
-    return jsonify(result_word)
-  else:
-    dict_list=int(result[0]['dict'][-2])
-    query2=f'select title,subtitle from dict where wordid>{dict_list} limit 3;'
-    conn.execute(query2)
-    result_word=conn.fetchall()
-    connection.close()
-    return jsonify(result_word)
     
 
 
