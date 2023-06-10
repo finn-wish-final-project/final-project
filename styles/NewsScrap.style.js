@@ -3,7 +3,9 @@ import { StyleSheet  } from 'react-native';
 export default StyleSheet.create({
     // 뉴스 스크랩
     ArticleText:{
-        fontSize:16
+        fontSize:17,
+        marginTop:15,
+    
     },
     CardContainer: {
         elevation: 5, // 그림자

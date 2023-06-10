@@ -1,18 +1,24 @@
 import { StyleSheet  } from 'react-native';
 
 export default StyleSheet.create({
+    article:{
+      marginTop:15,
+      fontSize:18
+    },
     CloseButton:{
         backgroundColor:'darkgreen',
         borderRadius:30,
         marginTop:10,
+        height:30,
         textAlign:'center',
+        paddingTop:5,
         color:'white'
       },
       textStyle:{
         color:'green',
         // marginTop:'68%',
         textAlign:'center',
-        fontSize:18,
+        fontSize:25,
         zIndex:1000
       },
       dialogContainer:{

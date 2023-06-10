@@ -17,6 +17,28 @@ import News_scrap from './Mypage_Slide/News_scrap';
 // import Icon from 'react-native-vector-icons/MaterialIcons';
 import Icon from 'react-native-vector-icons/Ionicons';
 import SignupUI from './login/SingupUI';
+import TabNavigator1 from './navigations/tab_navigator1'
+import TabNavigator2 from './navigations/tab_navigator2'
+import TabNavigator3 from './navigations/tab_navigator3'
+import Quiz from './Screens/Quiz';
+import Quiz2 from './Screens/Quiz2';
+import App2 from './hihihi';
+const Stack = createStackNavigator();
+
+// const App2 = () => {
+//   return (
+
+//       <Drawer.Navigator>
+//          <Drawer.Screen name="Quiz2" component={Quiz2} />
+//         <Drawer.Screen name="Quiz2" component={Quiz2} />
+//       </Drawer.Navigator>
+ 
+//   );
+// };
+
+
+
+
 
 const Drawer = createDrawerNavigator();
 const Tab = createBottomTabNavigator();
@@ -26,25 +48,25 @@ const colors={yellowgreen: '#28794D',
                 green: '#CBE6D7'}
 
                 
-const TabNavigator =()=> {
-  return(
-    <>
-      <Drawer.Navigator 
+// const TabNavigator =()=> {
+//   return(
+//     <>
+//       <Drawer.Navigator 
       
-      screenOptions={{
-        drawerActiveBackgroundColor:'#CBE6D7', //커서 올라가있는 칸 전체 색
-        drawerActiveTintColor:'#28794D', // 커서 올라가있는 글자색
+//       screenOptions={{
+//         drawerActiveBackgroundColor:'#CBE6D7', //커서 올라가있는 칸 전체 색
+//         drawerActiveTintColor:'#28794D', // 커서 올라가있는 글자색
         
-      }}
-      initialRouteName="Home"
-      >
-        <Drawer.Screen name="Home" component={Card_Study} options={{ title: 'FINN WISH',headerTitleAlign: 'center',headerTitleStyle:{color:'darkgreen',fontWeight:'bold',fontSize:25}, }} />
-        <Drawer.Screen name="My Chanllenge" component={Store} options={{title:'매점'}}/>
-        <Drawer.Screen name="News scrap" component={News_scrap} options={{ title: '뉴스 스크랩',headerStyle: {backgroundColor: 'lightgrey',}}}/>
-      </Drawer.Navigator>
-    </>
-  )
-}
+//       }}
+//       initialRouteName="Home"
+//       >
+//         <Drawer.Screen name="Home" component={Card_Study} options={{ title: 'FINN WISH',headerTitleAlign: 'center',headerTitleStyle:{color:'darkgreen',fontWeight:'bold',fontSize:25}, }} />
+//         <Drawer.Screen name="My Chanllenge" component={Store} options={{title:'매점'}}/>
+//         <Drawer.Screen name="News scrap" component={News_scrap} options={{ title: '뉴스 스크랩',headerStyle: {backgroundColor: 'lightgrey',}}}/>
+//       </Drawer.Navigator>
+//     </>
+//   )
+// }
 
 
 export default function App() {
@@ -71,13 +93,18 @@ export default function App() {
             activeTintColor: 'darkgreen',
             inactiveTintColor: 'gray',
           }}>
-        <Tab.Screen name="Dictionary" component={Dic} />
-        <Tab.Screen name="login" component={SignupUI}/>
-        <Tab.Screen  name="Home" component={TabNavigator} options={{ headerShown: false }} />
-        <Tab.Screen name="Challenge" component={Challenge} />
+       
+        {/* <Tab.Screen  name="Quiz2" component={Quiz2} /> */}
+        <Tab.Screen  name="Dictionary" component={TabNavigator2} />
+        <Tab.Screen  name="Home" component={TabNavigator1} options={{ headerShown: false }} />
+        {/* <Tab.Screen name="login" component={SignupUI}/> */}
+        <Tab.Screen name="Quiz" component={Quiz}/>
+        <Tab.Screen name="Challenge" component={TabNavigator3} />
         
       </Tab.Navigator>
+          {/* <App2/> */}
     </NavigationContainer>
   );
         }
+
 

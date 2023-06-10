@@ -121,7 +121,7 @@ const HomeNews = () => {
             <Dialog.ScrollArea>
               <ScrollView  contentContainerStyle={{paddingHorizontal: 0 }}>
               
-                <Text>{news.article}</Text>
+                <Text style={style.article}>{news.article}</Text>
 
               </ScrollView>
               <Pressable onPress={hideDialog}>
