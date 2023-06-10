@@ -16,9 +16,11 @@ import Store from './Mypage_Slide/Store';
 import News_scrap from './Mypage_Slide/News_scrap';
 // import Icon from 'react-native-vector-icons/MaterialIcons';
 import Icon from 'react-native-vector-icons/Ionicons';
+import SignupUI from './login/SingupUI';
 
 const Drawer = createDrawerNavigator();
 const Tab = createBottomTabNavigator();
+// const [isSignedUp, setIsSignedUp] = useState(false); 
 
 const colors={yellowgreen: '#28794D',
                 green: '#CBE6D7'}
@@ -70,6 +72,7 @@ export default function App() {
             inactiveTintColor: 'gray',
           }}>
         <Tab.Screen name="Dictionary" component={Dic} />
+        <Tab.Screen name="login" component={SignupUI}/>
         <Tab.Screen  name="Home" component={TabNavigator} options={{ headerShown: false }} />
         <Tab.Screen name="Challenge" component={Challenge} />
         
@@ -77,3 +80,4 @@ export default function App() {
     </NavigationContainer>
   );
         }
+

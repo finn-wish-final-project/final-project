@@ -1,6 +1,5 @@
 import React, {useRef, useState} from 'react';
 import { StyleSheet, Text, View, ScrollView ,Image} from 'react-native';
-import { createDrawerNavigator } from "@react-navigation/drawer";
 import { Dialog, Portal,  Provider,  Divider,Paragraph } from 'react-native-paper';
 import styles from '../styles/Store.style'
 

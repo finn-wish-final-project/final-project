@@ -1,6 +1,6 @@
 import React, { useState,useEffect } from 'react';
 // import PropTypes from 'prop-types';
-import { View, ScrollView, Text, SafeAreaView, StatusBar, Button,Pressable,StyleSheet } from 'react-native';
+import { View, ScrollView, Text, SafeAreaView, StatusBar, Button,Pressable,StyleSheet,AsyncStorage } from 'react-native';
 import Carousel  from 'react-native-snap-carousel';
 import { sliderWidth, itemWidth } from '../styles/SliderEntry.style';
 import SliderEntry from '../components/SliderEntry';
@@ -15,155 +15,251 @@ import { Dialog, Portal,  Provider,  Divider,Paragraph } from 'react-native-pape
 
 
 const Card_Study = () => {
-    const [data1,setData] = useState([]);
+     const [data1,setData] = useState([]);
     // const [slider1ActiveSlide, setSlider1ActiveSlide] = useState(SLIDER_1_FIRST_ITEM);
   
 
     const _renderItem = ({item, index}) => {
-        return <SliderEntry data={item} even={(index + 1) % 2 === 0} />;  
-    };
+         return <SliderEntry data={item} even={(index + 1) % 2 === 0} />;  
+     };
 
-    // useEffect(() => {
-    //   sendData();
-    // }, []);
-  
-    // const sendData=()=>{
-    //   let data={userid:1};
-    //    //IP 바꾸는거 잊지마!!!!!!!!!
-    //   fetch('http://192.168.0.189:5000/home/word',{
-    //     method:'POST',
-    //     headers:{
-    //       'Content-Type':'application/json',
-    //       'X-CSRFToken': '{{csrf_token}}'
-    //     },
-    //     body:JSON.stringify(data)
-    //   }).then (
-    //     (response)=>{
-    //       return response.json();
-    //   }).then(
-    //     (result)=>{
-    //       console.log('1111',result);
-    //       setData(result);
-    //     }
-    //   ).catch(
-    //     (error)=>{
-    //       alert('Error:',error);
-    //     }
-    //   );
-    // };
-
-    const layoutExample = (ENTRIES1) => {
-        const items = ENTRIES1.slice().reverse(); // slice : 복사본 만드는 거. 데이터 역순
-        console.log(items);
-        return (
-            <View style={[styles.exampleContainer, styles.exampleContainerLight]}>
-                <Text style={[styles.title, styles.titleDark]}>{`오늘의 끝장단어`}</Text>
-                <Carousel
-                  data={items}
-                  renderItem={_renderItem}
-                  sliderWidth={sliderWidth}
-                  itemWidth={itemWidth}
-                  containerCustomStyle={styles.slider}
-                  contentContainerCustomStyle={styles.sliderContentContainer}
-                  layout={'stack'}
-                  loop={false}
-                  // 카드 쌓는 순서 변경
-                  firstItem={items.length - 1}
-                  containerCustomStyle2={{
-                    transform: [{ scaleX: -1 }]
-                  }}
-                  
-                />
-                
-            </View>
-        );
+     useEffect(() => {
+       sendData();
+     }, []);
+        // 원래 send data 코드
+    //  const sendData=()=>{
+    //    let data={userid:1};
+    //     //IP 바꾸는거 잊지마!!!!!!!!!
+    //    fetch('http://192.168.0.189:5000/home/word',{
+    //      method:'POST',
+    //      headers:{
+    //        'Content-Type':'application/json',
+    //        'X-CSRFToken': '{{csrf_token}}'
+    //      },
+    //      body:JSON.stringify(data)
+    //    }).then (
+    //      (response)=>{
+    //        return response.json();
+    //    }).then(
+    //      (result)=>{
+    //        console.log('1111',result);
+    //        setData(result);
+    //      }
+    //    ).catch(
+    //      (error)=>{
+    //        alert('Error:',error);
+    //      }
+    //    );
+    //  };
+    if(AsyncStorage.getItem('access_token')){
+      console.log('토큰 존재함');
+    }else{
+      console.log('토큰 없음');
     }
 
-    return (
-          <SafeAreaView style={styles.safeArea}>
-            <View style={styles.container}>
-                <StatusBar
-                  translucent={true}
-                  backgroundColor={'#ffffff'}
-                  barStyle={'dark-content'}
-                />
-                  <View
-                    style={styles.scrollview}
-                    scrollEventThrottle={100}
-                    directionalLockEnabled={false}
-                    
-                  >
-                  { layoutExample(ENTRIES1) }
-                  {/* { layoutExample(data1) } */}
-              
-                  </View>
-                  
-                  <Provider>
-                    <HomeNews/>
-                    {/* {MyComponent()} */}
-                  </Provider>
-                
-                
-                
-            </View>
-        </SafeAreaView>
-
-    );
+    const sendData = async () => {
+      try {
+        const access_token = await AsyncStorage.getItem('access_token');
+        const data = {userid:1};
     
-};
+        fetch('http://192.168.0.189:5000/home/word', {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+            'X-CSRFToken': '{{csrf_token}}',
+            'Authorization': `Bearer ${access_token}`
+          },
+          body: JSON.stringify(data)
+        })
+          .then((response) => response.json())
+          .then((result) => {
+            // console.log('1111', result);
+            setData(result);
+          })
+          .catch((error) => {
+            console.error('Error:', error);
+          });
+      } catch (error) {
+        console.error('Error:', error);
+      }
+    };
 
-// const title = ['대출 연체율 급등 비상…"금융 위험 대비해야"']
-// const article = ['4월 말 기준 5대 시중은행 대출 가운데 한 달 이상 원리금이 연체된 비율은 0.304%, 1년 새 두 배 가까이로 뛰었습니다.금리 급등에 경기 둔화까지 겹치며 가계보다 기업들이 돈을 제때 못 갚은 경우가 많았습니다.<섬유업체 중소기업 대표> "작년보다 금리가 더 올라갔는데요. 양호했던 업체들이 지금 상황이 많이 안 좋아지고 있어요. 작년 12월 말일자로 공장 정리했고요…"2019년 말 906조원이던 은행의 기업 대출 잔액은 코로나 사태를 거치며 지난해 1,221조원까지 불어났는데, 여기엔 소상공인 대출도 포함됩니다.그간은 대출만기 연장이나 이자 유예로 부실이 드러나지 않았지만, 지난해 하반기부터 연체율은 뚜렷하게 상승곡선을 그리고 있습니다.']
-// const MyComponent = () => {
-//   const [visible, setVisible] = React.useState(false);
+     const layoutExample = (data) => {
+         const items = data.slice().reverse(); // slice : 복사본 만드는 거. 데이터 역순
+        //  console.log(items);
+         return (
+             <View style={[styles.exampleContainer, styles.exampleContainerLight]}>
+                 <Text style={[styles.title, styles.titleDark]}>{`오늘의 끝장단어`}</Text>
+                 <Carousel
+                   data={items}
+                   renderItem={_renderItem}
+                   sliderWidth={sliderWidth}
+                   itemWidth={itemWidth}
+                   containerCustomStyle={styles.slider}
+                   contentContainerCustomStyle={styles.sliderContentContainer}
+                   layout={'stack'}
+                   loop={false}
+                   // 카드 쌓는 순서 변경
+                   firstItem={items.length - 1}
+                   containerCustomStyle2={{
+                     transform: [{ scaleX: -1 }]
+                   }}
+                  
+                 />
+                
+             </View>
+         );
+     }
 
-//   const showDialog = () => setVisible(true);
-//   const hideDialog = () => setVisible(false);
+     return (
+           <SafeAreaView style={styles.safeArea}>
+             <View style={styles.container}>
+                 <StatusBar
+                   translucent={true}
+                   backgroundColor={'#ffffff'}
+                   barStyle={'dark-content'}
+                 />
+                   <View
+                     style={styles.scrollview}
+                     scrollEventThrottle={100}
+                     directionalLockEnabled={false}
+                    
+                   >
+                   { layoutExample(data1) }
+                   {/* { layoutExample(data1) } */}
+              
+                   </View>
+                  
+                   <Provider>
+                     <HomeNews/>
+                     {/* {MyComponent()} */}
+                   </Provider>
+                
+                
+                
+             </View>
+         </SafeAreaView>
+
+     );
+    
+ };
+
+
+ export default Card_Study;
+
+// import React, { useState, useEffect } from 'react';
+// import { View, ScrollView, Text, SafeAreaView, StatusBar, AsyncStorage } from 'react-native';
+// import Carousel  from 'react-native-snap-carousel';
+// import { sliderWidth, itemWidth } from '../styles/SliderEntry.style';
+// import SliderEntry from '../components/SliderEntry';
+// import styles from '../styles/index.style'
+// import { ENTRIES1 } from '../static/entries';
+
+// // AsyncStorage.setItem('access_token',
+// // "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJmcmVzaCI6ZmFsc2UsImlhdCI6MTY4NjI5MjUyOSwianRpIjoiOTQ1NTY5ZmUtOGY0OC00MWUzLThhNTgtODI0MTg2NTI3YzIwIiwidHlwZSI6ImFjY2VzcyIsInN1YiI6MSwibmJmIjoxNjg2MjkyNTI5fQ.797Z_n9G_20rv2_mQ5dUyJ5kZFuWrKA4gvfuUNhICQ8", 
+// // () => {
+// //   console.log('유저 닉네임 저장 완료')
+// // });
+
+// const Card_Study = () => {
+//   const [data1,setData] = useState([]);
+
+//     const _renderItem = ({item, index}) => {
+//         return <SliderEntry data={item} even={(index + 1) % 2 === 0} />;
+//     }; 
+
+//     useEffect(() => {
+//       sendData();
+//     }, []);
+    
+
+//     // AsyncStorage.getItem('access_token',(err,result)=>{
+//     //   setAcessToken(result)
+//     //   console.log('!!!!!!!!!!!!!!!!!',access_token);
+//     // });
+    
+//     if(AsyncStorage.getItem('access_token')){
+//       console.log('토큰 존재함');
+//     }else{
+//       console.log('토큰 없음');
+//     }
+
+//     const sendData = async () => {
+//       try {
+//         const access_token = await AsyncStorage.getItem('access_token');
+//         const data = {userid:1};
+    
+//         fetch('http://192.168.0.189:5000/home/word', {
+//           method: 'POST',
+//           headers: {
+//             'Content-Type': 'application/json',
+//             'X-CSRFToken': '{{csrf_token}}',
+//             'Authorization': `Bearer ${access_token}`
+//           },
+//           body: JSON.stringify(data)
+//         })
+//           .then((response) => response.json())
+//           .then((result) => {
+//             // console.log('1111', result);
+//             setData(result);
+//           })
+//           .catch((error) => {
+//             console.error('Error:', error);
+//           });
+//       } catch (error) {
+//         console.error('Error:', error);
+//       }
+//     };
+    
+
+
+//   const layoutExample = (data) => {
+      
+//       const items = data.slice().reverse(); // slice : 복사본 만드는 거. 데이터 역순
+
+//       // console.log("layoutExample:",items);
+
+//       return ( // 체크 : 바로 밑에 View style에 exampleContainerLight은 없어도 되는거 아냐?
+//           <View style={[styles.exampleContainer, styles.exampleContainerLight]}> 
+//               <Text style={[styles.title, styles.titleDark]}>{`오늘의 끝장단어`}</Text>
+//               <Carousel
+//                 data={items}
+//                 renderItem={_renderItem}
+//                 sliderWidth={sliderWidth}
+//                 itemWidth={itemWidth}
+//                 containerCustomStyle={styles.slider}
+//                 contentContainerCustomStyle={styles.sliderContentContainer}
+//                 layout={'stack'} // stack, tinder , ... 우리는 stack 사용
+//                 loop={false} // 무한반복 X
+                
+//                 // 카드 쌓는 순서 변경
+//                 firstItem={items.length - 1} // items의 마지막 인덱스 의미
+//                 containerCustomStyle2={{
+//                   transform: [{ scaleX: -1 }] // 좌우반전 ,,~
+//                 }}
+//               />
+//           </View>
+//       );
+//   }
 
 //   return (
-//     <Provider>
-//       <View>
-//         <Portal>
-//         <Pressable onPress={showDialog}>
-//             <Text style={style.textStyle}>오늘의 뉴스 보러가기</Text>
-//           </Pressable>
-//           {/* <Button style={styles.modalbButton}
-//           onPress={showDialog} title="오늘의 뉴스 보러가기" /> */}
-//           <Dialog style={style.dialogContainer} visible={visible} onDismiss={hideDialog} >
-//           <Dialog.Title>{title}</Dialog.Title>
-//           <Divider style={{ borderWidth: 1 }} width={'auto'}/>
-//             <Dialog.ScrollArea>
-//               <ScrollView  contentContainerStyle={{paddingHorizontal: 0 }}>
-              
-//                 <Text>{article}</Text>
-//               </ScrollView>
-//             </Dialog.ScrollArea>
-//           </Dialog>
-//         </Portal>
-//       </View>
-//     </Provider>
+//       <SafeAreaView style={styles.safeArea}>
+//           <View style={styles.container}>
+
+//               {/* 상단바 */}
+//               <StatusBar
+//                 translucent={true}
+//                 backgroundColor={'#ffffff'}
+//                 barStyle={'dark-content'}
+//               />
+
+//               <View style="flex:1">
+//                 { layoutExample(data1) }
+//               </View>
+//           </View>
+//       </SafeAreaView>
 //   );
-// };
-
-// const style = StyleSheet.create({
-//   textStyle:{
-//     color:'green',
-//     marginTop:'68%',
-//     textAlign:'center',
-//     fontSize:18
-//   },
-//   dialogContainer:{
     
-//     backgroundColor:'lightgrey',
-//     marginHorizontal:25, // 뉴스 컨테이너 넓이
-//     marginTop:10,
-//     marginBottom:10,
-//     justifyContent:'flex-start',
-//     textAlign:'center',
-//     // height: '100%',
-//     // flex:1
-//   }
-// })
+// }
 
-
-export default Card_Study;
+// export default Card_Study;
