@@ -1,0 +1,36 @@
+https://hwan001.tistory.com/277
+
+JWT (Json Web Token): 웹 표준으로 두 개체 사이에 JSON을 사용하여 정보를 안전성 있게 전달해줌
+웹에서 로그인 하거나 인증을 받게되면 JWT는 토큰 내부의 Signature에 해당 정보를 기록
+
+JWT의 구조 - Header, Payload, Signature 
+Header: 토큰의 typ(해당 토큰의 타입), alg(해싱 알고리즘)
+Payload: 토큰에 담을 정보
+Signature: Header와 Payload의 Base64 인코딩 값을 시크릿 키와 함께 다시 한번 해싱한 후 인코딩한 값 가짐
+
+------------------------------------------ JWT 란? ------------------------------------------------
+
+flask_jwt_extended 모듈: Flask 기반 웹 애플리케이션에서 JWT(JSON Web Token) 인증을 구현하기 위한 확장 기능 제공
+-> 토큰 생성, 토큰 유효성 검사, 토큰에 저장된 사용자 식별 정보 얻기 등
+
+1. JWTManager 설정 및 토큰 생성: Flask 애플리케이션에 JWT 관련 설정을 추가하는 역할
+
+app.config['JWT_SERCCRET_KEY'] = 'MY-SECRET-KEY' # JWT 암호화에 사용할 키 설정
+
+jwt = JWTManager(app)
+
+access_token = create_access_token(identity=USER_NUM) # 토큰 생성
+
+--------------------------------------- 토큰 생성 단계 --------------------------------------------
+
+2. 토큰 인증 및 식별 정보 얻기
+
+@jwt_required 데코레이터는 해당 엔드포인트 토큰 인증이 필요하다는 것을 나타냄
+
+get_jwt_identity() 함수를 사용하여 토큰에 저장된 사용자 식별 정보를 얻을 수 있음
+
+current_user = get_jwt_identity()
+
+--------------------------------------- 토큰 인증 단계 --------------------------------------------
+
+
