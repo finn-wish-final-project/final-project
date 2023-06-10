@@ -1,3 +1,6 @@
+import AppNavigator from './navigations/Challenge_navigator';
+
+
 import React, { useState, useEffect } from 'react';
 import { View,AsyncStorage } from 'react-native';
 import Icon from 'react-native-vector-icons/Ionicons';
@@ -51,6 +54,8 @@ export default function App() {
 
 
   return (
+    <React.Fragment>
+      
     <NavigationContainer>
       <Tab.Navigator initialRouteName="Home"
           screenOptions={({ route }) => ({
@@ -80,7 +85,10 @@ export default function App() {
         <Tab.Screen name="Quiz" component={TabNavigator4} options={{ headerShown: false }} />
         <Tab.Screen name="Challenge" component={TabNavigator3} options={{ headerShown: false }} />
       </Tab.Navigator>
+      
     </NavigationContainer>
+    
+    </React.Fragment>
   );
 };
 
