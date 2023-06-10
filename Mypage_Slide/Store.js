@@ -16,7 +16,7 @@ function Store(){
                     <View style={styles.ChallengeContainer2}>
                         <Text style={styles.StoreName}>빽다방</Text>
                         <Text style={styles.StoreItem}>아이스크림 카페라떼</Text>
-                        <Text style={styles.StorePrice}>3700 원 </Text>
+                        <Text style={styles.StorePrice}>3700🍀 </Text>
                     </View>
                     
                 </View>

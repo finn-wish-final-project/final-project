@@ -9,8 +9,8 @@ const Challenge = () => {
     <ScrollView>
       <View style={styles.ChallengeCardContainer}>
         <View style = {styles.ChallengeContainer1}>
-          <Text style={styles.CardTitle}> 💸 계좌 개설하기 </Text>
-          <Text style = {styles.Point}> 1000Point</Text>
+          <Text style={styles.CardTitle}> 계좌 개설하기 </Text>
+          <Text style = {styles.Point}> 1000🍀</Text>
         </View>
         <View style = {styles.ChallengeContainer2}>
             <Image style = {styles.ChallengeImg} source = {require('../static/img/challenge1.jpg')} />
@@ -23,8 +23,8 @@ const Challenge = () => {
 
       <View style={styles.ChallengeCardContainer}>
         <View style = {styles.ChallengeContainer1}>
-          <Text style={styles.CardTitle}>  ⚔ 모의 투자 참가하기 </Text>
-          <Text style = {styles.Point}> 300Point</Text>
+          <Text style={styles.CardTitle}> 모의 투자 참가하기 </Text>
+          <Text style = {styles.Point}> 300🍀</Text>
         </View>
 
         <View style = {styles.ChallengeContainer2}>

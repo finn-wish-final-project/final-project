@@ -11,7 +11,7 @@ import { createBottomTabNavigator } from "@react-navigation/bottom-tabs";
 import TabNavigator1 from './navigations/tab_navigator1';
 import TabNavigator2 from './navigations/tab_navigator2';
 import TabNavigator3 from './navigations/tab_navigator3'
-
+import TabNavigator4 from './navigations/tab_navigator4';
 
 import Loading from './login/Loading';
 
@@ -63,6 +63,8 @@ export default function App() {
                 iconName = focused ? 'home' : 'home-outline';
               } else if (route.name === 'Challenge'){
                 iconName = focused ? 'trophy' : 'trophy-outline';
+              } else if (route.name === 'Quiz'){
+                iconName = focused ? 'create' : 'create-outline';
               }
         
               // You can return any component that you like here!
@@ -75,6 +77,7 @@ export default function App() {
           }}>
         <Tab.Screen name="Dictionary" component={TabNavigator2} options={{ headerShown: false }}/>
         <Tab.Screen  name="Home" component={TabNavigator1} options={{ headerShown: false }} />
+        <Tab.Screen name="Quiz" component={TabNavigator4} options={{ headerShown: false }} />
         <Tab.Screen name="Challenge" component={TabNavigator3} options={{ headerShown: false }} />
       </Tab.Navigator>
     </NavigationContainer>

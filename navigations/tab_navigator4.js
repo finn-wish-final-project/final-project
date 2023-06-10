@@ -5,12 +5,12 @@ import My_Chanllenge from '../Mypage_Slide/My_Challenge';
 import News_scrap from '../Mypage_Slide/News_scrap';
 import Challenge from "../Screens/Challenge";
 import Store from '../Mypage_Slide/Store';
-import Challenge_Category from '../Screens/Challenge_Category'
+import Quiz from '../Mypage_Slide/Quiz';
 
 const Drawer = createDrawerNavigator();
 
 
-const TabNavigator3 =()=> {
+const TabNavigator4 =()=> {
   return(
     <>
       <Drawer.Navigator 
@@ -21,7 +21,7 @@ const TabNavigator3 =()=> {
         }}
         // initialRouteName="Home"
         >
-        <Drawer.Screen name="Home" component={Challenge_Category} options={{ title: 'FINN WISH', headerTitleAlign: 'center',headerTitleStyle:{color:'darkgreen',fontWeight:'bold',fontSize:25}, }} />
+        <Drawer.Screen name="Home" component={Quiz} options={{ title: 'FINN WISH', headerTitleAlign: 'center',headerTitleStyle:{color:'darkgreen',fontWeight:'bold',fontSize:25}, }} />
         <Drawer.Screen name="매점" component={Store} />
         <Drawer.Screen name="뉴스 스크랩" component={News_scrap} />
         <Drawer.Screen name="나의 챌린지" component={My_Chanllenge} />
@@ -30,4 +30,4 @@ const TabNavigator3 =()=> {
   )
 }
 
-export default TabNavigator3;
+export default TabNavigator4;
