@@ -91,7 +91,7 @@ const HomeNews = () => {
       })
         .then((response) => response.json())
         .then((result) => {
-          console.log('1111', result);
+          // console.log('1111', result);
           setData(result[0]);
         })
         .catch((error) => {

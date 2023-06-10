@@ -112,14 +112,14 @@ import StackNavigation from './navigations/login_navigator';
 const Tab = createBottomTabNavigator();
 
 // 토큰 제거
-// AsyncStorage.removeItem('access_token');
+
 
 // yellowgreen: '#28794D',
 //     green: '#CBE6D7',
 
 export default function App() {
   const [loading, setLoading] = useState(true);
-  const [hasToken, setHasToken] = useState(false);
+  const [hasToken, setHasToken] = useState('');
 
   useEffect(() => {
     // 3초 후에 로딩 상태를 false로 변경
@@ -138,10 +138,13 @@ export default function App() {
       </View>
     );
   }
+  AsyncStorage.getItem('access_token').then((value)=>setHasToken(value));
+  
+  
     // access_token이 있는 경우, 인증된 컴포넌트를 표시
     return (
       <NavigationContainer>
-        {hasToken ? (
+        {hasToken!=null ? (
           <Tab.Navigator initialRouteName="Home"
           screenOptions={({ route }) => ({
             tabBarIcon: ({ focused, color, size }) => {

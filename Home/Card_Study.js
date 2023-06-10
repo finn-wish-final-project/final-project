@@ -26,12 +26,17 @@ const Card_Study = () => {
     //   console.log('!!!!!!!!!!!!!!!!!',access_token);
     // });
     
-    if(AsyncStorage.getItem('access_token')){
-      console.log('토큰 존재함');
-    }else{
-      console.log('토큰 없음');
-    }
+    // if(AsyncStorage.getItem('access_token')){
+    //   console.log('토큰 존재함');
+    // }else{
+    //   console.log('토큰 없음');
+    // }
 
+    // AsyncStorage.getItem('access_token',(err,result)=>{
+    //   console.log(result);
+    // });
+
+    // AsyncStorage.removeItem('access_token');
     const sendData = async () => {
       try {
         const access_token = await AsyncStorage.getItem('access_token');

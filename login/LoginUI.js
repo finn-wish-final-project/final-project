@@ -34,13 +34,12 @@ export default function LoginUI ({ setHasToken,SignupUI }) {
         },
         body: JSON.stringify(data)
       })
-        .then((response) => { 
-          return response.json() 
-        })
-        .then(async (result) => {
-          console.log('1111', result);
+        .then((response) => response.json())
+        .then((result) => {
+          // console.log('1111', result);
           
           if (result['access_token']){
+            // console.log("!!!!!!!!!!!",result);
             AsyncStorage.setItem('access_token',result['access_token']);
             setHasToken(true);
             alert(result['msg']);
@@ -50,6 +49,7 @@ export default function LoginUI ({ setHasToken,SignupUI }) {
           }
         })
         .catch((error) => {
+          // console.log('sddfsdfsdf');
           console.error('Error:', error);
         });
 
