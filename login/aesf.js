@@ -1,301 +1,272 @@
-import * as React from 'react';
-import { View, StyleSheet ,Text , Pressable, ScrollView} from 'react-native';
-import { TextInput, DefaultTheme,Provider as PaperProvider   } from 'react-native-paper';
 
-export default function signupUI () {
-  const [password, setPassword] = React.useState('');
-  const [name, setname] = React.useState('');
-  const [birth, setbirth] = React.useState('');
-  const [phone, setphone] = React.useState('');
-  const [email, setemail] = React.useState('');
 
-  // onpress를 했을 때 딕셔너리로 보내
-  const LoginForm = (email, password, name, birth, phone ) => {
-    let data = {
-      email: email,
-      password: password,
-      name: name,
-      birth: birth,
-      phone: phone
+
+
+
+
+
+import React, { useState,useEffect } from 'react';
+// import PropTypes from 'prop-types';
+import { View, ScrollView, Text, SafeAreaView, StatusBar, Button,Pressable,StyleSheet,AsyncStorage } from 'react-native';
+import Carousel  from 'react-native-snap-carousel';
+import { sliderWidth, itemWidth } from '../styles/SliderEntry.style';
+import SliderEntry from '../components/SliderEntry';
+import styles from '../styles/index.style'
+import { ENTRIES1 } from '../static/entries';
+import HomeNews from './HomeNews';
+// import MyComponent from '../Mypage_Slide/News_scrap';
+import { Dialog, Portal,  Provider,  Divider,Paragraph } from 'react-native-paper';
+
+
+// const SLIDER_1_FIRST_ITEM =1;
+
+
+const Card_Study = () => {
+     const [data1,setData] = useState([]);
+    // const [slider1ActiveSlide, setSlider1ActiveSlide] = useState(SLIDER_1_FIRST_ITEM);
+  
+
+    const _renderItem = ({item, index}) => {
+         return <SliderEntry data={item} even={(index + 1) % 2 === 0} />;  
+     };
+
+     useEffect(() => {
+       sendData();
+     }, []);
+        // 원래 send data 코드
+    //  const sendData=()=>{
+    //    let data={userid:1};
+    //     //IP 바꾸는거 잊지마!!!!!!!!!
+    //    fetch('http://192.168.0.189:5000/home/word',{
+    //      method:'POST',
+    //      headers:{
+    //        'Content-Type':'application/json',
+    //        'X-CSRFToken': '{{csrf_token}}'
+    //      },
+    //      body:JSON.stringify(data)
+    //    }).then (
+    //      (response)=>{
+    //        return response.json();
+    //    }).then(
+    //      (result)=>{
+    //        console.log('1111',result);
+    //        setData(result);
+    //      }
+    //    ).catch(
+    //      (error)=>{
+    //        alert('Error:',error);
+    //      }
+    //    );
+    //  };
+    if(AsyncStorage.getItem('access_token')){
+      console.log('토큰 존재함');
+    }else{
+      console.log('토큰 없음');
+    }
+
+    const sendData = async () => {
+      try {
+        const access_token = await AsyncStorage.getItem('access_token');
+        const data = {userid:1};
+    
+        fetch('http://192.168.0.189:5000/home/word', {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+            'X-CSRFToken': '{{csrf_token}}',
+            'Authorization': `Bearer ${access_token}`
+          },
+          body: JSON.stringify(data)
+        })
+          .then((response) => response.json())
+          .then((result) => {
+            // console.log('1111', result);
+            setData(result);
+          })
+          .catch((error) => {
+            console.error('Error:', error);
+          });
+      } catch (error) {
+        console.error('Error:', error);
+      }
     };
-  
-    fetch('http://192.168.0.189:5000/signup', {
-      method: 'POST',
-      headers: {
-        'Content-Type': 'application/json',
-        'X-CSRFToken': '{{csrf_token}}',
-      },
-      body: JSON.stringify(data),
-    })
-      .then((response) => response.json())
-      .then((result) => {
-        console.log('1111', result);
-        alert(result['msg']);
-      })
-      .catch((error) => {
-        alert('Error:', error);
-      });
-  };
-  
-  
 
-  return (
-    <PaperProvider theme={theme} >
-        <ScrollView >
-        <View style={{ alignItems: 'center', marginTop:65}}>
+     const layoutExample = (data) => {
+         const items = data.slice().reverse(); // slice : 복사본 만드는 거. 데이터 역순
+        //  console.log(items);
+         return (
+             <View style={[styles.exampleContainer, styles.exampleContainerLight]}>
+                 <Text style={[styles.title, styles.titleDark]}>{`오늘의 끝장단어`}</Text>
+                 <Carousel
+                   data={items}
+                   renderItem={_renderItem}
+                   sliderWidth={sliderWidth}
+                   itemWidth={itemWidth}
+                   containerCustomStyle={styles.slider}
+                   contentContainerCustomStyle={styles.sliderContentContainer}
+                   layout={'stack'}
+                   loop={false}
+                   // 카드 쌓는 순서 변경
+                   firstItem={items.length - 1}
+                   containerCustomStyle2={{
+                     transform: [{ scaleX: -1 }]
+                   }}
+                  
+                 />
+                
+             </View>
+         );
+     }
 
-            <Text>이메일</Text> 
-            <TextInput   value={email} onChangeText ={setemail} style={{width:'70%' ,backgroundColor: 'transparent',marginBottom:20}}/>
+     return (
+           <SafeAreaView style={styles.safeArea}>
+             <View style={styles.container}>
+                 <StatusBar
+                   translucent={true}
+                   backgroundColor={'#ffffff'}
+                   barStyle={'dark-content'}
+                 />
+                   <View
+                     style={styles.scrollview}
+                     scrollEventThrottle={100}
+                     directionalLockEnabled={false}
+                    
+                   >
+                   { layoutExample(data1) }
+                   {/* { layoutExample(data1) } */}
+              
+                   </View>
+                  
+                   <Provider>
+                     <HomeNews/>
+                     {/* {MyComponent()} */}
+                   </Provider>
+                
+                
+                
+             </View>
+         </SafeAreaView>
 
-            <Text>비밀번호</Text>
-            <TextInput   value={password} onChangeText ={setPassword}
-                    keyboardType="numeric"  right={<TextInput.Icon name="eye" />}  style={{width:'70%' ,backgroundColor: 'transparent',marginBottom:20}}/>
-
-            <Text>이름</Text>     
-            <TextInput   value={name} onChangeText ={setname} style={{width:'70%' ,backgroundColor: 'transparent',marginBottom:20}}/>
-          
-           <Text>생년월일</Text>
-           <TextInput   value={birth} onChangeText ={setbirth} placeholder="ex)020415" placeholderTextColor={"lightgray"}
-                    keyboardType="numeric"  style={{width:'70%' ,backgroundColor: 'transparent',marginBottom:20}}/>
-            <Text>전화번호</Text>
-            <TextInput   value={phone} onChangeText ={setphone}
-                    keyboardType="numeric"  right={<TextInput.Icon name="eye" />}  style={{width:'70%' ,backgroundColor: 'transparent',marginBottom:20}}/>
-          
-          </View>
-            <View style={styles.buttonContainer}>
-          <Pressable style={[styles.button, styles.buttonClose]} >
-              <Text style={{fontSize:17, color: "white"}}>뒤로가기</Text>
-            </Pressable>
-            <Pressable style={[styles.button2, styles.buttonClose2]} onPress={() => LoginForm(email, password, name, birth, phone)}>
-            {/* sendData(email,password,name,birth,phone) */}
-              <Text style={{fontSize:17, color: "white",}}>회원가입</Text>
-            </Pressable>
-            </View>
-        </ScrollView>
-    </PaperProvider>
-  );
-};
-const theme = {
-
-    ...DefaultTheme,
-    colors: {
-      ...DefaultTheme.colors,
-      primary: '#30905B',
-      backgroundColor:'red' },
+     );
     
-  };
-  const styles = StyleSheet.create({
+ };
 
-  input: {
-    marginTop: '50%',
-    alignItems:'center',
-    borderRadius: 5,
+
+ export default Card_Study;
+
+// import React, { useState, useEffect } from 'react';
+// import { View, ScrollView, Text, SafeAreaView, StatusBar, AsyncStorage } from 'react-native';
+// import Carousel  from 'react-native-snap-carousel';
+// import { sliderWidth, itemWidth } from '../styles/SliderEntry.style';
+// import SliderEntry from '../components/SliderEntry';
+// import styles from '../styles/index.style'
+// import { ENTRIES1 } from '../static/entries';
+
+// // AsyncStorage.setItem('access_token',
+// // "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJmcmVzaCI6ZmFsc2UsImlhdCI6MTY4NjI5MjUyOSwianRpIjoiOTQ1NTY5ZmUtOGY0OC00MWUzLThhNTgtODI0MTg2NTI3YzIwIiwidHlwZSI6ImFjY2VzcyIsInN1YiI6MSwibmJmIjoxNjg2MjkyNTI5fQ.797Z_n9G_20rv2_mQ5dUyJ5kZFuWrKA4gvfuUNhICQ8", 
+// // () => {
+// //   console.log('유저 닉네임 저장 완료')
+// // });
+
+// const Card_Study = () => {
+//   const [data1,setData] = useState([]);
+
+//     const _renderItem = ({item, index}) => {
+//         return <SliderEntry data={item} even={(index + 1) % 2 === 0} />;
+//     }; 
+
+//     useEffect(() => {
+//       sendData();
+//     }, []);
     
-  },
-  buttonContainer: {
-    flexDirection: 'row',
-    justifyContent: 'space-between',
-    marginTop: 10,
-  },
-  button: {
-          borderRadius: 15,
-          padding: 10,
-          width: "25%",
-          height:"30%",
-          alignItems:'center',
-          marginTop:30,
-          fontSize: 20,
-          justifyContent:'center',
-          marginLeft:55,
-          marginRight:45,
-        },
-        
-        buttonClose: {
-          backgroundColor: '#B4DBB1', 
-        //   B4DBB1
-        },
-        button2: {
-            borderRadius: 15,
-            padding: 10,
-            width: "25%",
-            height:"30%",
-            alignItems:'center',
-            marginTop:30,
-            fontSize: 20,
-            justifyContent:'center',
-            marginLeft:35,
-            marginRight:55,
-          },
-          
-          buttonClose2: {
-            backgroundColor: '#30905B', 
-          //   B4DBB1
-          },
-}
-);
 
-
-
-
-
-
-
-
-
-
-import * as React from 'react';
-import { View, StyleSheet ,Text , Pressable, ScrollView} from 'react-native';
-import { TextInput, DefaultTheme,Provider as PaperProvider   } from 'react-native-paper';
-import { useNavigation } from '@react-navigation/native';
-import LoginUI from './LoginUI';
-
-
-
-
-// // 넘어가긴 하는데 에러 뜨는 코드 안시 안 씀
-
-export default function SignupUI ({ setIsSignedUp }) {
-  const [password, setPassword] = React.useState('');
-  const [name, setname] = React.useState('');
-  const [birth, setbirth] = React.useState('');
-  const [phone, setphone] = React.useState('');
-  const [email, setemail] = React.useState('');
-
-  // onpress를 했을 때 딕셔너리로 보내
-  // const LoginForm = ( email, password, name, birth, phone) => {
-  const navigation = useNavigation();
-  
-  const handleSignUp = () => {
-    setIsSignedUp(true);
-    sendData(email, password, name, birth, phone); // 회원가입 데이터 전송
-    navigation.navigate('LoginUI'); // 회원가입 후 화면 이동
-  }
-  const sendData = ( email, password, name, birth, phone,navigation) => {
-    let data = {
-      email: email,
-      password: password,
-      name: name,
-      birth: birth,
-      phone: phone
-    };
-  
-    fetch('http://192.168.0.189:5000/signup', {
-      method: 'POST',
-      headers: {
-        'Content-Type': 'application/json',
-        'X-CSRFToken': '{{csrf_token}}',
-      },
-      body: JSON.stringify(data),
-    })
-      .then((response) => response.json())
-      .then((result) => {
-        console.log('1111', result);
-        alert(result['msg']);
-        navigation.navigate('loginUI');
-      })
-      .catch((error) => {
-        alert('Error:', error);
-      });
-  }; 
-  // }
-
-  return (
-    <PaperProvider theme={theme} >
-        <ScrollView>
-        <View style={{ alignItems: 'center', marginTop:65}}>
-
-            <Text>이메일</Text> 
-            <TextInput   value={email} onChangeText ={setemail} style={{width:'70%' ,backgroundColor: 'transparent',marginBottom:20}}/>
-
-            <Text>비밀번호</Text>
-            <TextInput   value={password} onChangeText ={setPassword}
-                    keyboardType="numeric"  right={<TextInput.Icon name="eye" />}  style={{width:'70%' ,backgroundColor: 'transparent',marginBottom:20}}/>
-
-            <Text>이름</Text>     
-            <TextInput   value={name} onChangeText ={setname} style={{width:'70%' ,backgroundColor: 'transparent',marginBottom:20}}/>
-          
-           <Text>생년월일</Text>
-           <TextInput   value={birth} onChangeText ={setbirth} placeholder="ex)020415" placeholderTextColor={"lightgray"}
-                    keyboardType="numeric"  style={{width:'70%' ,backgroundColor: 'transparent',marginBottom:20}}/>
-            <Text>전화번호</Text>
-            <TextInput   value={phone} onChangeText ={setphone}
-                    keyboardType="numeric"  right={<TextInput.Icon name="eye" />}  style={{width:'70%' ,backgroundColor: 'transparent',marginBottom:20}}/>
-          
-          </View>
-            <View style={styles.buttonContainer}>
-             <Pressable style={[styles.button, styles.buttonClose]} >
-              <Text style={{fontSize:17, color: "white"}}>뒤로가기</Text>
-              {/* 로그인페이지로 이동 */}
-            </Pressable> 
-            {/* <Pressable style={[styles.button2, styles.buttonClose2]} onPress={() => sendData(email, password, name, birth, phone,navigation)}> */}
-            {/* sendData(email,password,name,birth,phone) */}
-            <Pressable
-      style={[styles.button2, styles.buttonClose2]}
-      onPress={handleSignUp}
-    >
-              <Text style={{fontSize:17, color: "white",}}>회원가입</Text>
-            </Pressable>
-            </View>
-        </ScrollView>
-    </PaperProvider>
-  );
-};
-const theme = {
-
-    ...DefaultTheme,
-    colors: {
-      ...DefaultTheme.colors,
-      primary: '#30905B',
-      backgroundColor:'red' },
+//     // AsyncStorage.getItem('access_token',(err,result)=>{
+//     //   setAcessToken(result)
+//     //   console.log('!!!!!!!!!!!!!!!!!',access_token);
+//     // });
     
-  };
-  const styles = StyleSheet.create({
+//     if(AsyncStorage.getItem('access_token')){
+//       console.log('토큰 존재함');
+//     }else{
+//       console.log('토큰 없음');
+//     }
 
-  input: {
-    marginTop: '50%',
-    alignItems:'center',
-    borderRadius: 5,
+//     const sendData = async () => {
+//       try {
+//         const access_token = await AsyncStorage.getItem('access_token');
+//         const data = {userid:1};
     
-  },
-  buttonContainer: {
-    flexDirection: 'row',
-    justifyContent: 'space-between',
-    marginTop: 10,
-  },
-  button: {
-          borderRadius: 15,
-          padding: 10,
-          width: "25%",
-          height:"30%",
-          alignItems:'center',
-          marginTop:30,
-          fontSize: 20,
-          justifyContent:'center',
-          marginLeft:55,
-          marginRight:45,
-        },
-        
-        buttonClose: {
-          backgroundColor: '#B4DBB1', 
-        //   B4DBB1
-        },
-        button2: {
-            borderRadius: 15,
-            padding: 10,
-            width: "25%",
-            height:"30%",
-            alignItems:'center',
-            marginTop:30,
-            fontSize: 20,
-            justifyContent:'center',
-            marginLeft:35,
-            marginRight:55,
-          },
-          
-          buttonClose2: {
-            backgroundColor: '#30905B', 
-          //   B4DBB1
-          },
-}
-);
+//         fetch('http://192.168.0.189:5000/home/word', {
+//           method: 'POST',
+//           headers: {
+//             'Content-Type': 'application/json',
+//             'X-CSRFToken': '{{csrf_token}}',
+//             'Authorization': `Bearer ${access_token}`
+//           },
+//           body: JSON.stringify(data)
+//         })
+//           .then((response) => response.json())
+//           .then((result) => {
+//             // console.log('1111', result);
+//             setData(result);
+//           })
+//           .catch((error) => {
+//             console.error('Error:', error);
+//           });
+//       } catch (error) {
+//         console.error('Error:', error);
+//       }
+//     };
+    
 
+
+//   const layoutExample = (data) => {
+      
+//       const items = data.slice().reverse(); // slice : 복사본 만드는 거. 데이터 역순
+
+//       // console.log("layoutExample:",items);
+
+//       return ( // 체크 : 바로 밑에 View style에 exampleContainerLight은 없어도 되는거 아냐?
+//           <View style={[styles.exampleContainer, styles.exampleContainerLight]}> 
+//               <Text style={[styles.title, styles.titleDark]}>{`오늘의 끝장단어`}</Text>
+//               <Carousel
+//                 data={items}
+//                 renderItem={_renderItem}
+//                 sliderWidth={sliderWidth}
+//                 itemWidth={itemWidth}
+//                 containerCustomStyle={styles.slider}
+//                 contentContainerCustomStyle={styles.sliderContentContainer}
+//                 layout={'stack'} // stack, tinder , ... 우리는 stack 사용
+//                 loop={false} // 무한반복 X
+                
+//                 // 카드 쌓는 순서 변경
+//                 firstItem={items.length - 1} // items의 마지막 인덱스 의미
+//                 containerCustomStyle2={{
+//                   transform: [{ scaleX: -1 }] // 좌우반전 ,,~
+//                 }}
+//               />
+//           </View>
+//       );
+//   }
+
+//   return (
+//       <SafeAreaView style={styles.safeArea}>
+//           <View style={styles.container}>
+
+//               {/* 상단바 */}
+//               <StatusBar
+//                 translucent={true}
+//                 backgroundColor={'#ffffff'}
+//                 barStyle={'dark-content'}
+//               />
+
+//               <View style="flex:1">
+//                 { layoutExample(data1) }
+//               </View>
+//           </View>
+//       </SafeAreaView>
+//   );
+    
+// }
+
+// export default Card_Study;
