@@ -1,19 +1,37 @@
 from flask import Flask, request, jsonify, render_template
 from flask_bcrypt import Bcrypt
+from flask_jwt_extended import JWTManager, create_access_token 
+from flask_jwt_extended import jwt_required,get_jwt_identity
 import pymysql
-import jwt
 
 from validation import *
 
-default_image = './templates/CSS/기본.png'
+default_image = './default_image.png'
 
 app = Flask(__name__)
 # jsonify 한글 인코딩이 변경되어 비정상 출력 문제 해결 코드
 app.config['JSON_AS_ASCII'] = False
-app.config['SECRET_KEY'] = 'secret_key'
+
+app.config['JWT_SECRET_KEY'] = 'SECRET_KEY'
+
 app.config['BCRYPT_LEVEL'] = 10
 
 bcrypt = Bcrypt(app)
+jwt = JWTManager(app)
+
+# 홈화면 구현
+# @app.route('/home', methods=['GET','POST'])
+# @jwt_required()
+# def app_home():
+#     current_user = get_jwt_identity()
+
+#     connection = pymysql.connect(host='localhost', port=3306, db='finnwish', user='root', passwd='1807992102', charset='utf8')
+#     cursor = connection.cursor(pymysql.cursors.DictCursor)
+#     sql = 'SELECT * FROM USER_ACT WHERE = USER_NUM = %s'
+
+
+
+
 
 # 회원가입 API 엔드포인트
 @app.route('/signup', methods=['POST']) ## POST 방식으로 오는 입력만 받음
@@ -62,7 +80,7 @@ def signup():
     elif pw_validation(user_pw) == False:
         return jsonify({'message': '비밀번호를 4자 이상 입력해 주세요.'})
     elif name_validation(user_name) == False:
-         return jsonify({'message':'이름을 1자리 이상 입력해 주세요.'})
+         return jsonify({'message':'이름을 입력해 주세요.'})
     elif birth_validation(user_birth) == False:
          return jsonify({'message':'생일을 6자리 숫자로 입력해 주세요.'})
     elif phone_validation(user_phone) == False:
@@ -112,22 +130,17 @@ def login():
         # check_password_hash(pwhash, password): 사용자가 제출한 비밀번호를 확인할 때
         if result:
             user_name = db_data[0]['USER_NAME']
-            return jsonify({'message': f'{user_name}님 반갑습니다.'})
+            return jsonify({'message': f"{user_name}님 반갑습니다.", 'access_token' : create_access_token(identity=db_data[0]['USER_NUM'])})
+                                                                    # JWT 토큰을 생성하여 access_token 키 값에 입력
+                                                                    # identity 는 db_data의 user_num을 고유 값으로 사용
         else:
             return jsonify({'message': '비밀번호를 다시 입력해주세요.'})
     else:
         return jsonify({'message': '아이디를 다시 입력해주세요.'})
-    
+    # jsonify 함수는 키-값 쌍을 가진 딕셔너리를 인자로 받아 JSON 형식으로 반환해주는 함수
 if __name__ == "__main__":
     app.run(host='localhost', port='5000', debug=True)
 ## 이거는 마지막에서만 선언
-
-# payload = {
-#    'id': 'hi',
-#    'exp': 'hello + time'     
-# }
-# SECRET_KEY = '휴'
-# token = jwt.encode(payload, SECRET_KEY, algorithm='HS256')
 
 # 코드를 작성한 파일을 실행하거나 flask run 명령을 사용하여 Flask 애플리케이션을 실행합니다.
 # Postman, cURL 또는 웹 브라우저와 같은 도구를 사용하여 회원가입과 로그인 API 엔드포인트를 호출합니다.
