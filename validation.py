@@ -26,14 +26,14 @@ def email_overlap(email):
     
 # 최소 비밀번호 길이 확인
 def pw_validation(password):
-    if 30 >= len(password) >= 4:
+    if 4 <= len(password) <= 30:
         return True
     else: 
         return False 
     
 # 유저 이름 입력 정보 확인
 def name_validation(name):
-    if 30 >= len(name) >= 1:
+    if 1 <= len(name) <= 20:
         return True 
     else:
         return False 
