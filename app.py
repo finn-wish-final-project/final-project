@@ -13,6 +13,7 @@ app = Flask(__name__)
 app.config['JSON_AS_ASCII'] = False
 
 app.config['JWT_SECRET_KEY'] = 'SECRET_KEY'
+algorithm = 'HS256'
 
 app.config['BCRYPT_LEVEL'] = 10
 
@@ -20,18 +21,32 @@ bcrypt = Bcrypt(app)
 jwt = JWTManager(app)
 
 # 홈화면 구현
-# @app.route('/home', methods=['GET','POST'])
-# @jwt_required()
-# def app_home():
-#     current_user = get_jwt_identity()
+@app.route('/home', methods=['GET','POST'])
+@jwt_required() # @jwt_required() 데코레이터 -> 해당 엔드포인트에 접근하려면 JWT 토큰이 필요
+                # => 자동으로 인증 처리, 유효한 JWT 토큰이 요청 헤더에 포함되어 있는지 확인하고, 유효성 검사를 수행
+def app_home():
+    current_user = get_jwt_identity()
 
-#     connection = pymysql.connect(host='localhost', port=3306, db='finnwish', user='root', passwd='1807992102', charset='utf8')
-#     cursor = connection.cursor(pymysql.cursors.DictCursor)
-#     sql = 'SELECT * FROM USER_ACT WHERE = USER_NUM = %s'
+    connection = pymysql.connect(host='localhost', port=3306, db='finnwish', user='root', passwd='1807992102', charset='utf8')
+    cursor = connection.cursor(pymysql.cursors.DictCursor)
 
+    word_sql = f'SELECT USER_DICT FROM USER_ACT WHERE USER_NUM={current_user};'
+    cursor.execute(word_sql)
+    word_data = cursor.fetchall()
 
-
-
+    if word_data[0]['USER_DICT'] == None:
+        dict_sql = 'SELECT WORD, EXPLAINATION FROM DICTIONARY LIMIT 3;'
+        cursor.execute(dict_sql)
+        result = cursor.fetchall()
+        connection.close()
+        return jsonify(result)
+    else:
+        max_word = word_data[0]['USER_DICT'][-2]
+        add_sql = f"SELECT WORD, EXPLAINATION FROM DICTIONARY WHERE WORD_NUM > {max_word} LIMIT 3;"
+        cursor.execute(add_sql)
+        result = cursor.fetchall()
+        connection.close()
+        return jsonify(result)
 
 # 회원가입 API 엔드포인트
 @app.route('/signup', methods=['POST']) ## POST 방식으로 오는 입력만 받음
@@ -130,9 +145,9 @@ def login():
         # check_password_hash(pwhash, password): 사용자가 제출한 비밀번호를 확인할 때
         if result:
             user_name = db_data[0]['USER_NAME']
-            return jsonify({'message': f"{user_name}님 반갑습니다.", 'access_token' : create_access_token(identity=db_data[0]['USER_NUM'])})
-                                                                    # JWT 토큰을 생성하여 access_token 키 값에 입력
-                                                                    # identity 는 db_data의 user_num을 고유 값으로 사용
+            return jsonify({'message': f"{user_name}님 반갑습니다.", 'access_token' : create_access_token(identity=db_data[0]['USER_NUM']),"token_type":"bearer", "expires_in": 7200})
+                                                                    # JWT 토큰을 생성하여 access_token 키 값에 입력 
+                                                                    # # identity 는 db_data의 user_num을 고유 값으로 사용
         else:
             return jsonify({'message': '비밀번호를 다시 입력해주세요.'})
     else:
