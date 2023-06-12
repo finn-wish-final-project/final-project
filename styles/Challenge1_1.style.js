@@ -8,10 +8,6 @@ export default StyleSheet.create({
     backgroundColor: 'white',
     height: '100%',
   },
-  contentcontainer : {
-    flexDirection: 'row',
-    // paddingHorizontal: 10,
-  },
   title : {
     fontSize : 23,
     color : 'black',
@@ -21,23 +17,25 @@ export default StyleSheet.create({
   },
   img : {
     height : 300,
-    width : 200,
+    width : 395,
     borderRadius : 10, 
     margin : 10,
   },
   text : {
+    fontFamily : '12롯데마트드림Medium',
     fontSize : 18,
     flexWrap : 'wrap',
     overflow : 'hidden',
-    color : 'black'
+    color : 'black',
+    marginHorizontal : 15
     // maxWidth: Dimensions.get('window').width - 230,
   },
   small_title : {
-    fontSize : 20,
+    fontSize : 23,
     fontWeight : 'bold',
     color : 'black',
-    marginTop : 10,
-    marginBottom : 10
+    marginVertical : 10,
+    marginLeft : 10
   },
   textcontainer : {
     flexDirection : 'column',
@@ -45,7 +43,7 @@ export default StyleSheet.create({
     marginLeft : 10
   },
   text2 : {
-    fontSize : 17,
+    fontSize : 19,
     flexWrap : 'wrap',
     overflow : 'hidden',
     color : 'black',
@@ -53,7 +51,7 @@ export default StyleSheet.create({
     marginTop : 5
   },
   text_bold : {
-    fontSize : 17,
+    fontSize : 19,
     flexWrap : 'wrap',
     overflow : 'hidden',
     color : 'black',
@@ -68,10 +66,11 @@ export default StyleSheet.create({
     alignItems: 'center',
     borderRadius: 10,
     marginLeft: '25%',
-    margin : 15
+    margin : 17
   },
   buttonText: {
     color: 'white',
     textAlign: 'center',
+    fontSize : 17
   },
 }) 

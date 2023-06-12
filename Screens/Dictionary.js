@@ -28,7 +28,7 @@ const CardView = () => {
         })
           .then((response) => response.json())
           .then((result) => {
-            // console.log('1111', result);
+            console.log('1111', result);
             setData(result);
           })
           .catch((error) => {

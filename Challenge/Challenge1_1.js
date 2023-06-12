@@ -9,37 +9,30 @@ const Challenge1_1 = () => {
   return (
     <ScrollView style = {styles.container}>
       <Text style = {styles.title}> 적금 챌린지 - ✨꿈을 위한 첫 걸음✨</Text>
-
-        <View style ={styles.contentcontainer}>
-        
-
-          <View style = {styles.textcontainer}>
-            <Text style = {styles.small_title}>🍀 Introduction:</Text>
-            <Text style = {styles.text}>
-              대학 등록금은 우리에게 큰 도전입니다. 한 두 푼이 아니라는 것을 알고 있지만, 우리에겐 큰 꿈이 있습니다. 이 챌린지 페이지는 그 꿈을 실현하기 위한 첫 걸음을 내딛을 수 있는 특별한 기회입니다. 여러분들이 중고등학생 때부터 매달 조금씩 적금을 시작하면, 앞으로 대학 등록금을 마련하는데 도움이 될 것입니다. 이 챌린지에 참여하여 여러분의 꿈을 향한 여정을 시작해보세요. {"\n"}
-            </Text>
-          </View>
-          <Image source = {require('../static/img/challenge1_1_1.jpg')}
-          style = {styles.img}/>
-
+  
+        <View>
+          <Text style = {styles.small_title}>🍀 Introduction:</Text>
+          <Text style = {styles.text}>
+            대학 등록금은 우리에게 큰 도전입니다.{"\n"} {"\n"}이 챌린지 페이지는 그 꿈을 실현하기 위한 첫 걸음을 내딛을 수 있는 특별한 기회입니다.{"\n"}{"\n"}여러분들이 중고등학생 때부터 매달 조금씩 적금을 시작하면, 앞으로 대학 등록금을 마련하는데 도움이 될 것입니다.{"\n"}{"\n"}이 챌린지에 참여하여 여러분의 꿈을 향한 여정을 시작해보세요. {"\n"}
+          </Text>
         </View>
-        
+        <Image source = {require('../static/img/challenge1_1_1.jpg')}
+          style = {styles.img}/>
         <Divider style={{ borderWidth: 0.5,borderColor:'lightgray' }} width={'100%'}/>
 
-        <Text style = {styles.small_title}>   🍀 Challenge Details: </Text>
+        <Text style = {styles.small_title}>🍀 Challenge Details: </Text>
         <Text style = {styles.text2}>
         <Text style = {styles.text_bold}>1️⃣ 목표 설정:</Text> 매달 정해진 금액을 적금으로 저축하여 대학 등록금을 마련하는 것이 목표입니다. 각자의 목표 금액과 저축 기간을 설정해보세요. {"\n"}{"\n"}
         <Text style = {styles.text_bold}>2️⃣ 적금 계획:</Text> 금융 기관을 방문하여 적금 계좌를 개설하고, 매달 정해진 금액을 저축하도록 계획을 세워보세요. {"\n"}{"\n"}
         <Text style = {styles.text_bold}>3️⃣ 정기 점검:</Text> 매달 저축한 금액을 확인하고, 목표에 도달하기 위해 얼마나 더 노력해야 하는지 정기적으로 점검해보세요. {"\n"}{"\n"}
         <Text style = {styles.text_bold}>4️⃣ 동기 부여:</Text> 적금 챌린지 페이지에서 다른 참여자들과 소통하며 서로의 목표와 성과를 공유하고 동기부여를 받아보세요. {"\n"}{"\n"}
-        <Text style = {styles.text_bold}>5️⃣ 꿈을 위한 성과:</Text> 대학 등록금을 마련하는 것은 큰 도전이지만, 여러분이 꿈을 이루는 데 도움이 되는 보람을 느낄 수 있을 것입니다. 성공적으로 목표를 달성하고 꿈을 이룬 참여자들은 특별한 인증과 상을 받게 됩니다.
+        <Text style = {styles.text_bold}>5️⃣ 꿈을 위한 성과:</Text> 대학 등록금을 마련하는 것은 큰 도전이지만, 여러분이 꿈을 이루는 데 도움이 되는 보람을 느낄 수 있을 것입니다. 성공적으로 목표를 달성하고 꿈을 이룬 참여자들은 특별한 인증과 상을 받게 됩니다.{"\n"}
         </Text>
 
         <Text style = {styles.small_title}>   🍀Why Join? </Text>
         <Text style = {styles.text2}>
-        포스트 코로나 시대: 적금을 통해 대학 등록금을 마련하면, 졸업 후 빚 없는 출발이 가능합니다. 경제적인 안정을 확보하고 미래를 준비하세요.
-        자금 조달 도움: 대학 등록금을 마련하는 데 필요한 자금을 조달하기 위해 별도의 노력이 필요합니다. 이 챌린지는 그 과정을 함께 걸어가는 동기를 제공합니다.
-        금융 교양: 적금 챌린지를 통해 금융 교양을 쌓고, 자신의 돈을 효과적으로 관리하는 방법을 배울 수 있습니다.
+          ✅ 금융 교양: 적금 챌린지를 통해 금융 교양을 쌓고, 자신의 돈을 효과적으로 관리하는 방법을 배울 수 있습니다. {"\n"}{"\n"}
+          ✅ 자금 조달 도움: 대학 등록금을 마련하는 데 필요한 자금을 조달하기 위해 별도의 노력이 필요합니다. 이 챌린지는 그 과정을 함께 걸어가는 동기를 제공합니다. 경제적인 안정을 확보하고 미래를 준비하세요.
         </Text>
 
         <TouchableOpacity style={styles.button} onPress={() => navigation.navigate('Challenge_link1')}>
