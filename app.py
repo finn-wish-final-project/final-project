@@ -142,7 +142,7 @@ def dictionary():
   # data=request.get_json()
   # data=data['userid']
   cur_user=get_jwt_identity()
-  print(cur_user)
+  # print(cur_user)
 
   connection= pymysql.connect(host=host, user=user, password=password, database=database)
   conn=connection.cursor(pymysql.cursors.DictCursor)
@@ -282,16 +282,16 @@ def signin():
   conn=connection.cursor(pymysql.cursors.DictCursor)
    ## json받아와서 인지값 넣기
   user_data=request.get_json()
-  print('json입력값:',user_data)
+  # print('json입력값:',user_data)
   user_email=user_data['email'].replace(" ", "")
   user_pw=user_data['password'].replace(" ", "")
-  print(user_email,user_pw)
+  # print(user_email,user_pw)
   query_login=f"select * from userlogin where email= '{user_email}';"
-  print(query_login)
+  # print(query_login)
   conn.execute(query_login)
   result = conn.fetchall()
   connection.close()
-  print('db결과:',result) 
+  # print('db결과:',result) 
   if bcrypt.check_password_hash(result[0]['password'], user_pw):
 
     return jsonify(username=result[0]['name'],access_token=create_access_token(identity=result[0]['userid'] ),msg="로그인 되었습니다.")       # jwt토큰 보내줌
