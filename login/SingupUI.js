@@ -298,7 +298,7 @@ import LoginUI from '../login/LoginUI';
 
 
 // // 넘어가긴 하는데 에러 뜨는 코드 안시 안 씀
-
+useNavigation
 export default function SignupUI ({ setIsSignedUp }) {
   const [password, setPassword] = React.useState('');
   const [name, setname] = React.useState('');

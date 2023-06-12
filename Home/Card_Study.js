@@ -132,7 +132,7 @@ const Card_Study = () => {
                   
                    <Provider>
                      <HomeNews/>
-                     {/* {MyComponent()} */}
+                    
                    </Provider>
                 
                 
