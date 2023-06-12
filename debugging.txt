@@ -1,0 +1,14 @@
+Debugging 
+defining the problem
+current - expected want 사이의 gap을 줄이는 것
+
+Debugger - VSCODE
+Run and Debug - python : flask
+빨간색 점 = breakpoint
+VARIABLES - 선언된 지역, 전역 변수를 모두 볼 수 있음
+WATCH - 관심 있는 값을 출력해볼 수 있음
+CALL STACK - 함수 실행 순서
+LOADED SCRIPTS
+BREAKPOINTS
+
+실행, 한줄 씩 실행
