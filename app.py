@@ -3,6 +3,7 @@ from flask_bcrypt import Bcrypt
 from flask_jwt_extended import JWTManager,create_access_token,jwt_required,get_jwt_identity
 import pymysql
 from dotenv import load_dotenv
+from datetime import timedelta
 import os 
 import ast
 
@@ -20,6 +21,7 @@ ip=os.environ.get('IP')
 
 app=Flask(__name__)
 app.config["JWT_SECRET_KEY"]=os.environ.get('JWT_HASH')
+app.config["JWT_ACCESS_TOKEN_EXPIRES"] = timedelta(hours=6)
 bcrypt=Bcrypt(app)
 jwt=JWTManager(app)
 
@@ -32,10 +34,36 @@ jwt=JWTManager(app)
 
 ## 퀴즈풀면 사전에 저장
   
-## 뉴스 스크랩 - 저장
-# @app.route('/news/save', methods=['GET','POST'])
-# # @jwt_required()
-# def save_scrap():
+# 뉴스 스크랩 - 저장
+@app.route('/news/save', methods=['GET','POST'])
+@jwt_required()
+def save_scrap():
+  news_id=request.get_json()
+  news_id=news_id['newsid']
+  cur_user=get_jwt_identity()
+
+  connection= pymysql.connect(host=host, user=user, password=password, database=database)
+  conn=connection.cursor(pymysql.cursors.DictCursor)
+  query=f'select scrap from useract where userid="{cur_user}";'
+  conn.execute(query)
+  result=conn.fetchall()
+  # print(result)
+  scrap_list=result[0]['scrap']
+  if scrap_list==None:
+    query3=f'update useract set scrap="{[news_id]}" where userid={cur_user};'
+    conn.execute(query3)
+    connection.commit()
+    connection.close()
+    return jsonify(msg="스크랩 저장을 완료하였습니다.")
+  else:
+    scrap_list=ast.literal_eval(scrap_list)
+    print(scrap_list)
+    scrap_list.append(int(news_id))
+    query2=f'update useract set scrap="{scrap_list}" where userid={cur_user};'
+    conn.execute(query2)
+    connection.commit()
+    connection.close()
+    return jsonify(msg="스크랩 저장을 완료하였습니다.")
 
 
 ####################################### USERACT API ##################################################
@@ -59,7 +87,7 @@ def show_scrap():
     return jsonify(msg="등록된 스크랩이 없습니다.")
   else:
     user_scrap=user_scrap.replace("[","(").replace("]",")")
-    query1=f'select title,article,image from news where newsid in {user_scrap};'    # 뉴스 db에서 useract에 scrap에 있는 배열안에 newsid들로 검색
+    query1=f'select title,article from news where newsid in {user_scrap};'    # 뉴스 db에서 useract에 scrap에 있는 배열안에 newsid들로 검색
     conn.execute(query1)
     news_list=conn.fetchall()
     connection.close()
@@ -69,9 +97,10 @@ def show_scrap():
 @app.route('/dict', methods=['GET','POST'])
 @jwt_required()
 def dictionary():
-  data=request.get_json()
-  data=data['userid']
+  # data=request.get_json()
+  # data=data['userid']
   cur_user=get_jwt_identity()
+  print(cur_user)
 
   connection= pymysql.connect(host=host, user=user, password=password, database=database)
   conn=connection.cursor(pymysql.cursors.DictCursor)
@@ -97,7 +126,31 @@ def dictionary():
     return jsonify(dict_list)
 
 ## 퀴즈 던져주기
+@app.route('/home/quiz', methods=['GET','POST'])
+@jwt_required()
+def home_quiz():
+  cur_user=get_jwt_identity()
 
+  connection=pymysql.connect(host=host, user=user, password=password, database=database)
+  conn=connection.cursor(pymysql.cursors.DictCursor)
+  query=f'select dict from useract where userid="{cur_user}";'
+  conn.execute(query)
+  result=conn.fetchall()
+  user_dict=result[0]['dict']
+  # print(user_dict)
+  if user_dict==None:
+    query1=f'select wordid,quiz,answer from dict where wordid in {(1,2,3)};'
+    conn.execute(query1)
+    quiz_list=conn.fetchall()
+    connection.close()
+    return jsonify(quiz_list)
+  else:
+    user_dict=user_dict.replace("[","(").replace("]",")")
+    query2=f'select wordid,quiz,answer from dict where wordid in {user_dict};'
+    conn.execute(query2)
+    quiz_list=conn.fetchall()
+    connection.close()
+    return jsonify(quiz_list)
 
 
 ######################################################################################################
@@ -131,7 +184,7 @@ def home_news():
   else:
     word_list=ast.literal_eval(word_list)
     news_num=int(len(word_list)/3)+1    # 자신이 가지고 있는 단어 리스트에 나누기 3을 하고 1을 더하면 필요한 뉴스가 나온다.
-    query2=f'select title,article from news where newsid={news_num};'
+    query2=f'select newsid,title,article from news where newsid={news_num};'
     conn.execute(query2)
     news_result=conn.fetchall()
     connection.close()
@@ -180,20 +233,21 @@ def signin():
   conn=connection.cursor(pymysql.cursors.DictCursor)
    ## json받아와서 인지값 넣기
   user_data=request.get_json()
-  # print(user_data)
-  user_email=user_data['email']
-  user_pw=user_data['password']
-  query=f"select * from userlogin where email= '{user_email}'; "
-  conn.execute(query)
-  result=conn.fetchall()
+  print('json입력값:',user_data)
+  user_email=user_data['email'].replace(" ", "")
+  user_pw=user_data['password'].replace(" ", "")
+  print(user_email,user_pw)
+  query_login=f"select * from userlogin where email= '{user_email}';"
+  print(query_login)
+  conn.execute(query_login)
+  result = conn.fetchall()
   connection.close()
-  # print(result)
+  print('db결과:',result) 
   if bcrypt.check_password_hash(result[0]['password'], user_pw):
-    return jsonify(username=result[0]['name'],
-    access_token=create_access_token(identity=result[0]['userid'] , expires_delta=False),
-    msg="로그인 되었습니다.")       # jwt토큰 보내줌
+
+    return jsonify(username=result[0]['name'],access_token=create_access_token(identity=result[0]['userid'] ),msg="로그인 되었습니다.")       # jwt토큰 보내줌
   else:
-    return jsonify(msg="비밀번호가 틀렸습니다.")
+    return jsonify(msg="비밀번호가 틀렸습니다.") 
 
 ## 회원가입
 @app.route('/signup', methods=['POST'])
@@ -206,11 +260,11 @@ def signup():
   ## json받아와서 인지값 넣기
   user_data=request.get_json()
   print(user_data)
-  user_email=user_data['email']
-  user_pw=user_data['password']
-  user_birth=user_data['birth']
-  user_name=user_data['name']
-  user_phone=user_data['phone']
+  user_email=user_data['email'].replace(" ", "")
+  user_pw=user_data['password'].replace(" ", "")
+  user_birth=user_data['birth'].replace(" ", "")
+  user_name=user_data['name'].replace(" ", "")
+  user_phone=user_data['phone'].replace(" ", "")
   
   # 유효성 검사
   if email_validation(user_email) and password_validation(user_pw) and name_validation(user_name):
@@ -234,10 +288,10 @@ def signup():
 
     else:
       connection.close()
-      return jsonify(msg="중복아이디가 존재합니다.")
+      return jsonify(msg2="중복아이디가 존재합니다.")
 
   else:
-    return jsonify(msg="로그인 폼에 맞게 작성해주세요.")
+    return jsonify(msg1="로그인 폼에 맞게 작성해주세요.")
 #####################################################################################################
 
     
