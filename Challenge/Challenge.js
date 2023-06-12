@@ -11,7 +11,7 @@ const Challenge = () => {
       <TouchableOpacity style={styles.ChallengeCardContainer} 
        onPress={() => navigation.navigate('Challenge1_1')}>
         <View style = {styles.ChallengeContainer1}>
-          <Text style={styles.CardTitle} > 대학 등록금 마련 챌린지 </Text>
+          <Text style={styles.CardTitle} > 꿈을 위한 첫 걸음</Text>
           <Text style = {styles.Point}> 500🍀</Text>
         </View>
         <View style = {styles.ChallengeContainer2}>

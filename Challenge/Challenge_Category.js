@@ -10,6 +10,8 @@ import Challenge4 from './Challenge4';
 
 import Challenge1_1 from './Challenge1_1';
 
+import Challenge_link1 from './Challenge_link1';
+
 const Stack = createStackNavigator();
 
 const Challenge_Category = () => {
@@ -68,6 +70,9 @@ const Challenge_Stack = () => {
       <Stack.Screen name="Challenge4" component={Challenge4} options={{ headerShown: false }} />
 
       <Stack.Screen name="Challenge1_1" component={Challenge1_1} options={{ headerShown: false }} />
+
+      <Stack.Screen name="Challenge_link1" component={Challenge_link1} options={{ headerShown: false }} />
+
     </Stack.Navigator>
   );
 };
