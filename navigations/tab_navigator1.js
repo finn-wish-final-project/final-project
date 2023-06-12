@@ -20,7 +20,7 @@ const TabNavigator1 =({})=> {
          <DrawerItemList {...props}  style={{borderWidth:1}}/>
          <View style={{flex:1,marginVertical:20,borderWidth:1}}>
            <DrawerItem
-            label="Log out"
+            label="로그아웃"
             onPress={() => {
               AsyncStorage.clear();
               RNRestart.restart();
