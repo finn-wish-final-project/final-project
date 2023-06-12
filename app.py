@@ -39,6 +39,7 @@ jwt=JWTManager(app)
 def save_word() :
   word_data=request.get_json()
   word_data=word_data['wordid']
+  
   cur_user=get_jwt_identity()
 
   connection= pymysql.connect(host=host, user=user, password=password, database=database)
@@ -50,7 +51,6 @@ def save_word() :
   dict_list=result[0]['dict']
 
   if dict_list==None:
-    word_data=ast.literal_eval(word_data)
     query2=f'update useract set dict="{word_data}" where userid={cur_user};'
     conn.execute(query2)
     connection.commit()
@@ -58,7 +58,6 @@ def save_word() :
     return jsonify(msg="단어가 사전에 저장되었습니다.")
   else:
     dict_list=ast.literal_eval(dict_list)
-    word_data=ast.literal_eval(word_data)
     update_dict_list=dict_list+word_data
     update_dict_list=set(update_dict_list)
     update_dict_list=list(update_dict_list)
@@ -110,9 +109,10 @@ def save_scrap():
 @app.route('/news/show', methods=['GET','POST'])
 @jwt_required()
 def show_scrap():
-  data=request.get_json()
-  data=data['userid']
+  # data=request.get_json()
+  # data=data['userid']
   cur_user=get_jwt_identity()
+  # print(cur_user)
 
   connection = pymysql.connect(host=host, user=user, password=password, database=database)
   conn=connection.cursor(pymysql.cursors.DictCursor)
@@ -120,15 +120,17 @@ def show_scrap():
   conn.execute(query)
   result=conn.fetchall()
   user_scrap=result[0]['scrap']
-  # print(user_scrap)
+  # print(cur_user,"요청:",user_scrap)
   if user_scrap==None:
     connection.close()
     return jsonify(msg="등록된 스크랩이 없습니다.")
   else:
     user_scrap=user_scrap.replace("[","(").replace("]",")")
+    # print(user_scrap)
     query1=f'select title,article from news where newsid in {user_scrap};'    # 뉴스 db에서 useract에 scrap에 있는 배열안에 newsid들로 검색
     conn.execute(query1)
     news_list=conn.fetchall()
+    # print(news_list)
     connection.close()
     return jsonify(news_list)
 
@@ -187,7 +189,8 @@ def home_quiz():
     return jsonify(quiz_list)
   else:
     user_dict=user_dict.replace("[","(").replace("]",")")
-    query2=f'select * from dict where wordid in {user_dict};'
+    print(user_dict)
+    query2=f'select * from dict where wordid not in {user_dict} limit 3;'
     conn.execute(query2)
     quiz_list=conn.fetchall()
     connection.close()
@@ -204,8 +207,8 @@ def home_quiz():
 @app.route('/home/news', methods=['GET','POST'])
 @jwt_required()
 def home_news():
-  data=request.get_json()
-  data=data['userid']
+  # data=request.get_json()
+  # data=data['userid']
   cur_user=get_jwt_identity()
   # print(cur_user)
 
@@ -217,7 +220,7 @@ def home_news():
   word_list=result[0]['dict']
   # 초기 사용자일때
   if word_list==None:
-    query1=f'select title,article from news limit 1;'
+    query1=f'select title,article,newsid from news limit 1;'
     conn.execute(query1)
     result_news=conn.fetchall()
     connection.close()
