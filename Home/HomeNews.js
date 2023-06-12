@@ -62,6 +62,7 @@ import { log } from 'react-native-reanimated';
 
 const HomeNews = () => {
   const [visible, setVisible] = useState(false);
+  const [newsID,setnewsID] = useState('')
   const [news,setData]=useState({title:'', article:''});
   // const [token, setToken] = useState(null);
 
@@ -80,7 +81,7 @@ const HomeNews = () => {
       const access_token = await AsyncStorage.getItem('access_token');
       const data = {userid:1};
   
-      fetch('http://192.168.0.189:5000/home/news', {
+      fetch('http://192.168.0.146:5000/home/news', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
@@ -93,6 +94,34 @@ const HomeNews = () => {
         .then((result) => {
           console.log('1111', result);
           setData(result[0]);
+          setnewsID(result[0]['newsid'])
+        })
+        .catch((error) => {
+          console.error('Error:', error);
+        });
+    } catch (error) {
+      console.error('Error:', error);
+    }
+  };
+
+  const newsidsendData = async (newsID) => {
+    try {
+      const access_token = await AsyncStorage.getItem('access_token');
+      const data = {newsid:newsID};
+  
+      fetch('http://192.168.0.146:5000/news/save', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+          'X-CSRFToken': '{{csrf_token}}',
+          'Authorization': `Bearer ${access_token}`
+        },
+        body: JSON.stringify(data)
+      })
+        .then((response) => response.json())
+        .then((result) => {
+          console.log('1111', result);
+          alert(result['msg'])
         })
         .catch((error) => {
           console.error('Error:', error);
@@ -124,9 +153,23 @@ const HomeNews = () => {
                 <Text style={style.article}>{news.article}</Text>
 
               </ScrollView>
-              <Pressable onPress={hideDialog}>
+              <View style={style.ButtonContainer}>
+                <Pressable onPress={()=>newsidsendData(newsID)}>
+                    <Text style={style.ScrapButton}>스크랩</Text>
+                </Pressable>
+                <Pressable onPress={hideDialog}>
                   <Text style={style.CloseButton}>닫기</Text>
                 </Pressable>
+              </View>
+              {/* <View style={{marginLeft:-14,height:30,borderRadius:10,backgroundColor:'darkgreen', bottom: 0, flexDirection: 'row', justifyContent:'space-between', width: '110%', paddingHorizontal: '15%'}}>
+                <Pressable onPress={()=>newsidsendData(newsID)}>
+                    <Text style={{fontSize:20,color:'white'}}>스크랩</Text>
+                </Pressable>
+                <Text style={{fontSize:25,color:'white'}}>|</Text>
+                <Pressable onPress={hideDialog}>
+                  <Text style={{fontSize:20,color:'white'}} >닫기</Text>
+                </Pressable>
+              </View> */}
             </Dialog.ScrollArea>
           </Dialog>
         </Portal>

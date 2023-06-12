@@ -16,25 +16,14 @@ import Store from './Mypage_Slide/Store';
 import News_scrap from './Mypage_Slide/News_scrap';
 // import Icon from 'react-native-vector-icons/MaterialIcons';
 import Icon from 'react-native-vector-icons/Ionicons';
-import SignupUI from './login/SingupUI';
+// import SignupUI from './login/SingupUI';
 import TabNavigator1 from './navigations/tab_navigator1'
 import TabNavigator2 from './navigations/tab_navigator2'
 import TabNavigator3 from './navigations/tab_navigator3'
-import Quiz from './Screens/Quiz';
-import Quiz2 from './Screens/Quiz2';
-import App2 from './hihihi';
+import Quiz from './Screens/QUIZ/Quiz';
+import Quiz2 from './Screens/QUIZ/Quiz2';
+
 const Stack = createStackNavigator();
-
-// const App2 = () => {
-//   return (
-
-//       <Drawer.Navigator>
-//          <Drawer.Screen name="Quiz2" component={Quiz2} />
-//         <Drawer.Screen name="Quiz2" component={Quiz2} />
-//       </Drawer.Navigator>
- 
-//   );
-// };
 
 
 
@@ -42,31 +31,12 @@ const Stack = createStackNavigator();
 
 const Drawer = createDrawerNavigator();
 const Tab = createBottomTabNavigator();
-// const [isSignedUp, setIsSignedUp] = useState(false); 
+
 
 const colors={yellowgreen: '#28794D',
                 green: '#CBE6D7'}
 
                 
-// const TabNavigator =()=> {
-//   return(
-//     <>
-//       <Drawer.Navigator 
-      
-//       screenOptions={{
-//         drawerActiveBackgroundColor:'#CBE6D7', //커서 올라가있는 칸 전체 색
-//         drawerActiveTintColor:'#28794D', // 커서 올라가있는 글자색
-        
-//       }}
-//       initialRouteName="Home"
-//       >
-//         <Drawer.Screen name="Home" component={Card_Study} options={{ title: 'FINN WISH',headerTitleAlign: 'center',headerTitleStyle:{color:'darkgreen',fontWeight:'bold',fontSize:25}, }} />
-//         <Drawer.Screen name="My Chanllenge" component={Store} options={{title:'매점'}}/>
-//         <Drawer.Screen name="News scrap" component={News_scrap} options={{ title: '뉴스 스크랩',headerStyle: {backgroundColor: 'lightgrey',}}}/>
-//       </Drawer.Navigator>
-//     </>
-//   )
-// }
 
 
 export default function App() {
@@ -83,6 +53,8 @@ export default function App() {
                 iconName = focused ? 'home' : 'home-outline';
               } else if (route.name === 'Challenge'){
                 iconName = focused ? 'trophy' : 'trophy-outline';
+              } else if (route.name === 'Quiz'){
+                iconName = focused ? 'create' : 'create-outline';
               }
         
               // You can return any component that you like here!
@@ -102,7 +74,7 @@ export default function App() {
         <Tab.Screen name="Challenge" component={TabNavigator3} />
         
       </Tab.Navigator>
-          {/* <App2/> */}
+      
     </NavigationContainer>
   );
         }

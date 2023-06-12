@@ -5,14 +5,34 @@ export default StyleSheet.create({
       marginTop:15,
       fontSize:18
     },
+    ButtonContainer:{ 
+      bottom: 0, 
+      flexDirection: 'row', 
+      justifyContent: 'flex-start', 
+      width: '100%', 
+      paddingHorizontal: '5%'},
+    ScrapButton:{
+      backgroundColor:'#3B883E',
+      borderRadius:20,
+      width:130,
+      marginTop:10,
+      height:30,
+      textAlign:'center',
+      paddingTop:5,
+      color:'white',
+      marginLeft:-28
+    },
     CloseButton:{
-        backgroundColor:'darkgreen',
-        borderRadius:30,
+      
+        backgroundColor:'#2F782F',
+        borderRadius:20,
+        width:130,
         marginTop:10,
+        marginLeft:85,
         height:30,
         textAlign:'center',
         paddingTop:5,
-        color:'white'
+        color:'white',
       },
       textStyle:{
         color:'green',
