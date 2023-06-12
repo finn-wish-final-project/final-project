@@ -31,9 +31,43 @@ jwt=JWTManager(app)
 ## 마이페이지
 ## 매점
 
+######################################## UPDATE DB에 저장 #############################################
 
 ## 퀴즈풀면 사전에 저장
-  
+@app.route('/quiz/save' ,methods=['GET','POST'])
+@jwt_required()
+def save_word() :
+  word_data=request.get_json()
+  word_data=word_data['wordid']
+  cur_user=get_jwt_identity()
+
+  connection= pymysql.connect(host=host, user=user, password=password, database=database)
+  conn=connection.cursor(pymysql.cursors.DictCursor)
+  query=f'select dict from useract where userid="{cur_user}";'
+  conn.execute(query)
+  result=conn.fetchall()
+
+  dict_list=result[0]['dict']
+
+  if dict_list==None:
+    word_data=ast.literal_eval(word_data)
+    query2=f'update useract set dict="{word_data}" where userid={cur_user};'
+    conn.execute(query2)
+    connection.commit()
+    connection.close()
+    return jsonify(msg="단어가 사전에 저장되었습니다.")
+  else:
+    dict_list=ast.literal_eval(dict_list)
+    word_data=ast.literal_eval(word_data)
+    update_dict_list=dict_list+word_data
+    update_dict_list=set(update_dict_list)
+    update_dict_list=list(update_dict_list)
+    query1=f'update useract set dict="{update_dict_list}" where userid={cur_user};'
+    conn.execute(query1)
+    connection.commit()
+    connection.close()
+    return jsonify(msg="단어가 사전에 저장되었습니다.")
+
 # 뉴스 스크랩 - 저장
 @app.route('/news/save', methods=['GET','POST'])
 @jwt_required()
@@ -56,17 +90,22 @@ def save_scrap():
     connection.close()
     return jsonify(msg="스크랩 저장을 완료하였습니다.")
   else:
-    scrap_list=ast.literal_eval(scrap_list)
-    print(scrap_list)
-    scrap_list.append(int(news_id))
+    scrap_list=set(ast.literal_eval(scrap_list))
+    # print(scrap_list)
+    scrap_list.add(int(news_id))
+    scrap_list=list(scrap_list)
     query2=f'update useract set scrap="{scrap_list}" where userid={cur_user};'
     conn.execute(query2)
     connection.commit()
     connection.close()
     return jsonify(msg="스크랩 저장을 완료하였습니다.")
 
+######################################################################################################
+
+
 
 ####################################### USERACT API ##################################################
+
 ## 뉴스스크랩-보기
 @app.route('/news/show', methods=['GET','POST'])
 @jwt_required()
@@ -92,6 +131,7 @@ def show_scrap():
     news_list=conn.fetchall()
     connection.close()
     return jsonify(news_list)
+
 
 ## user 사전보기
 @app.route('/dict', methods=['GET','POST'])
@@ -125,6 +165,7 @@ def dictionary():
     connection.close()
     return jsonify(dict_list)
 
+
 ## 퀴즈 던져주기
 @app.route('/home/quiz', methods=['GET','POST'])
 @jwt_required()
@@ -139,14 +180,14 @@ def home_quiz():
   user_dict=result[0]['dict']
   # print(user_dict)
   if user_dict==None:
-    query1=f'select wordid,quiz,answer from dict where wordid in {(1,2,3)};'
+    query1=f'select * from dict where wordid in {(1,2,3)};'
     conn.execute(query1)
     quiz_list=conn.fetchall()
     connection.close()
     return jsonify(quiz_list)
   else:
     user_dict=user_dict.replace("[","(").replace("]",")")
-    query2=f'select wordid,quiz,answer from dict where wordid in {user_dict};'
+    query2=f'select * from dict where wordid in {user_dict};'
     conn.execute(query2)
     quiz_list=conn.fetchall()
     connection.close()
@@ -158,6 +199,7 @@ def home_quiz():
 
 
 ###################################### HOME API ######################################################
+
 ## 홈-뉴스보기
 @app.route('/home/news', methods=['GET','POST'])
 @jwt_required()
@@ -190,6 +232,7 @@ def home_news():
     connection.close()
     return jsonify(news_result)
 
+
 # 홈화면 구현
 @app.route('/home/word', methods=['GET','POST'])
 @jwt_required()
@@ -221,11 +264,14 @@ def app_home():
     result_word=conn.fetchall()
     connection.close()
     return jsonify(result_word)
+
+
 #####################################################################################################
 
 
 
 ################################# JWT TOKEN 필요X ####################################################
+
 ## 로그인
 @app.route('/signin', methods=['POST'])
 def signin():
@@ -248,6 +294,7 @@ def signin():
     return jsonify(username=result[0]['name'],access_token=create_access_token(identity=result[0]['userid'] ),msg="로그인 되었습니다.")       # jwt토큰 보내줌
   else:
     return jsonify(msg="비밀번호가 틀렸습니다.") 
+
 
 ## 회원가입
 @app.route('/signup', methods=['POST'])
@@ -292,12 +339,11 @@ def signup():
 
   else:
     return jsonify(msg1="로그인 폼에 맞게 작성해주세요.")
+
+
 #####################################################################################################
 
     
-
-
-  
 
 if __name__=='__main__':
   app.run(debug=True, host=ip, port=5000)
