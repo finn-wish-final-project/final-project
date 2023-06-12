@@ -1,21 +1,18 @@
 import React, { useState, useEffect } from 'react';
-import { StyleSheet, Text, View, ScrollView, AsyncStorage} from 'react-native';
+import { StyleSheet, Text, View, ScrollView, AsyncStorage } from 'react-native';
 import styles from '../styles/Dictionary.style'
 
 const CardView = () => {
   const [data1,setData] = useState([]);
 
-
-  
   useEffect(() => {
       sendData();
     }, []);
 
-
-    const sendData = async () => {
+   const sendData = async () => {
       try {
         const access_token = await AsyncStorage.getItem('access_token');
-        const data = {userid:1};
+        const data = {access_token:'access_token'};
     
         fetch('http://192.168.0.146:5000/dict', {
           method: 'POST',
@@ -28,8 +25,13 @@ const CardView = () => {
         })
           .then((response) => response.json())
           .then((result) => {
-            console.log('1111', result);
-            setData(result);
+            // console.log('1111', result);
+            if (result['msg']){
+              alert(result['msg']);
+            }
+            else{setData(result);}
+
+            
           })
           .catch((error) => {
             console.error('Error:', error);

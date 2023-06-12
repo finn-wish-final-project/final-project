@@ -4,7 +4,7 @@ import { createDrawerNavigator } from "@react-navigation/drawer";
 
 const Tab = createDrawerNavigator();
 
-function My_Chanllenge(){
+function My_Challenge(){
     return(
         <>
             <View>
@@ -14,4 +14,4 @@ function My_Chanllenge(){
     );
 }
 
-export default My_Chanllenge;
+export default My_Challenge;
