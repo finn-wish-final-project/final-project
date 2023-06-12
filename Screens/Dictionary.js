@@ -12,9 +12,9 @@ const CardView = () => {
    const sendData = async () => {
       try {
         const access_token = await AsyncStorage.getItem('access_token');
-        const data = {userid:1};
+        const data = {access_token:'access_token'};
     
-        fetch('http://192.168.0.189:5000/dict', {
+        fetch('http://192.168.0.146:5000/dict', {
           method: 'POST',
           headers: {
             'Content-Type': 'application/json',
@@ -26,7 +26,12 @@ const CardView = () => {
           .then((response) => response.json())
           .then((result) => {
             // console.log('1111', result);
-            setData(result);
+            if (result['msg']){
+              alert(result['msg']);
+            }
+            else{setData(result);}
+
+            
           })
           .catch((error) => {
             console.error('Error:', error);

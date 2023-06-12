@@ -5,17 +5,16 @@ import SignupUI from '../login/SignupUI';
 
 
 
-
 const Stack = createStackNavigator();
 
 const StackNavigation = ({setHasToken}) => {
     return (
         <Stack.Navigator>
             {/* <Stack.Screen name='loginUI' component={loginUI} /> */}
-            <Stack.Screen name='loginUI'>
-        {props => <LoginUI {...props} setHasToken={setHasToken} />}
-      </Stack.Screen>
-            <Stack.Screen name='SignupUI' component={SignupUI} />
+            <Stack.Screen name='LoginUI' options={{ headerShown: false }}>
+            {props => <LoginUI {...props} setHasToken={setHasToken} />}
+        </Stack.Screen>
+            <Stack.Screen name='SignupUI' options={{ headerShown: false }} component={SignupUI} />
         </Stack.Navigator>  
     );
 };

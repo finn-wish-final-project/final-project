@@ -5,11 +5,23 @@ import My_Chanllenge from '../Mypage_Slide/My_Chanllenge';
 import News_scrap from '../Mypage_Slide/News_scrap';
 import Dic from "../Screens/Dictionary";
 import Store from '../Mypage_Slide/Store';
-
+import {Text, TouchableOpacity} from 'react-native';
 
 const Drawer = createDrawerNavigator();
 
+const LogoutScreen = ({ navigation }) => {
 
+  const handleLogout = () => {
+    AsyncStorage.clear();
+    navigation.navigate('StackNavigation'); // StackNavigation으로 이동
+  };
+
+  return (
+    <TouchableOpacity onPress={handleLogout}>
+      <Text>로그아웃</Text>
+    </TouchableOpacity>
+  );
+};
 const TabNavigator2 =()=> {
   return(
     <>
