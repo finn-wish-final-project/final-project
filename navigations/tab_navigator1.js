@@ -25,7 +25,7 @@ const TabNavigator1 =()=> {
         <Drawer.Screen name="나의 챌린지" component={My_Chanllenge} />
       </Drawer.Navigator>
     </>
-  )
+  ) 
 }
 
 export default TabNavigator1;

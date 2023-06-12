@@ -1,6 +1,3 @@
-import AppNavigator from './navigations/Challenge_navigator';
-
-
 import React, { useState, useEffect } from 'react';
 import { View,AsyncStorage } from 'react-native';
 import Icon from 'react-native-vector-icons/Ionicons';

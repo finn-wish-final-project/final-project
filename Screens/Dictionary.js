@@ -17,7 +17,7 @@ const CardView = () => {
         const access_token = await AsyncStorage.getItem('access_token');
         const data = {userid:1};
     
-        fetch('http://192.168.0.189:5000/dict', {
+        fetch('http://192.168.0.146:5000/dict', {
           method: 'POST',
           headers: {
             'Content-Type': 'application/json',

@@ -3,9 +3,9 @@ import { createDrawerNavigator } from "@react-navigation/drawer";
 import Card_Study from '../Home/Card_Study';
 import My_Chanllenge from '../Mypage_Slide/My_Challenge';
 import News_scrap from '../Mypage_Slide/News_scrap';
-import Challenge from "../Screens/Challenge";
+import Challenge from "../Challenge/Challenge";
 import Store from '../Mypage_Slide/Store';
-import Challenge_Category from '../Screens/Challenge_Category'
+import Challenge_Category from '../Challenge/Challenge_Category'
 
 const Drawer = createDrawerNavigator();
 
