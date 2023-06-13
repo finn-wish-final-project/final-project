@@ -4,7 +4,7 @@ import { Text, View, ScrollView, Image, TouchableOpacity } from 'react-native';
 import styles from '../styles/Challenge_Recommend.style'
 import Challenge1_2 from './Challenge1_2';
 
-const Challenge4 = () => {
+const Challenge_Recommend = () => {
   const navigation = useNavigation();
   return(
     <ScrollView>
@@ -51,4 +51,4 @@ const Challenge4 = () => {
     )
 }
 
-export default Challenge4;
+export default Challenge_Recommend;
