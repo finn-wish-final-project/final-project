@@ -46,7 +46,8 @@ import { NativeModules } from 'react-native';
 import My_Challenge from '../Mypage_Slide/My_Challenge';
 import Dic from "../Screens/Dictionary";
 import Challenge_Category from '../Challenge/Challenge_Category'
-import Quiz from '../Mypage_Slide/Quiz';
+import Quiz from '../QUIZ/Quiz'
+
 
 const { RNRestart } = NativeModules;
 const Drawer = createDrawerNavigator();

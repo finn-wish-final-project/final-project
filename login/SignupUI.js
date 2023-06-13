@@ -61,7 +61,7 @@ export default function SignupUI () {
   return (
     <NavigationContainer independent={true} >
       <PaperProvider theme={theme} >
-          <ScrollView contentContainerStyle = {styles.container}>
+          <ScrollView>
           <View style={{ alignItems: 'center', marginTop:"25%"}}>
 
               <Text>이메일</Text> 

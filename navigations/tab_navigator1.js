@@ -1,12 +1,13 @@
 import React from 'react';
 import { createDrawerNavigator } from "@react-navigation/drawer";
 import Card_Study from '../Home/Card_Study';
+import My_Challenge from '../Mypage_Slide/My_Challenge';
 import News_scrap from '../Mypage_Slide/News_scrap';
 import Store from '../Mypage_Slide/Store';
 import { View,AsyncStorage} from 'react-native';
 import { DrawerContentScrollView,DrawerItem, DrawerItemList } from '@react-navigation/drawer';
 import { NativeModules } from 'react-native';
-import My_Challenge from '../Mypage_Slide/My_Challenge';
+
 
 
 const { RNRestart } = NativeModules;

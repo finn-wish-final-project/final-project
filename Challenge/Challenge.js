@@ -26,7 +26,7 @@ const Challenge = () => {
       <TouchableOpacity style={styles.ChallengeCardContainer} 
        onPress={() => navigation.navigate('Challenge1_1')}>
         <View style = {styles.ChallengeContainer1}>
-          <Text style={styles.CardTitle}> 해외여행 경비 마련 챌린지 </Text>
+          <Text style={styles.CardTitle}> 우물 안 개구리 벗어나기 </Text>
           <Text style = {styles.Point}> 1000🍀</Text>
         </View>
         <View style = {styles.ChallengeContainer2}>
@@ -57,7 +57,7 @@ const Challenge = () => {
       <TouchableOpacity style={styles.ChallengeCardContainer} 
        onPress={() => navigation.navigate('Challenge1_1')}>
         <View style = {styles.ChallengeContainer1}>
-          <Text style={styles.CardTitle}> 주택청약 챌린지 </Text>
+          <Text style={styles.CardTitle}> 내집 마련하자 </Text>
           <Text style = {styles.Point}> 300🍀</Text>
         </View>
         <View style = {styles.ChallengeContainer2}>

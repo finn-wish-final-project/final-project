@@ -46,14 +46,14 @@ const Challenge_Category = () => {
           style={styles.textContainer3}
           onPress={() => navigation.navigate('Challenge3')}
         >
-          <Text style={styles.text}>자산관리?</Text>
+          <Text style={styles.text}>교육</Text>
         </TouchableOpacity>
 
         <TouchableOpacity
           style={styles.textContainer4}
           onPress={() => navigation.navigate('Challenge4')}
         >
-          <Text style={styles.text}>지점</Text>
+          <Text style={styles.text}>DSBA{"\n"}화이팅</Text>
         </TouchableOpacity>
       </View>
     </View>
