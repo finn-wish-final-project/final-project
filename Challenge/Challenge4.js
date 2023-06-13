@@ -1,16 +1,25 @@
 import React, { useState, useEffect } from 'react';
 import { useNavigation } from '@react-navigation/native';
 import { Text, View, ScrollView, Image, TouchableOpacity } from 'react-native';
-import styles from '../styles/Challenge.style'
+import styles from '../styles/Challenge_Recommend.style'
+import Challenge1_2 from './Challenge1_2';
 
 const Challenge4 = () => {
   const navigation = useNavigation();
   return(
     <ScrollView>
-      <TouchableOpacity style={styles.ChallengeCardContainer} 
+      <Text style = {styles.title}>name님이 좋아할 챌린지</Text>
+      <Text style = {styles.small_title}>AI기반으로 적절한 챌린지를 추천해드립니다. {"\n"}</Text>
+      <ScrollView>
+        <Challenge1_2/>
+      </ScrollView>
+
+
+
+      {/* <TouchableOpacity style={styles.ChallengeCardContainer} 
        onPress={() => navigation.navigate('Challenge1_1')}>
         <View style = {styles.ChallengeContainer1}>
-          <Text style={styles.CardTitle}> I LOVE BNK </Text>
+          <Text style={styles.CardTitle}> I LOVE BUSAN </Text>
           <Text style = {styles.Point}> 1000🍀</Text>
         </View>
         <View style = {styles.ChallengeContainer2}>
@@ -20,7 +29,7 @@ const Challenge4 = () => {
                 <Text style={styles.CardContent}>  취뽀하자</Text>
               </View>
         </View>
-      </TouchableOpacity> 
+      </TouchableOpacity>  */}
 
       {/* <TouchableOpacity style={styles.ChallengeCardContainer} 
        onPress={() => navigation.navigate('Challenge1_1')}>

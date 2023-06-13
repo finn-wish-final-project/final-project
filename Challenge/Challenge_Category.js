@@ -9,6 +9,11 @@ import Challenge3 from './Challenge3';
 import Challenge4 from './Challenge4';
 
 import Challenge1_1 from './Challenge1_1';
+import Challenge1_2 from './Challenge1_2';
+import Challenge1_3 from './Challenge1_3';
+import Challenge1_4 from './Challenge1_4';
+import Challenge2_1 from './Challenge2_1';
+import Challenge3_1 from './Challenge3_1';
 
 import Challenge_link1 from './Challenge_link1';
 
@@ -53,7 +58,7 @@ const Challenge_Category = () => {
           style={styles.textContainer4}
           onPress={() => navigation.navigate('Challenge4')}
         >
-          <Text style={styles.text}>DSBA{"\n"}화이팅</Text>
+          <Text style={styles.text}>추천</Text>
         </TouchableOpacity>
       </View>
     </View>
@@ -70,6 +75,12 @@ const Challenge_Stack = () => {
       <Stack.Screen name="Challenge4" component={Challenge4} options={{ headerShown: false }} />
 
       <Stack.Screen name="Challenge1_1" component={Challenge1_1} options={{ headerShown: false }} />
+      <Stack.Screen name="Challenge1_2" component={Challenge1_2} options={{ headerShown: false }} />
+      <Stack.Screen name="Challenge1_3" component={Challenge1_3} options={{ headerShown: false }} />
+      <Stack.Screen name="Challenge1_4" component={Challenge1_4} options={{ headerShown: false }} />
+      <Stack.Screen name="Challenge2_1" component={Challenge2_1} options={{ headerShown: false }} />
+      <Stack.Screen name="Challenge3_1" component={Challenge3_1} options={{ headerShown: false }} />
+
 
       <Stack.Screen name="Challenge_link1" component={Challenge_link1} options={{ headerShown: false }} />
 
