@@ -84,6 +84,16 @@ export default StyleSheet.create({
     marginLeft: '25%',
     margin : 17
   },
+  disabledButton : {
+    width: 200,
+    height: 50,
+    backgroundColor: 'gray',
+    justifyContent: 'center',
+    alignItems: 'center',
+    borderRadius: 10,
+    marginLeft: '25%',
+    margin : 17
+  },
   buttonText: {
     color: 'white',
     textAlign: 'center',
