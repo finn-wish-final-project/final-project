@@ -4,7 +4,8 @@ export default StyleSheet.create({
   ChallengeCardContainer : {
     elevation: 5, // 그림자
     borderRadius: 10,
-    margin: 20,
+    marginVertical: 15,
+    marginHorizontal:20,
     height : 220,
     backgroundColor : '#ffffff',
     display:'flex',

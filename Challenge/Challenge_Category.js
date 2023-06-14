@@ -7,7 +7,9 @@ import Challenge from './Challenge';
 import Challenge2 from './Challenge2';
 import Challenge3 from './Challenge3';
 import Challenge_Recommend from './Challenge_Recommend';
-import BoardScreen from './Challenge_bulletinBoard';
+import BoardScreen_Saving from './BulletinBoard_Saving';
+import BoardScreen_Invest from './BulletinBoard_Invest';
+import BoardScreen_Education from './BulletinBoard_Education';
 
 import Challenge1_1 from './Challenge1_1';
 import Challenge1_2 from './Challenge1_2';
@@ -64,12 +66,12 @@ const Challenge_Category = () => {
 
 
       </View>
-      <TouchableOpacity
+      {/* <TouchableOpacity
           style={styles.textContainer4}
           onPress={() => navigation.navigate('BoardScreen')}
         >
           <Text style={styles.text}>게시판</Text>
-        </TouchableOpacity>
+        </TouchableOpacity> */}
     </View>
   );
 };
@@ -82,7 +84,9 @@ const Challenge_Stack = () => {
       <Stack.Screen name="Challenge2" component={Challenge2} options={{ headerShown: false }} />
       <Stack.Screen name="Challenge3" component={Challenge3} options={{ headerShown: false }} />
       <Stack.Screen name="Challenge_Recommend" component={Challenge_Recommend} options={{ headerShown: false }} />
-      <Stack.Screen name="BoardScreen" component={BoardScreen} options={{ headerShown: false }} />
+      <Stack.Screen name="BoardScreen_Saving" component={BoardScreen_Saving} options={{ headerShown: false }} />
+      <Stack.Screen name="BoardScreen_Invest" component={BoardScreen_Invest} options={{ headerShown: false }} />
+      <Stack.Screen name="BoardScreen_Education" component={BoardScreen_Education} options={{ headerShown: false }} />
 
       <Stack.Screen name="Challenge1_1" component={Challenge1_1} options={{ headerShown: false }} />
       <Stack.Screen name="Challenge1_2" component={Challenge1_2} options={{ headerShown: false }} />

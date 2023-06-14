@@ -6,6 +6,15 @@ import styles from '../styles/Challenge.style'
 const Challenge2 = () => {
   const navigation = useNavigation();
   return(
+    <>
+    <TouchableOpacity style={{height:40,backgroundColor:'white',marginHorizontal:'5%',marginVertical:15,borderWidth:2,borderColor:'darkgreen',borderRadius:20,justifyContent:'center'}} 
+    onPress={() => navigation.navigate('BoardScreen_Invest')}>
+     <View >
+       <Text style={{textAlign:'center',fontWeight:'bold',color:'black',fontSize:20}} > 투자 게시판 바로가기</Text>
+     
+     </View>
+    
+   </TouchableOpacity>
     <ScrollView>
       <TouchableOpacity style={styles.ChallengeCardContainer} 
        onPress={() => navigation.navigate('Challenge2_1')}>
@@ -22,7 +31,7 @@ const Challenge2 = () => {
         </View>
       </TouchableOpacity>
     </ScrollView>
-
+    </>
     )
 }
 
