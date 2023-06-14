@@ -213,6 +213,7 @@ const Tab = createBottomTabNavigator();
 // AsyncStorage.clear()
 // yellowgreen: '#28794D',
 //     green: '#CBE6D7',
+export const IP ='192.168.0.111';
 
 export default function App() {
   const [loading, setLoading] = useState(true);

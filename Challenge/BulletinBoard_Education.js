@@ -1,6 +1,7 @@
-import React, { useState } from 'react';
+import React, { useState,useEffect } from 'react';
 import { View, Text, FlatList, TouchableOpacity, Modal, TextInput, Button, Alert } from 'react-native';
 import { Divider } from 'react-native-paper';
+import AsyncStorage from '@react-native-async-storage/async-storage';
 
 const BoardScreen_Education = () => {
   const [posts, setPosts] = useState([]);
@@ -8,8 +9,131 @@ const BoardScreen_Education = () => {
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [newPostTitle, setNewPostTitle] = useState('');
   const [newPostContent, setNewPostContent] = useState('');
+  const [access_token,setAccess_token] = useState('');
+  //게시판
+  const [chal_type, setChal_type] = useState('');
+  const [content, setContent] = useState('');
+  const [title, setTitle] = useState('');
+  const [boardid, setBoardid] = useState('');
+
+  const [board,setBoard] = useState([]);
 
 
+  console.log('posts',posts);
+  console.log('selectedPost',selectedPost);
+  console.log('isModalOpen',isModalOpen);
+  console.log('newPostTitle',newPostTitle);
+  console.log('newPostContent',newPostContent);
+  console.log('boardid',boardid);
+
+  useEffect(() => {
+    board_show();
+  }, []);
+
+// 게시판 보여주기 글목록들 -clear
+const board_show = async () => {
+    try {
+      const access_token = await AsyncStorage.getItem('access_token');
+      const data = { chal_type:3 };
+  
+      fetch('http://192.168.0.111:5000/board', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+          'X-CSRFToken': '{{csrf_token}}',
+          'Authorization': `Bearer ${access_token}`
+        },
+        body: JSON.stringify(data)
+      })
+        .then((response) => response.json())
+        .then((result) => {
+            console.log(result,access_token);
+            setAccess_token(access_token);
+            setPosts(result);
+            // setBoardid(result[0]['boardid'])
+          })
+        .catch((error) => {
+          console.error('Error:', error);
+        });
+    } catch (error) {
+      console.error('Error:', error);
+    }
+  };
+
+
+
+
+// 게시글 저장하기 (글 올리기)- 완벽
+  const sendData = async (newPostContent,newPostTitle) => {
+    try {
+      const access_token = await AsyncStorage.getItem('access_token');
+      const data = { chal_type:3, contents:newPostContent, title:newPostTitle };
+  
+      fetch('http://192.168.0.111:5000/board/save', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+          'X-CSRFToken': '{{csrf_token}}',
+          'Authorization': `Bearer ${access_token}`
+        },
+        body: JSON.stringify(data)
+      })
+        .then((response) => response.json())
+        .then((result) => {
+
+            if (result['msg']){
+                alert(result['msg']);
+            }
+          })
+        .catch((error) => {
+          console.error('Error:', error);
+        });
+    } catch (error) {
+      console.error('Error:', error);
+    }
+  };
+
+// 수정하기 
+//   const sendData_update = async (selectedPost) => {
+//     try {
+//       const access_token = await AsyncStorage.getItem('access_token');
+//       const data = { boardid:selectedPost['boardid'], contents:newPostContent, title:newPostTitle };
+  
+//       fetch('http://192.168.0.111:5000/board/update', {
+//         method: 'POST',
+//         headers: {
+//           'Content-Type': 'application/json',
+//           'X-CSRFToken': '{{csrf_token}}',
+//           'Authorization': `Bearer ${access_token}`
+//         },
+//         body: JSON.stringify(data)
+//       })
+//         .then((response) => response.json())
+//         .then((result) => {
+
+//             if (result['msg']){
+//                 alert(result['msg']);
+//                 // setIsModalOpen(false);
+//                 // setSelectedPost(null);
+//             }
+//           })
+//         .catch((error) => {
+//           console.error('Error:', error);
+//         });
+//     } catch (error) {
+//       console.error('Error:', error);
+//     }
+//   };
+
+
+
+
+
+
+
+
+// fetch 전 원래 함수들
+  // 클릭했을때 게시글이면 true 이면 글쓰기, false면 글 수정
   const handlePostPress = (post) => {
     setSelectedPost(post);
   };
@@ -20,21 +144,23 @@ const BoardScreen_Education = () => {
 
   const handleSavePost = () => {
     const newPost = {
-      id: Date.now().toString(),
+    //   id: Date.now().toString(),
+      id:boardid,
       title: newPostTitle,
       content: newPostContent,
     };
 
-    setPosts([...posts, newPost]);
+    setPosts([...posts, newPost]);handleUpdatePost
     setNewPostTitle('');
     setNewPostContent('');
     setIsModalOpen(false);
+    sendData(newPost['content'],newPost['title'])
   };
 
   const handleEditPost = () => {
     setIsModalOpen(true);
     setNewPostTitle(selectedPost.title);
-    setNewPostContent(selectedPost.content);
+    setNewPostContent(selectedPost.contents);
   };
 
   const handleUpdatePost = () => {
@@ -67,9 +193,10 @@ const BoardScreen_Education = () => {
   };
 
   const renderItem = ({ item }) => (
+    
     <TouchableOpacity style={styles.postItem} onPress={() => handlePostPress(item)}>
       <Text style={styles.postTitle}>{item.title}</Text>
-      <Text style={styles.postContent}>{item.content.length > 50 ? item.content.slice(0, 50) + '...' : item.content}</Text>
+      <Text style={styles.postContent}>{item.contents.length > 50 ? item.contents.slice(0, 50) + '...' : item.contents}</Text>
 
     </TouchableOpacity>
   );
@@ -97,10 +224,10 @@ const BoardScreen_Education = () => {
         <View style={{backgroundColor:'white',borderWidth:1,borderColor:'darkgreen',borderRadius:13,padding:10,height:'90%'}}>
           <Text style={styles.modalTitle}>{selectedPost?.title}</Text>
           <Divider style={{ borderWidth: 1, marginHorizontal: 0,color:'grey' }}/>
-          <Text style={styles.modalContent}>{selectedPost?.content}</Text>
+          <Text style={styles.modalContent}>{selectedPost?.contents}</Text>
           
           <View style={styles.modalButtons}>
-            <TouchableOpacity style={styles.Buttons}  onPress={handleEditPost}>
+            <TouchableOpacity style={styles.Buttons}  onPress={handleUpdatePost} >
                 <Text style={{color:'black'}}>수정</Text>
             </TouchableOpacity>
             <TouchableOpacity style={styles.Buttons} onPress={handleDeletePost}>
