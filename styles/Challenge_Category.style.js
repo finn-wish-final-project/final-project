@@ -47,7 +47,7 @@ export default StyleSheet.create ({
   },
   textContainer4: {
     position: 'absolute',
-    bottom : 83,
+    bottom : 78,
     alignItems: 'center',
   },
 })

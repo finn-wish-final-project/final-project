@@ -120,7 +120,7 @@ const HomeNews = () => {
       })
         .then((response) => response.json())
         .then((result) => {
-          console.log('1111', result);
+          console.log('1111222', result);
           alert(result['msg'])
         })
         .catch((error) => {
@@ -147,7 +147,7 @@ const HomeNews = () => {
           style={style.dialogContainer} visible={visible} onDismiss={hideDialog} >
           <Dialog.Title>{news.title}</Dialog.Title>
           <Divider style={{ borderWidth: 1,marginHorizontal:15,borderColor:'darkgreen' }} width={'90%'}/>
-            <Dialog.ScrollArea>
+          <Dialog.ScrollArea style = {style.ScrollArea}>
               <ScrollView  contentContainerStyle={{paddingHorizontal: 0 }}>
               
                 <Text style={style.article}>{news.article}</Text>

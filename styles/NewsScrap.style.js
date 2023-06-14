@@ -7,12 +7,16 @@ export default StyleSheet.create({
         marginTop:15,
     
     },
+    ScrollArea: {
+      borderWidth: 1,
+      borderColor: 'lightgrey',
+    },
     CardContainer: {
         elevation: 5, // 그림자
         borderRadius: 10,
         borderWidth: 0.5,
         borderColor: 'darkgrey', 
-        margin: 20,
+        margin: 15,
         height : 100,
         backgroundColor : '#ffffff',
         display:'flex',
@@ -36,6 +40,7 @@ export default StyleSheet.create({
     dialogContainer:{
         borderWidth:1.5,
         borderColor:'black',
+        height:650,
         backgroundColor:'lightgrey',
         marginHorizontal:15, // 뉴스 컨테이너 넓이
         marginTop:-7,
@@ -50,6 +55,7 @@ export default StyleSheet.create({
         borderRadius:30,
         marginTop:10,
         textAlign:'center',
-        color:'white'
+        color:'white',
+        padding:7
       },
 })

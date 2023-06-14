@@ -3,7 +3,7 @@ import { StyleSheet, Text, View, ScrollView, Alert, Pressable,TouchableOpacity }
 import { Button } from 'react-native-paper';
 import { useNavigation,NavigationContainer } from '@react-navigation/native';
 import { createStackNavigator } from '@react-navigation/stack';
-import styles from '/Users/PC3/finnwish/finnwish/styles/Quiz.style'
+import styles from '../styles/Quiz.style'
 
 
 

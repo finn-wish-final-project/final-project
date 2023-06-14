@@ -6,9 +6,15 @@ import { createStackNavigator } from '@react-navigation/stack';
 import Challenge from './Challenge';
 import Challenge2 from './Challenge2';
 import Challenge3 from './Challenge3';
-import Challenge4 from './Challenge4';
+import Challenge_Recommend from './Challenge_Recommend';
+import BoardScreen from './Challenge_bulletinBoard';
 
 import Challenge1_1 from './Challenge1_1';
+import Challenge1_2 from './Challenge1_2';
+import Challenge1_3 from './Challenge1_3';
+import Challenge1_4 from './Challenge1_4';
+import Challenge2_1 from './Challenge2_1';
+import Challenge3_1 from './Challenge3_1';
 
 import Challenge_link1 from './Challenge_link1';
 
@@ -46,16 +52,24 @@ const Challenge_Category = () => {
           style={styles.textContainer3}
           onPress={() => navigation.navigate('Challenge3')}
         >
-          <Text style={styles.text}>자산관리?</Text>
+          <Text style={styles.text}>교육</Text>
         </TouchableOpacity>
 
         <TouchableOpacity
           style={styles.textContainer4}
-          onPress={() => navigation.navigate('Challenge4')}
+          onPress={() => navigation.navigate('Challenge_Recommend')}
         >
-          <Text style={styles.text}>지점</Text>
+          <Text style={styles.text}>추천</Text>
         </TouchableOpacity>
+
+
       </View>
+      <TouchableOpacity
+          style={styles.textContainer4}
+          onPress={() => navigation.navigate('BoardScreen')}
+        >
+          <Text style={styles.text}>게시판</Text>
+        </TouchableOpacity>
     </View>
   );
 };
@@ -67,9 +81,16 @@ const Challenge_Stack = () => {
       <Stack.Screen name="Challenge" component={Challenge} options={{ headerShown: false }} />
       <Stack.Screen name="Challenge2" component={Challenge2} options={{ headerShown: false }} />
       <Stack.Screen name="Challenge3" component={Challenge3} options={{ headerShown: false }} />
-      <Stack.Screen name="Challenge4" component={Challenge4} options={{ headerShown: false }} />
+      <Stack.Screen name="Challenge_Recommend" component={Challenge_Recommend} options={{ headerShown: false }} />
+      <Stack.Screen name="BoardScreen" component={BoardScreen} options={{ headerShown: false }} />
 
       <Stack.Screen name="Challenge1_1" component={Challenge1_1} options={{ headerShown: false }} />
+      <Stack.Screen name="Challenge1_2" component={Challenge1_2} options={{ headerShown: false }} />
+      <Stack.Screen name="Challenge1_3" component={Challenge1_3} options={{ headerShown: false }} />
+      <Stack.Screen name="Challenge1_4" component={Challenge1_4} options={{ headerShown: false }} />
+      <Stack.Screen name="Challenge2_1" component={Challenge2_1} options={{ headerShown: false }} />
+      <Stack.Screen name="Challenge3_1" component={Challenge3_1} options={{ headerShown: false }} />
+
 
       <Stack.Screen name="Challenge_link1" component={Challenge_link1} options={{ headerShown: false }} />
 

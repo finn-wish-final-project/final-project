@@ -1,7 +1,7 @@
 import React from 'react';
 import { createStackNavigator } from "@react-navigation/stack";
 import LoginUI from '../login/LoginUI';
-import SignupUI from '../login/SignupUI';
+import SignupUI from '../login/SingupUI';
 
 
 

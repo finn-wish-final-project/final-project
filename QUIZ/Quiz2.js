@@ -3,7 +3,7 @@ import { Text, View,Alert,AsyncStorage } from 'react-native';
 import { Button } from 'react-native-paper';
 import { useNavigation } from '@react-navigation/native';
 import { createStackNavigator } from '@react-navigation/stack';
-import styles from '/Users/PC3/finnwish/finnwish/styles/Quiz.style'
+import styles from '../styles/Quiz.style'
 
 
 

@@ -5,6 +5,11 @@ export default StyleSheet.create({
       marginTop:15,
       fontSize:18
     },
+    ScrollArea: {
+      borderWidth: 1,
+      borderColor: 'lightgrey',
+    },
+
     ButtonContainer:{ 
       bottom: 0, 
       flexDirection: 'row', 
@@ -39,7 +44,10 @@ export default StyleSheet.create({
         // marginTop:'68%',
         textAlign:'center',
         fontSize:25,
-        zIndex:1000
+        zIndex:1000,
+        textShadowColor: 'rgba(188, 226, 131, 0.75)',
+        textShadowOffset: {width: 0, height: 0},
+        textShadowRadius: 5
       },
       dialogContainer:{
         borderWidth:2,

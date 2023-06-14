@@ -9,13 +9,17 @@ const colors = {
 
 export default StyleSheet.create({
     QuizEntireContainer:{
-        backgroundColor: 'white', flex: 1
+        backgroundColor: 'white',
+        height:'100%'
     },
     QuizContainer:{
         width: '80%', 
+        height : '30%',
         backgroundColor: 'white',
         marginHorizontal: '10%', 
-        marginVertical: '52%' 
+        marginVertical: '52%' ,
+        justifyContent : 'center',
+        alignContent : 'center'
     },
     WordQuiz:{
         fontSize: 20

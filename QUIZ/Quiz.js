@@ -6,7 +6,7 @@ import { createStackNavigator,TransitionPresets  } from '@react-navigation/stack
 import Quiz2 from './Quiz2';
 import Quiz3 from './Quiz3';
 import Submit from './Submit';
-import styles from '/Users/PC3/finnwish/finnwish/styles/Quiz.style'
+import styles from '../styles/Quiz.style'
 
 
 const Stack = createStackNavigator();

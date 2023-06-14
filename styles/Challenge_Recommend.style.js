@@ -53,5 +53,16 @@ export default StyleSheet.create({
   Point : {
     marginLeft:-75,
     fontSize : 15
+  },
+  title : {
+    fontSize : 23,
+    color : 'black',
+    textAlign : 'center',
+    fontWeight : 'bold',
+    margin : 15
+  },
+  small_title : {
+    fontSize : 17,
+    textAlign : 'center',
   }
 });

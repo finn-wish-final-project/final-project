@@ -6,7 +6,7 @@ import { createStackNavigator } from '@react-navigation/stack';
 import Quiz from './Quiz'
 import Quiz3 from './Quiz3';
 import Submit from './Submit';
-import styles from '/Users/PC3/finnwish/finnwish/styles/Quiz.style'
+import styles from '../styles/Quiz.style'
 
 
 
@@ -44,6 +44,8 @@ const Quiz2 = () => {
     const [col3,setCol3]=useState('');
     const [col4,setCol4]=useState('');
     const [wordid,setWorid] = useState('');
+    const [wordid2,setWorid2] = useState('');
+    const [wordid3,setWorid3] = useState('');
     
     const handleAnswerSelect = (answerIndex) => {
         setSelectedAnswer(answerIndex);
@@ -55,7 +57,10 @@ const Quiz2 = () => {
         Alert.alert('정답입니다!', '', [
           {
             text: '제출',
-            onPress: () => navigation.navigate('Submit')
+            onPress: () => {
+              sendwordid(wordid);
+              navigation.navigate('Submit');
+          }
           }
         ]);
       } else {
@@ -86,17 +91,51 @@ const Quiz2 = () => {
           .then((response) => response.json())
           .then((result) => {
             try{
-              console.log('2222', result);
+              // console.log('2222', result);
             setData(result[2]['quiz']);
             setAnswer(result[2]['answer']);
             setCol1(result[2]['col1']);
             setCol2(result[2]['col2']);
             setCol3(result[2]['col3']);
             setCol4(result[2]['col4']);
-            setWorid(result[2]['wordid']);
+            setWorid2(result[1]['wordid']);
+            setWorid3(result[2]['wordid']);
+            setWorid(result[0]['wordid']);
+            console.log(wordid,wordid2,wordid3);
           }catch(error){
             alert(error)
           }  
+          })
+          .catch((error) => {
+            // console.log('@@@@@@@@@');
+            console.error('Error:', error);
+          });
+      } catch (error) {
+        // console.log('!!!!!!!!');
+        console.error('Error:', error);
+      }
+    };
+
+
+    const sendwordid = async (wordid) => {
+      try {
+        const access_token = await AsyncStorage.getItem('access_token');
+        const data = {wordid:[wordid,wordid2,wordid3]};
+    
+        fetch('http://192.168.0.146:5000/quiz/save', {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+            'X-CSRFToken': '{{csrf_token}}',
+            'Authorization': `Bearer ${access_token}`
+          },
+          body: JSON.stringify(data)
+        })
+          .then((response) => response.json())
+          .then((result) => {
+            if (result['msg']){
+              alert(result['msg'])
+            } 
           })
           .catch((error) => {
             // console.log('@@@@@@@@@');
@@ -169,6 +208,7 @@ const Quiz2 = () => {
       style={styles.NextButton}
       onPress={checkAnswerAndProceed}
       disabled={selectedAnswer === null} // 다음 버튼은 선택된 항목이 없을 경우 비활성화
+      
     >
       <Text style={styles.ButtonText}>제출</Text>
     </Button>

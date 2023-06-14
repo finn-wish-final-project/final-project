@@ -7,7 +7,11 @@ export default StyleSheet.create({
   container : {
     backgroundColor: 'white',
     height: '100%',
+    
   },
+  lineContainer:{
+    borderColor:'darkgreen',borderRadius:15,marginHorizontal:5,
+    borderWidth:2},
   title : {
     fontSize : 23,
     color : 'black',
@@ -17,9 +21,9 @@ export default StyleSheet.create({
   },
   img : {
     height : 300,
-    width : 395,
+    width : 390,
     borderRadius : 10, 
-    margin : 10,
+    margin : 2,
   },
   text : {
     fontFamily : '12롯데마트드림Medium',
@@ -48,7 +52,19 @@ export default StyleSheet.create({
     overflow : 'hidden',
     color : 'black',
     marginHorizontal : 15,
-    marginTop : 5
+    marginTop : 5,
+  },
+  text3 : {
+    fontSize : 19,
+    flexWrap : 'wrap',
+    overflow : 'hidden',
+    color : 'black',
+    marginHorizontal : 15,
+    marginTop : 5,
+    borderRadius:10,
+    padding:2,
+    marginBottom:10,
+    backgroundColor:'rgba(105,188,115,0.2)'
   },
   text_bold : {
     fontSize : 19,
