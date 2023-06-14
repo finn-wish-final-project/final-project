@@ -3,6 +3,7 @@ from flask_bcrypt import Bcrypt
 from flask_jwt_extended import JWTManager, create_access_token 
 from flask_jwt_extended import jwt_required,get_jwt_identity
 import pymysql
+from datetime import timedelta
 
 from validation import *
 
@@ -13,18 +14,105 @@ app = Flask(__name__)
 app.config['JSON_AS_ASCII'] = False
 
 app.config['JWT_SECRET_KEY'] = 'SECRET_KEY'
-algorithm = 'HS256'
+app.config['JWT_ACCESS_TOKEN_EXPIRES'] = timedelta(hours=1)
+# JWT 토큰의 만료 시간 설정
 
 app.config['BCRYPT_LEVEL'] = 10
 
 bcrypt = Bcrypt(app)
 jwt = JWTManager(app)
 
-# 홈화면 구현
-@app.route('/home', methods=['GET','POST'])
+# 유저의 MYPAGE 데이터 모음 기능 구현 - USER_NAME, USER_POINT ...
+@app.route('/mypage', methods=['POST'])
+@jwt_required()
+def mypage():
+    current_user = get_jwt_identity()
+    connection = pymysql.connect(host='localhost', port=3306, db='finnwish', user='root', passwd='1807992102', charset='utf8')
+    cursor = connection.cursor(pymysql.cursors.DictCursor)
+
+    join_sql = f"""SELECT USER_LOGIN.*, USER_ACT.* FROM USER_LOGIN 
+    INNER JOIN USER_ACT ON USER_LOGIN.USER_NUM = USER_ACT.USER_NUM WHERE USER_LOGIN.USER_NUM={current_user}"""
+    cursor.execute(join_sql)
+    join_data = cursor.fetchall()
+    connection.close()
+
+    if join_data[0] != None:
+        return jsonify(join_data)
+    else:
+        return jsonify({'message':'다시 로그인 해주세요.'})
+     
+    # my_sql = f'SELECT USER_NAME FROM USER_LOGIN WHERE USER_NUM={current_user}'
+    # cursor.execute(my_sql)
+    # name_data = cursor.fetchone()
+
+    # point_sql = f'SELECT USER_POINT FROM USER_ACT WHERE USER_NUM={current_user}'
+    # cursor.execute(point_sql)
+    # point_data = cursor.fetchone()
+
+# 퀴즈 문제 던져주는 기능 구현
+@app.route('/quiz', methods=['GET','POST'])
+@jwt_required()
+def quiz_save():
+    current_user = get_jwt_identity()
+    connection = pymysql.connect(host='localhost', port=3306, db='finnwish', user='root', passwd='1807992102', charset='utf8')
+    cursor = connection.cursor(pymysql.cursors.DictCursor)
+
+    quiz_sql = f'SELECT QUIZ, ANSWER FROM DICTIONARY WHERE WORD_NUM={current_user}'
+    cursor.execute(quiz_sql)
+    quiz_data = cursor.fetchall()
+    print(quiz_data)
+    return jsonify(quiz_data)
+
+    if word_data[0]['USER_DICT'] == None:
+        dict_sql = 'SELECT WORD_NUM, WORD, EXPLAINATION FROM DICTIONARY LIMIT 3;'
+        cursor.execute(dict_sql)
+        result = cursor.fetchall()
+        connection.close()
+        return jsonify(result)
+    else:
+        max_word = word_data[0]['USER_DICT'][-2]
+        add_sql = f"SELECT WORD, EXPLAINATION FROM DICTIONARY WHERE WORD_NUM > {max_word} LIMIT 3;"
+        cursor.execute(add_sql)
+        result = cursor.fetchall()
+        connection.close()
+        return jsonify(result)
+    
+    # 뉴스는 스크랩 버튼 누르면 아마 POST, 저장하여 스크랩 DB로
+    # 단어랑 퀴즈는 문제 다 맞추면 DICT DB로
+
+# 홈 뉴스보기 기능 구현
+@app.route('/news', methods=['GET','POST'])
 @jwt_required() # @jwt_required() 데코레이터 -> 해당 엔드포인트에 접근하려면 JWT 토큰이 필요
                 # => 자동으로 인증 처리, 유효한 JWT 토큰이 요청 헤더에 포함되어 있는지 확인하고, 유효성 검사를 수행
-def app_home():
+def home_news():
+    current_user = get_jwt_identity()
+
+    connection = pymysql.connect(host='localhost', port=3306, db='finnwish', user='root', passwd='1807992102', charset='utf8')
+    cursor = connection.cursor(pymysql.cursors.DictCursor)
+
+    news_sql = f'SELECT USER_SCRAP FROM USER_ACT WHERE USER_NUM={current_user};'
+    cursor.execute(news_sql)
+    news_data = cursor.fetchall()
+    # print(news_data) # [{'USER_SCRAP': None}]
+    if news_data[0]['USER_SCRAP'] == None:
+        news_sql = 'SELECT NEWS_TITLE, ARTICLE, NEWS_IMAGE FROM NEWS LIMIT 1;'
+        cursor.execute(news_sql)
+        result = cursor.fetchall()
+        connection.close()
+        return jsonify(result)
+    else:
+        max_word = news_data[0]['USER_SCRAP'][-2]
+        add_sql = f"SELECT NEWS_TITLE, ARTICLE, NEWS_IMAGE FROM NEWS WHERE NEWS_NUM > {max_word} LIMIT 1;"
+        cursor.execute(add_sql)
+        result = cursor.fetchall()
+        connection.close()
+        return jsonify(result)
+
+# 홈 단어공부 기능 구현
+@app.route('/word', methods=['GET','POST'])
+@jwt_required() # @jwt_required() 데코레이터 -> 해당 엔드포인트에 접근하려면 JWT 토큰이 필요
+                # => 자동으로 인증 처리, 유효한 JWT 토큰이 요청 헤더에 포함되어 있는지 확인하고, 유효성 검사를 수행
+def home_word():
     current_user = get_jwt_identity()
 
     connection = pymysql.connect(host='localhost', port=3306, db='finnwish', user='root', passwd='1807992102', charset='utf8')
@@ -35,7 +123,7 @@ def app_home():
     word_data = cursor.fetchall()
 
     if word_data[0]['USER_DICT'] == None:
-        dict_sql = 'SELECT WORD, EXPLAINATION FROM DICTIONARY LIMIT 3;'
+        dict_sql = 'SELECT WORD_NUM, WORD, EXPLAINATION FROM DICTIONARY LIMIT 3;'
         cursor.execute(dict_sql)
         result = cursor.fetchall()
         connection.close()
