@@ -11,6 +11,8 @@ import TabNavigator4 from './navigations/tab_navigator4';
 import Loading from './login/Loading';
 import StackNavigation from './navigations/login_navigator';
 
+export const IP = '192.168.0.111';
+
 
 const Tab = createBottomTabNavigator();
 // AsyncStorage.clear()
@@ -150,6 +152,16 @@ export default function App() {
 // });
 
 // export default App;
+
+
+
+
+
+
+
+
+
+
 
 
 

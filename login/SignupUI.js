@@ -4,7 +4,7 @@ import { TextInput, DefaultTheme,Provider as PaperProvider   } from 'react-nativ
 import { useNavigation } from '@react-navigation/native';
 import { NavigationContainer } from "@react-navigation/native";
 import styles from '../styles/login.style';
-
+import { IP } from '../App';
 
 export default function SignupUI () {
   const [password, setPassword] = React.useState('');
@@ -28,7 +28,7 @@ export default function SignupUI () {
       phone: phone
     };
   
-    fetch('http://192.168.0.146:5000/signup', {
+    fetch(`http://${ IP }:5000/signup`, {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',

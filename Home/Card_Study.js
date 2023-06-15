@@ -157,6 +157,7 @@ import { ENTRIES1 } from '../static/entries';
 import HomeNews from './HomeNews';
 import { Dialog, Portal,  Provider,  Divider,Paragraph } from 'react-native-paper';
 
+import { IP } from '../App';
 
 const Card_Study = () => {
   const [data1,setData] = useState([]);
@@ -192,7 +193,7 @@ const Card_Study = () => {
         const access_token = await AsyncStorage.getItem('access_token');
         const data = {userid:1};
     
-        fetch('http://192.168.124.99:5000/home/word', {
+        fetch(`http://${IP}:5000/home/word`, {
           method: 'POST',
           headers: {
             'Content-Type': 'application/json',

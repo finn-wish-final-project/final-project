@@ -1,11 +1,58 @@
-import React from 'react';
-import {View, Text, Image , ScrollView, TouchableOpacity, Linking} from 'react-native';
+import React, {useEffect, useState} from 'react';
+import {View, Text, Image , ScrollView, TouchableOpacity, Linking, Alert} from 'react-native';
 import { useNavigation } from '@react-navigation/native';
 import styles from '../styles/Challenge1_1.style'
 import { Divider } from 'react-native-paper';
+import AsyncStorage from '@react-native-async-storage/async-storage';
 
 const Challenge1_2 = () => {
   const navigation = useNavigation();
+  const [isJoined, setIsJoined] = useState(false);
+
+  useEffect(() => {
+    checkIsJoined();
+  }, []);
+
+  const checkIsJoined = async () => {
+    try {
+      const access_token = await AsyncStorage.getItem('access_token');
+      setIsJoined(true);
+    } catch (error) {
+      console.error('Error:', error);
+    }
+  };
+
+  
+  const sendPoint = async () => {
+    try {
+      const access_token = await AsyncStorage.getItem('access_token');
+      const data = { chalid : 2, userid : access_token, point : 500 };
+      
+      
+      fetch('http://192.168.0.111:5000/challenge/point', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+          'X-CSRFToken': '{{csrf_token}}',
+          'Authorization': `Bearer ${access_token}`
+        },
+        body: JSON.stringify(data)
+      })
+        .then((response) => response.json())
+        .then((result) => {
+          if (result['msg']){
+            Alert.alert(result['msg']);
+            setIsJoined(true);
+        }
+          })
+        .catch((error) => {
+          console.error('Error:', error);
+        });
+    } catch (error) {
+      console.error('Error:', error);
+    }
+  };
+
   return (
     <ScrollView style = {styles.container}>
       <View style={styles.lineContainer}>
@@ -39,9 +86,27 @@ const Challenge1_2 = () => {
           ✅ 자금 조달 도움: 적금 챌린지를 통해 매달 조금씩 저축하여 해외여행이란 더 넓은 식견을 가지기 위한 자금을 조달할 수 있습니다.
         </Text>
 
-        <TouchableOpacity style={styles.button} onPress={() => Linking.openURL('https://m.busanbank.co.kr/ib20/mnu/MWPFPM3000FPM10?FPCD=0010100132&ACSYS_FPCD=0&FP_HLV_DVCD=00101&FP_LRG_CLACD=001010102&TRG_BTE_DPO_EGM_NTRT=5.75&FP_NM=2030%EB%B6%80%EC%82%B0%EC%9B%94%EB%93%9C%EC%97%91%EC%8A%A4%ED%8F%AC%EC%A0%81%EA%B8%88&FP_OTL_CNTN=2030%EB%85%84+%EC%9B%94%EB%93%9C%EC%97%91%EC%8A%A4%ED%8F%AC%EC%9D%98+%EB%B6%80%EC%82%B0+%EC%9C%A0%EC%B9%98%EB%A5%BC+%EA%B8%B0%EC%9B%90%ED%95%98%EB%8A%94+%EC%83%81%ED%92%88&DPID=&TPCD=&IS_FPM=&SELL_STP_YN=&TIT_NM=&FP_MD_CLACD=000000000&MENU_ID=&ib20_wc=MWPFPM200000V10M%3AMWPFPM310000V00M&app_uuid=&preMenuId=MWPFPM2100FPM20&ib20.persistent.lang.code=ko&')}>
+
+        {!isJoined ? (
+        <TouchableOpacity
+          style={styles.button}
+          onPress={() => {
+            sendPoint();
+            Linking.openURL(
+              'https://m.busanbank.co.kr/ib20/mnu/MWPFPM2500FPM10?FPCD=0010100117&ACSYS_FPCD=0&FP_HLV_DVCD=00101&FP_LRG_CLACD=001010104&TRG_BTE_DPO_EGM_NTRT=2.1&FP_NM=%EC%A3%BC%ED%83%9D%EC%B2%AD%EC%95%BD%EC%A2%85%ED%95%A9%EC%A0%80%EC%B6%95&FP_OTL_CNTN=%EB%AF%BC%EC%98%81%EC%A3%BC%ED%83%9D+%EB%B0%8F+%EA%B5%AD%EB%AF%BC%EC%A3%BC%ED%83%9D%3Cbr%3E%EB%AA%A8%EB%91%90+%EC%B2%AD%EC%95%BD+%EA%B0%80%EB%8A%A5%ED%95%9C+%EB%A7%8C%EB%8A%A5%EC%83%81%ED%92%88&DPID=&TPCD=&IS_FPM=&SELL_STP_YN=&TIT_NM=&FP_MD_CLACD=000000000&MENU_ID=&ib20_wc=MWPFPM200000V10M%3AMWPFPM310000V00M&app_uuid=&preMenuId=MWPFPM2500FPM10&ib20.persistent.lang.code=ko&'
+            );
+          }}>
           <Text style={styles.buttonText}>🍀 챌린지 참여하기 🍀</Text>
         </TouchableOpacity>
+      ) : (
+        <TouchableOpacity style={styles.button} onPress={() => Alert.alert('이미 참여한 챌린지입니다.')}>
+          <Text style={styles.buttonText}>🍀 챌린지 참여하기 🍀</Text>
+        </TouchableOpacity>
+      )}
+{/*       
+        <TouchableOpacity style={styles.button} onPress={() => Linking.openURL('https://m.busanbank.co.kr/ib20/mnu/MWPFPM3000FPM10?FPCD=0010100132&ACSYS_FPCD=0&FP_HLV_DVCD=00101&FP_LRG_CLACD=001010102&TRG_BTE_DPO_EGM_NTRT=5.75&FP_NM=2030%EB%B6%80%EC%82%B0%EC%9B%94%EB%93%9C%EC%97%91%EC%8A%A4%ED%8F%AC%EC%A0%81%EA%B8%88&FP_OTL_CNTN=2030%EB%85%84+%EC%9B%94%EB%93%9C%EC%97%91%EC%8A%A4%ED%8F%AC%EC%9D%98+%EB%B6%80%EC%82%B0+%EC%9C%A0%EC%B9%98%EB%A5%BC+%EA%B8%B0%EC%9B%90%ED%95%98%EB%8A%94+%EC%83%81%ED%92%88&DPID=&TPCD=&IS_FPM=&SELL_STP_YN=&TIT_NM=&FP_MD_CLACD=000000000&MENU_ID=&ib20_wc=MWPFPM200000V10M%3AMWPFPM310000V00M&app_uuid=&preMenuId=MWPFPM2100FPM20&ib20.persistent.lang.code=ko&')}>
+          <Text style={styles.buttonText}>🍀 챌린지 참여하기 🍀</Text>
+        </TouchableOpacity> */}
 
         <Text style = {styles.text3}>
         해외여행을 위한 적금 챌린지에 참여하여 꿈을 향한 첫 걸음을 내딛어보세요. 중고등학생 시절부터 매달 조금씩 저축하여 여행을 위한 경비를 마련하며, 새로운 경험과 추억을 만들어보세요. 챌린지에 참여하여 여러분의 꿈을 이루는 여정에 함께할 준비가 되셨나요?

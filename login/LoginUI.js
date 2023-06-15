@@ -5,6 +5,7 @@ import AsyncStorage from '@react-native-async-storage/async-storage';
 import { useNavigation } from '@react-navigation/native';
 import styles from '../styles/login.style';
 
+import { IP } from '../App';
 
 export default function LoginUI ({ setHasToken}) {
   const [email, setemail] = React.useState('');
@@ -23,7 +24,7 @@ export default function LoginUI ({ setHasToken}) {
 
     const data={email:email, password:password};
     
-      fetch('http://192.168.0.111:5000/signin', {
+      fetch(`http://${ IP }:5000/signin`, {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',

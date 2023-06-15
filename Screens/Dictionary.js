@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { StyleSheet, Text, View, ScrollView, AsyncStorage } from 'react-native';
 import styles from '../styles/Dictionary.style'
+import { IP } from '../App';
 
 const CardView = () => {
   const [data1,setData] = useState([]);
@@ -14,7 +15,7 @@ const CardView = () => {
         const access_token = await AsyncStorage.getItem('access_token');
         const data = {access_token:'access_token'};
     
-        fetch('http://192.168.0.146:5000/dict', {
+        fetch(`http://${ IP }:5000/dict`, {
           method: 'POST',
           headers: {
             'Content-Type': 'application/json',

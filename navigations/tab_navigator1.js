@@ -39,7 +39,7 @@ const TabNavigator1 =({})=> {
       <Drawer.Navigator drawerContent={props=><AppDrawerContent {...props} />}
         screenOptions=
         {{
-        contentContainerStyle : { marginTop : 50},
+        // contentContainerStyle : { marginTop : 50},
         drawerActiveBackgroundColor:'#CBE6D7', //커서 올라가있는 칸 전체 색
         drawerActiveTintColor:'#28794D', // 커서 올라가있는 글자색
         }}
