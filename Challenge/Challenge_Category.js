@@ -66,12 +66,6 @@ const Challenge_Category = () => {
 
 
       </View>
-      {/* <TouchableOpacity
-          style={styles.textContainer4}
-          onPress={() => navigation.navigate('BoardScreen')}
-        >
-          <Text style={styles.text}>게시판</Text>
-        </TouchableOpacity> */}
     </View>
   );
 };

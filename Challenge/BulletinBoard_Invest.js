@@ -1,9 +1,12 @@
 import React, { useState,useEffect } from 'react';
-import { View, Text, FlatList, TouchableOpacity, Modal, Alert } from 'react-native';
+import { View, Text, FlatList, TouchableOpacity, Modal, Alert,TextInput } from 'react-native';
 import { Divider } from 'react-native-paper';
 import AsyncStorage from '@react-native-async-storage/async-storage';
+import styles from '../styles/BulletinBoard.style';
+import { IP } from '../App';
 
-const BoardScreen_Education = () => {
+
+const BulletinBoard_Invest = () => {
   const [posts, setPosts] = useState([]);
   const [selectedPost, setSelectedPost] = useState(null);
   const [isModalOpen, setIsModalOpen] = useState(false);
@@ -12,8 +15,6 @@ const BoardScreen_Education = () => {
   const [userid,setuser_id] = useState('');
   const [boardid, setBoardid] = useState('');
 
-
-  
 
    useEffect(() => {
     sendData_show();
@@ -25,7 +26,7 @@ const sendData_show = async () => {
       const access_token = await AsyncStorage.getItem('access_token');
       const data = { chal_type:2 };
   
-      fetch('http://192.168.0.111:5000/board', {
+      fetch(`http://${IP}:5000/board`, {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
@@ -56,9 +57,9 @@ const sendData_show = async () => {
   const sendData = async (newPostContent,newPostTitle) => {
     try {
       const access_token = await AsyncStorage.getItem('access_token');
-      const data = { chal_type:3, contents:newPostContent, title:newPostTitle };
+      const data = { chal_type:2, contents:newPostContent, title:newPostTitle };
   
-      fetch('http://192.168.0.111:5000/board/save', {
+      fetch(`http://${IP}:5000/board/save`, {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
@@ -88,7 +89,7 @@ const sendData_show = async () => {
       const access_token = await AsyncStorage.getItem('access_token');
       const data = { userid:userid, boardid:boardid,contents:newPostContent, title:newPostTitle };
   
-      fetch('http://192.168.0.111:5000/board/update', {
+      fetch(`http://${IP}:5000/board/update`, {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
@@ -118,8 +119,8 @@ const sendData_show = async () => {
     try {
       const access_token = await AsyncStorage.getItem('access_token');
       const data = { boardid:boardid };
-      console.log('delete1');
-      fetch('http://192.168.0.111:5000/board/delete', {
+      
+      fetch(`http://${IP}:5000/board/delete`, {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
@@ -231,7 +232,7 @@ const sendData_show = async () => {
     <View style={{backgroundColor:'white',flex:1}}>
     <View style={styles.container}>
     <View style={{justifyContent:'center',alignItems:'center'}}>
-      <Text style={styles.title}> 교육 챌린지 게시판</Text>
+      <Text style={styles.title}> 투자 챌린지 게시판</Text>
       </View>
 
       <FlatList
@@ -305,111 +306,5 @@ const sendData_show = async () => {
   );
 };
 
-const styles = {
-  container: {
-    flex: 1,
-    padding: 16,
-    backgroundColor: '#ffffff',
-    borderWidth:2,
-    borderColor:'darkgreen',
-    borderRadius:15,
-    margin:5,
-  },
 
-
-  title: {
-    fontSize: 24,
-    fontWeight: 'bold',
-    color:'black',
-    margin: 16,
-
-  },
-  postList: {
-    flex: 1,
-    marginBottom: 16,
-  },
-  postItem: {
-    padding: 15,
-    borderBottomWidth: 1,
-    borderBottomColor: '#ccc',
-  },
-  postTitle: {
-    fontSize: 18,
-    height:30,
-    fontWeight:'bold',
-    color:'black',
-
-  },
-  postContent: {
-    fontSize: 15,
-    color: 'gray',
-  },
-  modalContainer: {
-    flex: 1,
-    padding: 16,
-    justifyContent: 'center',
-    backgroundColor: 'white',
-    
-  },
-  modalTitle: {
-    fontSize: 24,
-    padding:6,
-    fontWeight: 'bold',
-    marginBottom: 16,
-    color:'black',
-    textAlign:'left',
-  },
-  modalContent: {
-    fontSize: 16,
-    padding:6,
-    marginBottom: 16,
-    height:'50%'
-  },
-  modalButtons: {
-    flexDirection: 'row',
-    justifyContent: 'space-between',
-    marginBottom: -40,
-    marginTop:20,
-    padding : 10
-  },
-  Buttons:{
-    backgroundColor:'white',
-    borderWidth:1,
-    borderColor:'#28794D',
-    borderRadius:15,
-    marginTop:100,
-    height:30, 
-    margin:10,
-    justifyContent:'center',
-    alignItems:"center",
-    width:'38%',
-    marginLeft:2
-
-},
-Buttons2:{
-    backgroundColor:'#28794D',
-    borderWidth:1,
-    borderColor:'#28794D',
-    borderRadius:15,
-    marginTop:100,
-    height:30, 
-    margin:10,
-    justifyContent:'center',
-    alignItems:"center",
-    width:'38%',
-    marginLeft:2
-},
-  input: {
-    marginBottom: 16,
-    padding: 8,
-    borderWidth: 1,
-    borderColor: 'darkgreen',
-    borderRadius: 10,
-  },
-  contentInput: {
-    height: 120,
-    textAlignVertical: 'top',
-  },
-};
-
-export default BoardScreen_Education;
+export default BulletinBoard_Invest;
