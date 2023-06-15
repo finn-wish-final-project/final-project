@@ -2,6 +2,8 @@ import React, { useState,useEffect } from 'react';
 import { View, Text, FlatList, TouchableOpacity, Modal, TextInput, Button, Alert } from 'react-native';
 import { Divider } from 'react-native-paper';
 import AsyncStorage from '@react-native-async-storage/async-storage';
+import styles from '../styles/BulletinBoard.style'
+import { IP } from '../App';
 
 const BoardScreen_Education = () => {
   const [posts, setPosts] = useState([]);
@@ -9,34 +11,27 @@ const BoardScreen_Education = () => {
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [newPostTitle, setNewPostTitle] = useState('');
   const [newPostContent, setNewPostContent] = useState('');
-  const [access_token,setAccess_token] = useState('');
-  //게시판
-  const [chal_type, setChal_type] = useState('');
-  const [content, setContent] = useState('');
-  const [title, setTitle] = useState('');
-  const [boardid, setBoardid] = useState('');
-
-  const [board,setBoard] = useState([]);
+  const [userid, setAccess_token] = useState('');
 
 
-  console.log('posts',posts);
-  console.log('selectedPost',selectedPost);
-  console.log('isModalOpen',isModalOpen);
-  console.log('newPostTitle',newPostTitle);
-  console.log('newPostContent',newPostContent);
-  console.log('boardid',boardid);
+  // console.log('1.posts',posts);
+  // console.log('2.selectedPost',selectedPost);
+  // console.log('3.isModalOpen',isModalOpen);
+  // console.log('4.newPostTitle',newPostTitle);
+  // console.log('5.newPostContent',newPostContent);
+  
 
   useEffect(() => {
     board_show();
   }, []);
 
-// 게시판 보여주기 글목록들 -clear
-const board_show = async () => {
+  // 게시판 보여주기 글목록들 -clear
+  const board_show = async () => {
     try {
       const access_token = await AsyncStorage.getItem('access_token');
       const data = { chal_type:3 };
-  
-      fetch('http://192.168.0.111:5000/board', {
+      
+      fetch(`http://${IP}:5000/board`, {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
@@ -47,9 +42,9 @@ const board_show = async () => {
       })
         .then((response) => response.json())
         .then((result) => {
-            console.log(result,access_token);
-            setAccess_token(access_token);
-            setPosts(result);
+            console.log(result);
+            setPosts(result['result']);
+            setAccess_token(result['access_token']);
             // setBoardid(result[0]['boardid'])
           })
         .catch((error) => {
@@ -61,15 +56,44 @@ const board_show = async () => {
   };
 
 
-
-
 // 게시글 저장하기 (글 올리기)- 완벽
-  const sendData = async (newPostContent,newPostTitle) => {
+  const saveData = async (newPostContent,newPostTitle) => {
     try {
       const access_token = await AsyncStorage.getItem('access_token');
       const data = { chal_type:3, contents:newPostContent, title:newPostTitle };
+      
+      fetch(`http://${IP}:5000/board/save`, {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+          'X-CSRFToken': '{{csrf_token}}',
+          'Authorization': `Bearer ${access_token}`
+        },
+        body: JSON.stringify(data)
+      })
+        .then((response) => response.json())
+        .then((result) => {
+
+            if (result['msg']){
+                alert(result['msg']);
+            }
+          })
+        .catch((error) => {
+          console.error('Error:', error);
+        });
+    } catch (error) {
+      console.error('Error:', error);
+    }
+  };
   
-      fetch('http://192.168.0.111:5000/board/save', {
+// 게시판 수정
+  const updateData = async (selectedPost) => {
+    try {
+      const access_token = await AsyncStorage.getItem('access_token');
+
+      const data = { chal_type:3, boardid:selectedPost['boardid'], contents:selectedPost['contents'], title:selectedPost['title'], userid : selectedPost['userid'] };
+
+      fetch(`http://${IP}:5000/board/update`, {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
@@ -93,47 +117,6 @@ const board_show = async () => {
     }
   };
 
-// 수정하기 
-//   const sendData_update = async (selectedPost) => {
-//     try {
-//       const access_token = await AsyncStorage.getItem('access_token');
-//       const data = { boardid:selectedPost['boardid'], contents:newPostContent, title:newPostTitle };
-  
-//       fetch('http://192.168.0.111:5000/board/update', {
-//         method: 'POST',
-//         headers: {
-//           'Content-Type': 'application/json',
-//           'X-CSRFToken': '{{csrf_token}}',
-//           'Authorization': `Bearer ${access_token}`
-//         },
-//         body: JSON.stringify(data)
-//       })
-//         .then((response) => response.json())
-//         .then((result) => {
-
-//             if (result['msg']){
-//                 alert(result['msg']);
-//                 // setIsModalOpen(false);
-//                 // setSelectedPost(null);
-//             }
-//           })
-//         .catch((error) => {
-//           console.error('Error:', error);
-//         });
-//     } catch (error) {
-//       console.error('Error:', error);
-//     }
-//   };
-
-
-
-
-
-
-
-
-// fetch 전 원래 함수들
-  // 클릭했을때 게시글이면 true 이면 글쓰기, false면 글 수정
   const handlePostPress = (post) => {
     setSelectedPost(post);
   };
@@ -144,17 +127,17 @@ const board_show = async () => {
 
   const handleSavePost = () => {
     const newPost = {
-    //   id: Date.now().toString(),
-      id:boardid,
+      id: Date.now().toString(),
       title: newPostTitle,
-      content: newPostContent,
+      contents: newPostContent,
     };
 
-    setPosts([...posts, newPost]);handleUpdatePost
+    setPosts([...posts, newPost]);
     setNewPostTitle('');
     setNewPostContent('');
     setIsModalOpen(false);
-    sendData(newPost['content'],newPost['title'])
+    saveData(newPost['contents'],newPost['title'])
+
   };
 
   const handleEditPost = () => {
@@ -165,8 +148,8 @@ const board_show = async () => {
 
   const handleUpdatePost = () => {
     const updatedPosts = posts.map((post) => {
-      if (post.id === selectedPost.id) {
-        return { ...post, title: newPostTitle, content: newPostContent };
+      if (userid === selectedPost.userid) {
+        return { ...post, title: newPostTitle, contents: newPostContent };
       }
       return post;
     });
@@ -176,6 +159,7 @@ const board_show = async () => {
     setNewPostContent('');
     setIsModalOpen(false);
     setSelectedPost(null);
+    updateData(selectedPost);
   };
 
   const handleDeletePost = () => {
@@ -184,7 +168,7 @@ const board_show = async () => {
       {
         text: '삭제',
         onPress: () => {
-          const updatedPosts = posts.filter((post) => post.id !== selectedPost.id);
+          const updatedPosts = posts.filter((post) => post.userid !== selectedPost.userid);
           setPosts(updatedPosts);
           setSelectedPost(null);
         },
@@ -193,7 +177,6 @@ const board_show = async () => {
   };
 
   const renderItem = ({ item }) => (
-    
     <TouchableOpacity style={styles.postItem} onPress={() => handlePostPress(item)}>
       <Text style={styles.postTitle}>{item.title}</Text>
       <Text style={styles.postContent}>{item.contents.length > 50 ? item.contents.slice(0, 50) + '...' : item.contents}</Text>
@@ -202,9 +185,9 @@ const board_show = async () => {
   );
 
   return (
-    <View style={{backgroundColor:'white',flex:1}}>
+    <View style={styles.boardBack}>
     <View style={styles.container}>
-    <View style={{justifyContent:'center',alignItems:'center'}}>
+    <View style={styles.titleContainer}>
       <Text style={styles.title}> 교육 챌린지 게시판</Text>
       </View>
       {/* <TouchableOpacity style={{backgroundColor:'darkgreen',borderRadius:15,height:30,margin:10,marginBottom:40,justifyContent:'center',alignItems:"center"}}  onPress={handleAddPost}>
@@ -214,20 +197,20 @@ const board_show = async () => {
       <FlatList
         data={posts}
         renderItem={renderItem}
-        keyExtractor={(item) => item.id}
+        keyExtractor={(item) => item.boardid}
         style={styles.postList}
       />
 {/* yellowgreen: '#28794D',
     green: '#CBE6D7', */}
       <Modal visible={!!selectedPost} animationType="slide">
         <View style={styles.modalContainer}>
-        <View style={{backgroundColor:'white',borderWidth:1,borderColor:'darkgreen',borderRadius:13,padding:10,height:'90%'}}>
+        <View style={styles.selectedPostBack}>
           <Text style={styles.modalTitle}>{selectedPost?.title}</Text>
           <Divider style={{ borderWidth: 1, marginHorizontal: 0,color:'grey' }}/>
           <Text style={styles.modalContent}>{selectedPost?.contents}</Text>
           
           <View style={styles.modalButtons}>
-            <TouchableOpacity style={styles.Buttons}  onPress={handleUpdatePost} >
+            <TouchableOpacity style={styles.Buttons}  onPress={handleEditPost}>
                 <Text style={{color:'black'}}>수정</Text>
             </TouchableOpacity>
             <TouchableOpacity style={styles.Buttons} onPress={handleDeletePost}>
@@ -236,14 +219,14 @@ const board_show = async () => {
           {/* <View style={{marginBottom:-40}}>
            
             </View> */}
-            <TouchableOpacity style={{backgroundColor:'#28794D',borderRadius:15,height:30, marginLeft : '-120%',  marginTop:145,justifyContent:'center',alignItems:"center",width:'100%'}} onPress={() => setSelectedPost(null)}>
+            <TouchableOpacity style={styles.closeButton} onPress={() => setSelectedPost(null)}>
                 <Text style={{color:'white'}}>닫기</Text>
             </TouchableOpacity>
           </View>
         </View>
         </View>
       </Modal>
-        <TouchableOpacity style={{backgroundColor:'darkgreen',borderRadius:20,height:40,marginHorizontal:'35%',width:'30%',marginBottom:15,justifyContent:'center',alignItems:"center"}}  onPress={handleAddPost}>
+        <TouchableOpacity style={styles.WriteButton}  onPress={handleAddPost}>
             <Text style={{color:'white',fontSize:17}}>글 쓰기</Text>
         </TouchableOpacity>
 
@@ -283,111 +266,6 @@ const board_show = async () => {
   );
 };
 
-const styles = {
-  container: {
-    flex: 1,
-    padding: 16,
-    backgroundColor: '#ffffff',
-    borderWidth:2,
-    borderColor:'darkgreen',
-    borderRadius:15,
-    margin:5,
-  },
 
-
-  title: {
-    fontSize: 24,
-    fontWeight: 'bold',
-    color:'black',
-    margin: 16,
-
-  },
-  postList: {
-    flex: 1,
-    marginBottom: 16,
-  },
-  postItem: {
-    padding: 15,
-    borderBottomWidth: 1,
-    borderBottomColor: '#ccc',
-  },
-  postTitle: {
-    fontSize: 18,
-    height:30,
-    fontWeight:'bold',
-    color:'black',
-
-  },
-  postContent: {
-    fontSize: 15,
-    color: 'gray',
-  },
-  modalContainer: {
-    flex: 1,
-    padding: 16,
-    justifyContent: 'center',
-    backgroundColor: 'white',
-    
-  },
-  modalTitle: {
-    fontSize: 24,
-    padding:6,
-    fontWeight: 'bold',
-    marginBottom: 16,
-    color:'black',
-    textAlign:'left',
-  },
-  modalContent: {
-    fontSize: 16,
-    padding:6,
-    marginBottom: 16,
-    height:'50%'
-  },
-  modalButtons: {
-    flexDirection: 'row',
-    justifyContent: 'space-between',
-    marginBottom: -40,
-    marginTop:20,
-    padding : 10
-  },
-  Buttons:{
-    backgroundColor:'white',
-    borderWidth:1,
-    borderColor:'#28794D',
-    borderRadius:15,
-    marginTop:100,
-    height:30, 
-    margin:10,
-    justifyContent:'center',
-    alignItems:"center",
-    width:'38%',
-    marginLeft:2
-
-},
-Buttons2:{
-    backgroundColor:'#28794D',
-    borderWidth:1,
-    borderColor:'#28794D',
-    borderRadius:15,
-    marginTop:100,
-    height:30, 
-    margin:10,
-    justifyContent:'center',
-    alignItems:"center",
-    width:'38%',
-    marginLeft:2
-},
-  input: {
-    marginBottom: 16,
-    padding: 8,
-    borderWidth: 1,
-    borderColor: 'darkgreen',
-    borderRadius: 10,
-  },
-  contentInput: {
-    height: 120,
-    textAlignVertical: 'top',
-  },
-};
 
 export default BoardScreen_Education;
