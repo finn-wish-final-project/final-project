@@ -7,7 +7,7 @@ import Quiz2 from './Quiz2';
 import Quiz3 from './Quiz3';
 import Submit from './Submit';
 import styles from '../styles/Quiz.style'
-
+import { IP } from '../App';
 
 const Stack = createStackNavigator();
 
@@ -52,8 +52,8 @@ const Quiz = () => {
       try {
         const access_token = await AsyncStorage.getItem('access_token');
         const data = {userid:1};
-    
-        fetch('http://192.168.0.146:5000/home/quiz', {
+        
+        fetch(`http://${IP}:5000/home/quiz`, {
           method: 'POST',
           headers: {
             'Content-Type': 'application/json',

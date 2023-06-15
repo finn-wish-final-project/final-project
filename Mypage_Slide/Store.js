@@ -1,8 +1,14 @@
 import React from 'react';
 import { Text, View, ScrollView ,Image} from 'react-native';
 import { Divider} from 'react-native-paper';
+import { useNavigation } from '@react-navigation/native';
 import styles from '../styles/Store.style'
 import Stores from '../static/StoreEntry';
+import { createStackNavigator } from '@react-navigation/stack';
+import Purchase from './Purchase';
+
+
+const Stack = createStackNavigator();
 
 function Store(){
     // const stores = [
@@ -51,14 +57,18 @@ function Store(){
     //       image: require('../static/img/theVenti.jpg')
     //     }
     //   ];
-    
+    const navigation = useNavigation();
+
+    const handleItemPress = (store) => {
+      navigation.navigate('Purchase',{ item: store });
+    }
     return(
         <>
             <ScrollView>
             <>
                 {Stores.map((store, index) => (
                     <React.Fragment key={index}>
-                    <View style={styles.CardContainer}>
+                    <View style={styles.CardContainer} onPress={() => handleItemPress(store)}>
                         <View style={styles.ChallengeContainer1}>
                         <Image style={[styles.StoreImg, store.style]} source={store.image} />
 
@@ -79,5 +89,29 @@ function Store(){
         </>
     );
 }
+
+// const Purchase = ({ route }) => {
+//   const { item } = route.params;
+
+//   return (
+//     <View>
+//       <Image source={item.image} />
+//       <Text>{item.name}</Text>
+//       <Text>{item.item}</Text>
+//       <Text>{item.price}</Text>
+//     </View>
+//   );
+// };
+
+
+// const Store_Stack = () => {
+//   return (
+//     <Stack.Navigator>
+//             <Stack.Screen name="Purchase" component={Purchase} options={{ headerShown: false }}/>
+
+//       <Stack.Screen name="Store_Home" component={Store} options={{ headerShown: false }}/>
+//     </Stack.Navigator>
+//   );
+// };
 
 export default Store;

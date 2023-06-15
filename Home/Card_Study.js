@@ -9,7 +9,7 @@ import { ENTRIES1 } from '../static/entries';
 import HomeNews from './HomeNews';
 // import MyComponent from '../Mypage_Slide/News_scrap';
 import { Dialog, Portal,  Provider,  Divider,Paragraph } from 'react-native-paper';
-
+import { IP } from '../App';
 
 // const SLIDER_1_FIRST_ITEM =1;
 
@@ -61,8 +61,8 @@ const Card_Study = () => {
       try {
         const access_token = await AsyncStorage.getItem('access_token');
         const data = {userid:1};
-    
-        fetch('http://192.168.0.146:5000/home/word', {
+        
+        fetch(`http://${IP}:5000/home/word`, {
           method: 'POST',
           headers: {
             'Content-Type': 'application/json',

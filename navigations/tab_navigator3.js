@@ -44,7 +44,7 @@ import { NativeModules } from 'react-native';
 import My_Challenge from '../Mypage_Slide/My_Challenge';
 import Dic from "../Screens/Dictionary";
 import Challenge_Category from '../Challenge/Challenge_Category'
-
+import Mypage from '../Mypage_Slide/Mypage';
 
 const { RNRestart } = NativeModules;
 const Drawer = createDrawerNavigator();
@@ -82,6 +82,7 @@ const TabNavigator3 =({})=> {
         <Drawer.Screen name="매점" component={Store} />
         <Drawer.Screen name="뉴스 스크랩" component={News_scrap} />
         <Drawer.Screen name="나의 챌린지" component={My_Challenge} />
+        <Drawer.Screen name="내 정보" component={Mypage} />
       </Drawer.Navigator>
     </>
   ) 

@@ -70,5 +70,23 @@ export default StyleSheet.create({
         backgroundColor: '#30905B', 
         },
                     
-
+    button_back:{
+        borderRadius: 20,
+        
+        position: 'absolute',
+        bottom: 35,
+        right: 23,
+        margin: 25,
+        padding: 10,
+            alignItems:'center',
+            borderWidth:1.5,borderColor:"green",
+            // marginTop:50,
+        width:'25%',
+        fontSize: 15,
+        
+            justifyContent:'center',
+            // marginLeft:-33,
+            // marginRight:45,
+            // backgroundColor: 'darkgreen', //#B4DBB1
+    }
   })

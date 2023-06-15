@@ -5,7 +5,7 @@ import Card_Study from '../Home/Card_Study';
 import News_scrap from '../Mypage_Slide/News_scrap';
 import Dic from "../Screens/Dictionary";
 import Store from '../Mypage_Slide/Store';
-
+import Mypage from '../Mypage_Slide/Mypage';
 
 const Drawer = createDrawerNavigator();
 
@@ -25,6 +25,7 @@ const TabNavigator2 =()=> {
         {/* <Drawer.Screen name="My Chanllenge" component={My_Chanllenge} /> */}
         <Drawer.Screen name="News scrap" component={News_scrap} />
         <Drawer.Screen name="store" component={Store} />
+        <Drawer.Screen name="내 정보" component={Mypage} />
       </Drawer.Navigator>
     </>
   )

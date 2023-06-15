@@ -7,34 +7,13 @@ import Quiz from './Quiz'
 import Quiz3 from './Quiz3';
 import Submit from './Submit';
 import styles from '../styles/Quiz.style'
-
+import { IP } from '../App';
 
 
 const Stack = createStackNavigator();
 
 const Quiz2 = () => {
     const navigation = useNavigation();
-
-    // const [selectedAnswer, setSelectedAnswer] = useState(null);
-
-    // const handleAnswerSelect = (answerIndex) => {
-    //     setSelectedAnswer(answerIndex);
-    // };
-
-    // const checkAnswerAndProceed = () => {
-    //   if (selectedAnswer === 2) {
-    //     // 정답인 경우
-    //     Alert.alert('정답입니다!', '', [
-    //       {
-    //         text: '제출',
-    //         onPress: () => navigation.navigate('Submit')
-    //       }
-    //     ]);
-    //   } else {
-    //     // 오답인 경우
-    //     Alert.alert('틀렸습니다. 다시 선택해주세요.');
-    //   }
-    // };
 
     const [selectedAnswer, setSelectedAnswer] = useState(null);
     const [Quiz,setData] = useState('');
@@ -78,8 +57,8 @@ const Quiz2 = () => {
       try {
         const access_token = await AsyncStorage.getItem('access_token');
         const data = {userid:1};
-    
-        fetch('http://192.168.0.146:5000/home/quiz', {
+        
+        fetch(`http://${IP}:5000/home/quiz`, {
           method: 'POST',
           headers: {
             'Content-Type': 'application/json',
@@ -122,7 +101,7 @@ const Quiz2 = () => {
         const access_token = await AsyncStorage.getItem('access_token');
         const data = {wordid:[wordid,wordid2,wordid3]};
     
-        fetch('http://192.168.0.146:5000/quiz/save', {
+        fetch(`http://${IP}:5000/home/quiz/save`, {
           method: 'POST',
           headers: {
             'Content-Type': 'application/json',

@@ -27,17 +27,20 @@ export default StyleSheet.create({
     QuizContent:{
         fontWeight: 'bold',
         fontSize: 22,
-        marginVertical: 15
+        marginVertical: 15,
     },
    
     defaultAnswer:{  marginBottom: 10,
         marginLeft: 20,
         fontSize: 17,
+        padding:5,
         borderRadius: 20,},
     selectedAnswer:{
         marginLeft: 20,
+        color:'black',
         fontSize: 17,
         borderRadius: 20,
+        padding:5,
         backgroundColor:colors.green
     },
     ButtonContainer:{ position: 'absolute', bottom: 20, flexDirection: 'row', justifyContent: 'flex-end', width: '100%', paddingHorizontal: '10%' },
@@ -46,7 +49,6 @@ export default StyleSheet.create({
         backgroundColor: colors.green, 
         width: '30%' 
     },
-    NextButton:{ backgroundColor: colors.green, width: '30%' },
-    ButtonText:{ color: 'black' }
+    ButtonText:{ color: 'black' },
         
 })
