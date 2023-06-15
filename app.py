@@ -23,12 +23,12 @@ ip=os.environ.get('IP')
 
 app=Flask(__name__)
 app.config["JWT_SECRET_KEY"]=os.environ.get('JWT_HASH')
-app.config["JWT_ACCESS_TOKEN_EXPIRES"] = timedelta(hours=6)
+app.config["JWT_ACCESS_TOKEN_EXPIRES"] = timedelta(hours=24)
 bcrypt=Bcrypt(app)
 jwt=JWTManager(app)
 
 
-## 마이페이지
+
 ## 매점
 
 ################## 챌린지 추천 코드################################
@@ -88,7 +88,7 @@ pred_matrix= np.dot(P,Q.T)
 #################################################################
 
 
-
+################################Challenge API##############################
 
 ## 챌린지 추천
 @app.route('/challenge', methods=['GET','POST'])
@@ -102,6 +102,13 @@ def challenge():
   predict_matrix=np.round(pred_matrix, 3)
   predict_matrix=pred_matrix[challenge_index,:]   # 해당 유저의 예측 행 뽑아냄
 
+  connection = pymysql.connect(host=host, user=user, password=password, database=database)
+  cursor = connection.cursor(pymysql.cursors.DictCursor)
+
+  sql = f'select name from userlogin where userid="{user_id}"'
+  cursor.execute(sql)
+  result = cursor.fetchall()
+  connection.close()
   
   max_challenge=0
   max_index=0
@@ -111,10 +118,69 @@ def challenge():
       max_challenge=predict_matrix[i]
       max_index=i+1
       
-  return jsonify(chalid=max_index)
+  return jsonify({"chalid":max_index, "username":result[0]['name']})
   
 
- 
+## 챌린지 포인트
+@app.route('/challenge/point', methods=['POST'])
+@jwt_required()
+def challenge_point():
+  user_id=get_jwt_identity()
+  data=request.get_json()
+  point=data['point']
+  chalid=data['chalid']
+
+  connection= pymysql.connect(host=host, user=user, password=password, database=database)
+  conn=connection.cursor(pymysql.cursors.DictCursor)
+
+  query1=f'select point,challenge from useract where userid="{user_id}";'
+  conn.execute(query1)
+  result=conn.fetchall()
+  chal_list=result[0]['challenge']
+  user_point=result[0]['point']
+
+  # 유저가 참여한 챌린지가 없을때
+  if chal_list == None:
+    query=f'update useract set point={point},challenge="[{chalid}]" where userid="{user_id}";'
+    conn.execute(query)
+    connection.commit()
+    connection.close()
+    return jsonify(msg="챌린지가 시작되었습니다.")
+  else:
+    point=user_point+point
+    chal_list=ast.literal_eval(chal_list)
+    if chalid in chal_list:
+      return jsonify(msg="이미 참여중인 챌린지 입니다.")
+    else:
+      chal_list.append(chalid)
+      query2=f'update useract set point={point},challenge="{chal_list}" where userid="{user_id}";'
+      conn.execute(query2)
+      connection.commit()
+      connection.close()
+
+      return jsonify(msg="챌린지가 시작되었습니다.")
+
+#############################################################################
+
+## 마이페이지
+@app.route('/mypage', methods=['POST'])
+@jwt_required()
+def mypage():
+    current_user = get_jwt_identity()
+    connection = pymysql.connect(host=host, user=user, password=password, database=database)
+    cursor = connection.cursor(pymysql.cursors.DictCursor)
+
+    join_sql = f"""SELECT userlogin.email,userlogin.name, useract.point FROM userlogin 
+    INNER JOIN useract ON userlogin.userid = useract.userid WHERE userlogin.userid={current_user}"""
+    cursor.execute(join_sql)
+    join_data = cursor.fetchall()
+    connection.close()
+
+    if join_data[0] != None:
+        return jsonify(join_data)
+    else:
+        return jsonify({'msg':'다시 로그인 해주세요.'})
+
 
 ######################################################################################################
 
@@ -168,12 +234,19 @@ def board_update():
   title=data['title']
   contents=data['contents']
   userid=data['userid']
+  print(data)
+  print(user_id)
 
   # print(boardid,title,contents)
-  if userid==user_id:
-    connection= pymysql.connect(host=host, user=user, password=password, database=database)
-    conn=connection.cursor(pymysql.cursors.DictCursor)
+  
+  connection= pymysql.connect(host=host, user=user, password=password, database=database)
+  conn=connection.cursor(pymysql.cursors.DictCursor)
 
+  query1=f'select userid from board where boardid={boardid};'
+  conn.execute(query1)
+  result=conn.fetchall()
+  result=result[0]['userid']
+  if result==user_id:
     query=f'update board set title="{title}", contents="{contents}" where boardid={boardid} and userid={user_id} ;'
     conn.execute(query)
     connection.commit()
@@ -190,15 +263,27 @@ def board_delete():
   data=request.get_json()
   boardid=data['boardid']
   user_id=get_jwt_identity()
+  print(data)
+  print(boardid)
 
   connection= pymysql.connect(host=host, user=user, password=password, database=database)
   conn=connection.cursor(pymysql.cursors.DictCursor)
 
-  query=f'delete from board where boardid={boardid} userid={user_id};'
-  conn.execute(query)
-  connection.commit()
-  connection.close()
-  return jsonify(msg="삭제가 완료되었습니다.")
+  query1=f'select userid from board where boardid={boardid};'
+  conn.execute(query1)
+  result=conn.fetchall()
+  # print(result)
+  result=result[0]['userid']
+
+  if result==user_id:
+    query=f'delete from board where boardid={boardid};'
+    conn.execute(query)
+    connection.commit()
+    connection.close()
+    return jsonify(msg="삭제가 완료되었습니다.")
+  else:
+    connection.close()
+    return jsonify(msg="삭제 권한이 없습니다.")
 
 
 #######################################################################################################
