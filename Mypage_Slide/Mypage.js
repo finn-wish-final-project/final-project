@@ -1,9 +1,8 @@
 import React,{useEffect} from 'react';
 import { Divider } from 'react-native-paper';
-import { View, StyleSheet ,Text , Pressable, ScrollView} from 'react-native';
-import { TextInput, DefaultTheme,Provider as PaperProvider   } from 'react-native-paper';
+import { View,Text , Pressable, Image} from 'react-native';
+import { DefaultTheme,Provider as PaperProvider   } from 'react-native-paper';
 import { useNavigation } from '@react-navigation/native';
-// import { NavigationContainer } from "@react-navigation/native";
 import styles from '../styles/login.style';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 
@@ -47,9 +46,10 @@ export default function Mypage () {
 
   return (
       <PaperProvider theme={theme} >
-        <View style={{  display:'flex',justifyContent: 'center',alignItems: 'center',marginTop:"30%",borderWidth:2, borderColor:'darkgreen',borderRadius:20,
+        <View style={{  display:'flex',justifyContent: 'center',alignItems: 'center',marginTop:"20%",borderWidth:2, borderColor:'darkgreen',borderRadius:20,
             width:350,marginLeft:30}}>
-    {/* style={{ alignItems: 'center', }} */}
+
+            <Image style={{ width: 150, height: 150 ,marginTop:20,borderRadius:100}} source={require('../static/img/pro_img.jpg')}/> 
             <Text style={{fontSize:25, alignItems:'center',textAlign:'left',marginTop:25}}>{name}{'\n'} </Text>
            <Divider style={{ borderWidth: 0.5,borderColor:'darkgreen' }} width={'90%'}/>
            <Text style={{fontSize:25, alignItems:'center',textAlign:'left',marginBottom:60}}>

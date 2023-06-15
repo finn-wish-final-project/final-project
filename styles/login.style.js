@@ -74,12 +74,12 @@ export default StyleSheet.create({
         borderRadius: 15,
             padding: 10,
             // alignItems:'center',
-            marginTop:50,
+            // marginTop:-20,
             fontSize: 15,
-            position:'absolute',
+            // position:'absolute',
             // justifyContent:'center',
-            marginLeft:-33,
             // marginRight:45,
+            marginBottom:20,
             backgroundColor: 'darkgreen', //#B4DBB1
     }
   })

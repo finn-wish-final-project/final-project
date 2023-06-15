@@ -9,14 +9,16 @@ const BoardScreen_Education = () => {
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [newPostTitle, setNewPostTitle] = useState('');
   const [newPostContent, setNewPostContent] = useState('');
-  const [access_token,setAccess_token] = useState('');
+  const [userid,setuser_id] = useState('');
   //게시판
-  const [chal_type, setChal_type] = useState('');
-  const [content, setContent] = useState('');
-  const [title, setTitle] = useState('');
+
   const [boardid, setBoardid] = useState('');
 
-  const [board,setBoard] = useState([]);
+  // console.log('posts',posts);
+  console.log('selectedPost',selectedPost);
+  
+
+
 
    useEffect(() => {
     sendData_show();
@@ -39,9 +41,9 @@ const sendData_show = async () => {
       })
         .then((response) => response.json())
         .then((result) => {
-            console.log(result,access_token);
-            setAccess_token(access_token);
-            setPosts(result);
+            // console.log(result.map(result));
+            setuser_id(result['access_token']);
+            setPosts(result['result']);
             // setBoardid(result[0]['boardid'])
           })
         .catch((error) => {
@@ -72,9 +74,9 @@ const sendData_show = async () => {
       })
         .then((response) => response.json())
         .then((result) => {
-
             if (result['msg']){
                 alert(result['msg']);
+                sendData_show();
             }
           })
         .catch((error) => {
@@ -86,10 +88,10 @@ const sendData_show = async () => {
   };
 
 // 수정하기 
-  const sendData_update = async (newPostContent,newPostTitle) => {
+  const sendData_update = async (userid,boardid,newPostContent,newPostTitle) => {
     try {
       const access_token = await AsyncStorage.getItem('access_token');
-      const data = { boardid:6, contents:newPostContent, title:newPostTitle };
+      const data = { userid:userid, boardid:boardid,contents:newPostContent, title:newPostTitle };
   
       fetch('http://192.168.0.111:5000/board/update', {
         method: 'POST',
@@ -105,8 +107,39 @@ const sendData_show = async () => {
 
             if (result['msg']){
                 alert(result['msg']);
-                // setIsModalOpen(false);
-                // setSelectedPost(null);
+                sendData_show();
+            }
+          })
+        .catch((error) => {
+          console.error('Error:', error);
+        });
+    } catch (error) {
+      console.error('Error:', error);
+    }
+  };
+
+// 삭제하기
+  const sendData_delete = async (boardid) => {
+    try {
+      const access_token = await AsyncStorage.getItem('access_token');
+      const data = { boardid:boardid };
+      console.log('delete1');
+      fetch('http://192.168.0.111:5000/board/delete', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+          'X-CSRFToken': '{{csrf_token}}',
+          'Authorization': `Bearer ${access_token}`
+        },
+        body: JSON.stringify(data)
+      })
+        .then((response) => response.json())
+        .then((result) => {
+           
+            if (result['msg']){
+                alert(result['msg']);
+                sendData_show();
+
             }
           })
         .catch((error) => {
@@ -122,8 +155,6 @@ const sendData_show = async () => {
 
 
 
-
-
 // fetch 전 원래 함수들
   const handlePostPress = (post) => {
     setSelectedPost(post);
@@ -133,26 +164,27 @@ const sendData_show = async () => {
     setIsModalOpen(true);
   };
 
+  // 글쓰기
   const handleSavePost = () => {
     const newPost = {
     //   id: Date.now().toString(),
-      userid:access_token,
-      id:boardid,
+      userid: userid,
       title: newPostTitle,
-      content: newPostContent,
+      contents: newPostContent,
     };
 
     setPosts([...posts, newPost]);
-    setBoardid('')
     setNewPostTitle('');
     setNewPostContent('');
+    sendData(newPost['contents'],newPost['title']);
     setIsModalOpen(false);
-    sendData(newPost['content'],newPost['title']);
+
   };
 
   const handleEditPost = () => {
     
     setIsModalOpen(true);
+    setBoardid(selectedPost.boardid);
     setNewPostTitle(selectedPost.title);
     setNewPostContent(selectedPost.contents);
 
@@ -160,18 +192,20 @@ const sendData_show = async () => {
 
   const handleUpdatePost = () => {
     const updatedPosts = posts.map((post) => {
-      if (post.id === selectedPost.id) {
-        return { ...post, title: newPostTitle, content: newPostContent };
+      if (post.userid === selectedPost.userid) {
+        return { ...post, boardid: boardid,title: newPostTitle, contents: newPostContent };
       }
       return post;
     });
 
     setPosts(updatedPosts);
+    setBoardid('');
     setNewPostTitle('');
     setNewPostContent('');
-    setIsModalOpen(false);
     setSelectedPost(null);
-    sendData_update(boardid, newPostContent, newPostTitle);
+    sendData_update(userid,boardid, newPostContent, newPostTitle);
+    setIsModalOpen(false);
+
   };
 
   const handleDeletePost = () => {
@@ -180,8 +214,11 @@ const sendData_show = async () => {
       {
         text: '삭제',
         onPress: () => {
-          const updatedPosts = posts.filter((post) => post.id !== selectedPost.id);
+          const updatedPosts = posts.filter((post) => post.boardid !== selectedPost.boardid);
+
+          // setBoardid(selectedPost.boardid);
           setPosts(updatedPosts);
+          sendData_delete(selectedPost.boardid);
           setSelectedPost(null);
         },
       },
