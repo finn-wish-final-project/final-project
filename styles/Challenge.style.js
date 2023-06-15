@@ -25,7 +25,7 @@ export default StyleSheet.create({
     width: '100%',
     color : '#507557',
     fontSize: 18,
-    padding : 10,
+    padding : 7,
     flexShrink: 1,
   },
   ChallengeImg : {
@@ -51,7 +51,7 @@ export default StyleSheet.create({
       marginBottom : 20
   },
   Point : {
-    marginLeft:-70,
+    marginLeft:-75,
     fontSize : 15
   }
 });

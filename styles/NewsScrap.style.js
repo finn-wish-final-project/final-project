@@ -3,15 +3,20 @@ import { StyleSheet  } from 'react-native';
 export default StyleSheet.create({
     // 뉴스 스크랩
     ArticleText:{
-      fontSize:17,
-      marginTop : 15,
-  },
+        fontSize:17,
+        marginTop:15,
+    
+    },
+    ScrollArea: {
+      borderWidth: 1,
+      borderColor: 'lightgrey',
+    },
     CardContainer: {
         elevation: 5, // 그림자
         borderRadius: 10,
         borderWidth: 0.5,
         borderColor: 'darkgrey', 
-        margin: 20,
+        margin: 15,
         height : 100,
         backgroundColor : '#ffffff',
         display:'flex',
@@ -33,6 +38,7 @@ export default StyleSheet.create({
         paddingHorizontal : 10
     },
     dialogContainer:{
+      height : 630,
         borderWidth:1.5,
         borderColor:'black',
         backgroundColor:'lightgrey',
@@ -45,6 +51,7 @@ export default StyleSheet.create({
         // flex:1
       },
       CloseButton:{
+        padding : 7,
         backgroundColor:'grey',
         borderRadius:30,
         marginTop:10,

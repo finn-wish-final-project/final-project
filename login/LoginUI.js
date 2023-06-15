@@ -1,12 +1,10 @@
 import React, {useEffect } from 'react';
 import { View,Text , Pressable} from 'react-native';
-import { TextInput, DefaultTheme,Provider as PaperProvider   } from 'react-native-paper';
+import { TextInput, DefaultTheme,Provider as PaperProvider,Divider   } from 'react-native-paper';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import { useNavigation } from '@react-navigation/native';
 import styles from '../styles/login.style';
 
-
-// // 안시 쓰기전
 
 export default function LoginUI ({ setHasToken}) {
   const [email, setemail] = React.useState('');
@@ -25,7 +23,7 @@ export default function LoginUI ({ setHasToken}) {
 
     const data={email:email, password:password};
     
-      fetch('http://192.168.0.146:5000/signin', {
+      fetch('http://192.168.0.111:5000/signin', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',

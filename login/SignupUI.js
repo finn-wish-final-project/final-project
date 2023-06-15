@@ -28,7 +28,7 @@ export default function SignupUI () {
       phone: phone
     };
   
-    fetch('http://192.168.0.146:5000/signup', {
+    fetch('http://192.168.225.123:5000/signup', {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',
@@ -61,14 +61,14 @@ export default function SignupUI () {
   return (
     <NavigationContainer independent={true} >
       <PaperProvider theme={theme} >
-          <ScrollView>
-          <View style={{ alignItems: 'center', marginTop:"25%"}}>
+        <ScrollView>
+          <View style={{ alignItems: 'center', marginTop:"30%"}}>
 
               <Text>이메일</Text> 
               <TextInput   value={email} onChangeText ={setemail} style={{width:'70%' ,backgroundColor: 'transparent',marginBottom:20}}/>
 
               <Text>비밀번호</Text>
-              <TextInput   value={password} onChangeText ={setPassword} placeholder="7자리 이상" placeholderTextColor={"lightgray"}
+              <TextInput   value={password} onChangeText ={setPassword} placeholder="8자리 이상" placeholderTextColor={"lightgray"}
               style={{width:'70%' ,backgroundColor: 'transparent',marginBottom:20}}/>
 
               <Text>이름</Text>     

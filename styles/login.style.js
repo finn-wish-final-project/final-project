@@ -2,7 +2,10 @@ import { StyleSheet } from 'react-native';
 
 
 export default StyleSheet.create({
-
+    container : {
+        height : '100%',
+        justifyContent: 'center',
+    },
     input: {
         marginTop: '50%',
         alignItems:'center',
@@ -67,5 +70,16 @@ export default StyleSheet.create({
         backgroundColor: '#30905B', 
         },
                     
-
+    button_back:{
+        borderRadius: 15,
+            padding: 10,
+            // alignItems:'center',
+            marginTop:50,
+            fontSize: 15,
+            position:'absolute',
+            // justifyContent:'center',
+            marginLeft:-33,
+            // marginRight:45,
+            backgroundColor: 'darkgreen', //#B4DBB1
+    }
   })

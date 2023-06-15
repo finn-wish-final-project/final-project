@@ -46,7 +46,7 @@ export default StyleSheet.create({
       height : 100,
       borderWidth: 0.5,
         // borderColor: 'darkgrey', 
-        marginLeft:'-25%',
+        marginLeft:'-33%',
         marginVertical: 15
     }
 
