@@ -5,18 +5,19 @@ import styles from '../styles/Challenge1_1.style'
 import { Divider } from 'react-native-paper';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 
+import { IP } from '../App';
+
+const url = 'https://m.busanbank.co.kr/ib20/mnu/MWPFPM2500FPM10?FPCD=0010100117&ACSYS_FPCD=0&FP_HLV_DVCD=00101&FP_LRG_CLACD=001010104&TRG_BTE_DPO_EGM_NTRT=2.1&FP_NM=%EC%A3%BC%ED%83%9D%EC%B2%AD%EC%95%BD%EC%A2%85%ED%95%A9%EC%A0%80%EC%B6%95&FP_OTL_CNTN=%EB%AF%BC%EC%98%81%EC%A3%BC%ED%83%9D+%EB%B0%8F+%EA%B5%AD%EB%AF%BC%EC%A3%BC%ED%83%9D%3Cbr%3E%EB%AA%A8%EB%91%90+%EC%B2%AD%EC%95%BD+%EA%B0%80%EB%8A%A5%ED%95%9C+%EB%A7%8C%EB%8A%A5%EC%83%81%ED%92%88&DPID=&TPCD=&IS_FPM=&SELL_STP_YN=&TIT_NM=&FP_MD_CLACD=000000000&MENU_ID=&ib20_wc=MWPFPM200000V10M%3AMWPFPM310000V00M&app_uuid=&preMenuId=MWPFPM2500FPM10&ib20.persistent.lang.code=ko&'
+const id = 4;
+const point = 100;
 
 const Challenge1_4 = () => {
-  const navigation = useNavigation();
-  const [isJoined, setIsJoined] = useState(false);
-
   const sendPoint = async () => {
     try {
       const access_token = await AsyncStorage.getItem('access_token');
-      const data = { chalid : 4 , userid : access_token, point : 500 };
+      const data = { chalid : id, userid : access_token, point : point };
       
-      
-      fetch('http://192.168.0.111:5000/challenge/point', {
+      fetch(`http://${ IP }:5000/challenge/point`, {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
@@ -28,8 +29,14 @@ const Challenge1_4 = () => {
         .then((response) => response.json())
         .then((result) => {
           if (result['msg']){
-            Alert.alert(result['msg']);
-            setIsJoined(true);
+            Alert.alert(result['msg'], '',[
+              {
+                text : '확인',
+                onPress : () => {
+                  Linking.openURL(url);
+                }
+              }
+            ]);
         }
           })
         .catch((error) => {
@@ -37,14 +44,6 @@ const Challenge1_4 = () => {
         });
     } catch (error) {
       console.error('Error:', error);
-    }
-  };
-
-  const handleChallengeJoin = () => {
-    if (isJoined) {
-      Alert.alert('You have already joined the challenge!');
-    } else {
-      sendPoint();
     }
   };
 
@@ -80,20 +79,12 @@ const Challenge1_4 = () => {
         </Text>
 
 
-        {!isJoined ? (
-          <TouchableOpacity style={styles.button} onPress={sendPoint}>
-            <Text style={styles.buttonText}>🍀 챌린지 참여하기 🍀</Text>
-          </TouchableOpacity>
-        ) : (
-          <TouchableOpacity style={styles.button} onPress={() => navigation.navigate('Challenge1_4Detail')}>
-            <Text style={styles.buttonText}>챌린지 상세보기</Text>
-          </TouchableOpacity>
-        )}
-
-
-        {/* <TouchableOpacity style={styles.button} onPress={() => Linking.openURL('https://m.busanbank.co.kr/ib20/mnu/MWPFPM2500FPM10?FPCD=0010100117&ACSYS_FPCD=0&FP_HLV_DVCD=00101&FP_LRG_CLACD=001010104&TRG_BTE_DPO_EGM_NTRT=2.1&FP_NM=%EC%A3%BC%ED%83%9D%EC%B2%AD%EC%95%BD%EC%A2%85%ED%95%A9%EC%A0%80%EC%B6%95&FP_OTL_CNTN=%EB%AF%BC%EC%98%81%EC%A3%BC%ED%83%9D+%EB%B0%8F+%EA%B5%AD%EB%AF%BC%EC%A3%BC%ED%83%9D%3Cbr%3E%EB%AA%A8%EB%91%90+%EC%B2%AD%EC%95%BD+%EA%B0%80%EB%8A%A5%ED%95%9C+%EB%A7%8C%EB%8A%A5%EC%83%81%ED%92%88&DPID=&TPCD=&IS_FPM=&SELL_STP_YN=&TIT_NM=&FP_MD_CLACD=000000000&MENU_ID=&ib20_wc=MWPFPM200000V10M%3AMWPFPM310000V00M&app_uuid=&preMenuId=MWPFPM2500FPM10&ib20.persistent.lang.code=ko&')}>
+        <TouchableOpacity style={styles.button}
+         onPress={sendPoint}>
           <Text style={styles.buttonText}>🍀 챌린지 참여하기 🍀</Text>
-        </TouchableOpacity> */}
+        </TouchableOpacity> 
+
+
 
         <Text style = {styles.text3}>
           주택 청약은 빠르게 시작할수록 당첨 가능성이 더욱 커집니다. 주택청약 챌린지에 참여하여 내 집 마련의 꿈을 향한 여정을 시작해보세요.

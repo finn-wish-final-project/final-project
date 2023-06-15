@@ -1,35 +1,22 @@
 import React, {useEffect, useState} from 'react';
 import {View, Text, Image , ScrollView, TouchableOpacity, Linking, Alert} from 'react-native';
-import { useNavigation } from '@react-navigation/native';
 import styles from '../styles/Challenge1_1.style'
 import { Divider } from 'react-native-paper';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 
+import { IP } from '../App';
+
+const url = 'https://m.busanbank.co.kr/ib20/mnu/MWPFPM3000FPM10?FPCD=0010100132&ACSYS_FPCD=0&FP_HLV_DVCD=00101&FP_LRG_CLACD=001010102&TRG_BTE_DPO_EGM_NTRT=5.75&FP_NM=2030%EB%B6%80%EC%82%B0%EC%9B%94%EB%93%9C%EC%97%91%EC%8A%A4%ED%8F%AC%EC%A0%81%EA%B8%88&FP_OTL_CNTN=2030%EB%85%84+%EC%9B%94%EB%93%9C%EC%97%91%EC%8A%A4%ED%8F%AC%EC%9D%98+%EB%B6%80%EC%82%B0+%EC%9C%A0%EC%B9%98%EB%A5%BC+%EA%B8%B0%EC%9B%90%ED%95%98%EB%8A%94+%EC%83%81%ED%92%88&DPID=&TPCD=&IS_FPM=&SELL_STP_YN=&TIT_NM=&FP_MD_CLACD=000000000&MENU_ID=&ib20_wc=MWPFPM200000V10M%3AMWPFPM310000V00M&app_uuid=&preMenuId=MWPFPM2100FPM20&ib20.persistent.lang.code=ko&';
+const id = 2;
+const point = 500;
+
 const Challenge1_2 = () => {
-  const navigation = useNavigation();
-  const [isJoined, setIsJoined] = useState(false);
-
-  useEffect(() => {
-    checkIsJoined();
-  }, []);
-
-  const checkIsJoined = async () => {
-    try {
-      const access_token = await AsyncStorage.getItem('access_token');
-      setIsJoined(true);
-    } catch (error) {
-      console.error('Error:', error);
-    }
-  };
-
-  
   const sendPoint = async () => {
     try {
       const access_token = await AsyncStorage.getItem('access_token');
-      const data = { chalid : 2, userid : access_token, point : 500 };
+      const data = { chalid : id, userid : access_token, point : point };
       
-      
-      fetch('http://192.168.0.111:5000/challenge/point', {
+      fetch(`http://${ IP }:5000/challenge/point`, {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
@@ -41,8 +28,14 @@ const Challenge1_2 = () => {
         .then((response) => response.json())
         .then((result) => {
           if (result['msg']){
-            Alert.alert(result['msg']);
-            setIsJoined(true);
+            Alert.alert(result['msg'], '',[
+              {
+                text : '확인',
+                onPress : () => {
+                  Linking.openURL(url);
+                }
+              }
+            ]);
         }
           })
         .catch((error) => {
@@ -52,6 +45,7 @@ const Challenge1_2 = () => {
       console.error('Error:', error);
     }
   };
+
 
   return (
     <ScrollView style = {styles.container}>
@@ -76,8 +70,6 @@ const Challenge1_2 = () => {
         <Text style = {styles.text_bold}>2️⃣ 적금 계획:{"\n"}</Text> 적금 계좌를 개설하고, 매달 정해진 금액을 저축하도록 계획을 세워보세요. {"\n"}{"\n"}
         <Text style = {styles.text_bold}>3️⃣ 정기 점검:{"\n"}</Text> 매달 저축한 금액을 확인하고, 목표에 도달하기 위해 얼마나 더 노력해야 하는지 정기적으로 점검해보세요. {"\n"}{"\n"}
         <Text style = {styles.text_bold}>4️⃣ FINN WISH:{"\n"}</Text> 행복한 해외여행을 통해 챌린지를 성공적으로 완수해보세요! {"\n"}{"\n"}
-        {/* <Text style = {styles.text_bold}>4️⃣ 동기 부여:</Text> 적금 챌린지 페이지에서 다른 참여자들과 소통하며 서로의 목표와 성과를 공유하고 동기부여를 받아보세요. 함께 여행을 꿈꾸는 사람들과의 소통은 여행을 위한 열정을 더욱 높여줄 것입니다. {"\n"}{"\n"}
-        <Text style = {styles.text_bold}>5️⃣ 꿈을 위한 성과:</Text> 해외여행을 위한 경비를 마련하는 것은 큰 도전이지만, 그 과정에서 자금 조달 능력과 금융 교양을 향상시킬 수 있습니다. 성공적으로 목표를 달성하고 여행을 이룬 참여자들은 특별한 인증과 상을 받게 될 것입니다.{"\n"} */}
         </Text>
 
         <Text style = {styles.small_title}>🍀Why Join? </Text>
@@ -87,33 +79,16 @@ const Challenge1_2 = () => {
         </Text>
 
 
-        {!isJoined ? (
-        <TouchableOpacity
-          style={styles.button}
-          onPress={() => {
-            sendPoint();
-            Linking.openURL(
-              'https://m.busanbank.co.kr/ib20/mnu/MWPFPM2500FPM10?FPCD=0010100117&ACSYS_FPCD=0&FP_HLV_DVCD=00101&FP_LRG_CLACD=001010104&TRG_BTE_DPO_EGM_NTRT=2.1&FP_NM=%EC%A3%BC%ED%83%9D%EC%B2%AD%EC%95%BD%EC%A2%85%ED%95%A9%EC%A0%80%EC%B6%95&FP_OTL_CNTN=%EB%AF%BC%EC%98%81%EC%A3%BC%ED%83%9D+%EB%B0%8F+%EA%B5%AD%EB%AF%BC%EC%A3%BC%ED%83%9D%3Cbr%3E%EB%AA%A8%EB%91%90+%EC%B2%AD%EC%95%BD+%EA%B0%80%EB%8A%A5%ED%95%9C+%EB%A7%8C%EB%8A%A5%EC%83%81%ED%92%88&DPID=&TPCD=&IS_FPM=&SELL_STP_YN=&TIT_NM=&FP_MD_CLACD=000000000&MENU_ID=&ib20_wc=MWPFPM200000V10M%3AMWPFPM310000V00M&app_uuid=&preMenuId=MWPFPM2500FPM10&ib20.persistent.lang.code=ko&'
-            );
-          }}>
+        <TouchableOpacity style={styles.button}
+         onPress={sendPoint}>
           <Text style={styles.buttonText}>🍀 챌린지 참여하기 🍀</Text>
-        </TouchableOpacity>
-      ) : (
-        <TouchableOpacity style={styles.button} onPress={() => Alert.alert('이미 참여한 챌린지입니다.')}>
-          <Text style={styles.buttonText}>🍀 챌린지 참여하기 🍀</Text>
-        </TouchableOpacity>
-      )}
-{/*       
-        <TouchableOpacity style={styles.button} onPress={() => Linking.openURL('https://m.busanbank.co.kr/ib20/mnu/MWPFPM3000FPM10?FPCD=0010100132&ACSYS_FPCD=0&FP_HLV_DVCD=00101&FP_LRG_CLACD=001010102&TRG_BTE_DPO_EGM_NTRT=5.75&FP_NM=2030%EB%B6%80%EC%82%B0%EC%9B%94%EB%93%9C%EC%97%91%EC%8A%A4%ED%8F%AC%EC%A0%81%EA%B8%88&FP_OTL_CNTN=2030%EB%85%84+%EC%9B%94%EB%93%9C%EC%97%91%EC%8A%A4%ED%8F%AC%EC%9D%98+%EB%B6%80%EC%82%B0+%EC%9C%A0%EC%B9%98%EB%A5%BC+%EA%B8%B0%EC%9B%90%ED%95%98%EB%8A%94+%EC%83%81%ED%92%88&DPID=&TPCD=&IS_FPM=&SELL_STP_YN=&TIT_NM=&FP_MD_CLACD=000000000&MENU_ID=&ib20_wc=MWPFPM200000V10M%3AMWPFPM310000V00M&app_uuid=&preMenuId=MWPFPM2100FPM20&ib20.persistent.lang.code=ko&')}>
-          <Text style={styles.buttonText}>🍀 챌린지 참여하기 🍀</Text>
-        </TouchableOpacity> */}
+        </TouchableOpacity> 
 
         <Text style = {styles.text3}>
         해외여행을 위한 적금 챌린지에 참여하여 꿈을 향한 첫 걸음을 내딛어보세요. 중고등학생 시절부터 매달 조금씩 저축하여 여행을 위한 경비를 마련하며, 새로운 경험과 추억을 만들어보세요. 챌린지에 참여하여 여러분의 꿈을 이루는 여정에 함께할 준비가 되셨나요?
         </Text>
         </View>
     </ScrollView>
-    
   )
 }
 

@@ -1,11 +1,53 @@
-import React from 'react';
-import {View, Text, Image , ScrollView, TouchableOpacity,Linking} from 'react-native';
+import React, {useState, useEffect} from 'react';
+import {View, Text, Image , ScrollView, TouchableOpacity,Linking, Alert} from 'react-native';
 import { useNavigation } from '@react-navigation/native';
 import styles from '../styles/Challenge1_1.style'
 import { Divider } from 'react-native-paper';
+import AsyncStorage from '@react-native-async-storage/async-storage';
+
+import { IP } from '../App';
+
+const url = 'https://youtu.be/bB5bntqoAPc';
+const id = 6;
+const point = 300;
 
 const Challenge3_1 = () => {
-  const navigation = useNavigation();
+  const sendPoint = async () => {
+    try {
+      const access_token = await AsyncStorage.getItem('access_token');
+      const data = { chalid : id, userid : access_token, point : point };
+      
+      fetch(`http://${ IP }:5000/challenge/point`, {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+          'X-CSRFToken': '{{csrf_token}}',
+          'Authorization': `Bearer ${access_token}`
+        },
+        body: JSON.stringify(data)
+      })
+        .then((response) => response.json())
+        .then((result) => {
+          if (result['msg']){
+            Alert.alert(result['msg'], '',[
+              {
+                text : '확인',
+                onPress : () => {
+                  Linking.openURL(url);
+                }
+              }
+            ]);
+        }
+          })
+        .catch((error) => {
+          console.error('Error:', error);
+        });
+    } catch (error) {
+      console.error('Error:', error);
+    }
+  };
+
+
   return (
     <ScrollView style = {styles.container}>
       <View style={styles.lineContainer}>
@@ -31,9 +73,10 @@ const Challenge3_1 = () => {
         ✅ 실생활에 적용 가능한 내용: 챌린지에서 배우는 내용은 실생활에서 바로 적용할 수 있는 내용들로 구성되어 있습니다. 여러분은 금융상품에 대한 이해도를 높이고, 돈을 관리하고 투자하는 방법을 배움으로써 미래에 더욱 안정적인 경제적인 삶을 쌓아갈 수 있습니다. {'\n'}{'\n'}
         </Text>
 
-        <TouchableOpacity style={styles.button} onPress={() => Linking.openURL('https://youtu.be/bB5bntqoAPc')}>
+        <TouchableOpacity style={styles.button}
+         onPress={sendPoint}>
           <Text style={styles.buttonText}>🍀 챌린지 참여하기 🍀</Text>
-        </TouchableOpacity>
+        </TouchableOpacity> 
 
         <Text style = {styles.text3}>
         챌린지에 참여하여 중고등학생 여러분들이 금융교육의 중요성을 깨닫고 미래를 위한 금융적인 판단력을 키우는 좋은 기회가 되길 바랍니다. 함께 배우고 성장하는 과정에서 여러분의 실생활에 적용할 수 있는 소중한 지식과 경험을 얻을 수 있을 것입니다.         </Text>

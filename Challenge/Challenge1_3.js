@@ -1,84 +1,22 @@
 import React, { useState, useEffect } from 'react';
 import { View, Text, Image, ScrollView, TouchableOpacity, Linking, Alert } from 'react-native';
-import { useNavigation } from '@react-navigation/native';
 import styles from '../styles/Challenge1_1.style';
 import { Divider } from 'react-native-paper';
 import AsyncStorage from '@react-native-async-storage/async-storage';
-                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                  
+        
+import { IP } from '../App';
+
+const url = 'https://m.busanbank.co.kr/ib20/mnu/MWPFPME000FPM10?FPCD=0010100172&ACSYS_FPCD=0&FP_HLV_DVCD=00101&FP_LRG_CLACD=001010101&TRG_BTE_DPO_EGM_NTRT=0&FP_NM=%EB%A7%88!%EC%9D%B4%ED%86%B5%EC%9E%A5&FP_OTL_CNTN=%3Cb%3EMZ%EC%84%B8%EB%8C%80%EB%A5%BC+%EC%9C%84%ED%95%9C%3C%2Fb%3E%3Cbr%3E%EB%86%92%EC%9D%80+%EA%B8%88%EB%A6%AC%EC%99%80+%EB%8B%A4%EC%96%91%ED%95%9C+%EC%84%9C%EB%B9%84%EC%8A%A4&DPID=&TPCD=&IS_FPM=&SELL_STP_YN=&TIT_NM=&FP_MD_CLACD=000000000&MENU_ID=&ib20_wc=MWPFPM200000V10M%3AMWPFPME10000V00M&app_uuid=&preMenuId=MWPFPME000FPM10&ib20.persistent.lang.code=ko&';
+const id = 3;
+const point = 500;
+
 const Challenge1_3 = () => {
-  const navigation = useNavigation();
-  const [isDisabled, setIsDisabled] = useState(false);
-
-  useEffect(() => {
-    const getDisabledState = async () => {
-      try {
-        const disabledState = await AsyncStorage.getItem('isDisabled');
-        if (disabledState !== null) {
-          setIsDisabled(JSON.parse(disabledState));
-        }
-      } catch (error) {
-        console.log('AsyncStorage에서 비활성화 상태를 가져오는 중 오류 발생:', error);
-      }
-    };
-
-    getDisabledState();
-  }, []);
-
-  useEffect(() => {
-    const storeDisabledState = async () => {
-      try {
-        await AsyncStorage.setItem('isDisabled', JSON.stringify(isDisabled));
-      } catch (error) {
-        console.log('AsyncStorage에 비활성화 상태를 저장하는 중 오류 발생:', error);
-      }
-    };
-
-    storeDisabledState();
-  }, [isDisabled]);
-
-  const handlePress = async () => {
-    try {
-      if (isDisabled) {
-        Alert.alert('이미 참여한 챌린지입니다.', '', [
-          {
-            text: '확인',
-            onPress: () => {
-              Linking.openURL(
-                'https://m.busanbank.co.kr/ib20/mnu/MWPFPME000FPM10?FPCD=0010100172&ACSYS_FPCD=0&FP_HLV_DVCD=00101&FP_LRG_CLACD=001010101&TRG_BTE_DPO_EGM_NTRT=0&FP_NM=%EB%A7%88!%EC%9D%B4%ED%86%B5%EC%9E%A5&FP_OTL_CNTN=%3Cb%3EMZ%EC%84%B8%EB%8C%80%EB%A5%BC+%EC%9C%84%ED%95%9C%3C%2Fb%3E%3Cbr%3E%EB%86%92%EC%9D%80+%EA%B8%88%EB%A6%AC%EC%99%80+%EB%8B%A4%EC%96%91%ED%95%9C+%EC%84%9C%EB%B9%84%EC%8A%A4&DPID=&TPCD=&IS_FPM=&SELL_STP_YN=&TIT_NM=&FP_MD_CLACD=000000000&MENU_ID=&ib20_wc=MWPFPM200000V10M%3AMWPFPME10000V00M&app_uuid=&preMenuId=MWPFPME000FPM10&ib20.persistent.lang.code=ko&'
-              );
-            },
-          },
-        ]);
-      } else {
-        Alert.alert('챌린지 참여하기', '', [
-          {
-            text: '확인',
-            onPress: async () => {
-              await sendPoint();
-              setIsDisabled(true);
-              Linking.openURL(
-                'https://m.busanbank.co.kr/ib20/mnu/MWPFPME000FPM10?FPCD=0010100172&ACSYS_FPCD=0&FP_HLV_DVCD=00101&FP_LRG_CLACD=001010101&TRG_BTE_DPO_EGM_NTRT=0&FP_NM=%EB%A7%88!%EC%9D%B4%ED%86%B5%EC%9E%A5&FP_OTL_CNTN=%3Cb%3EMZ%EC%84%B8%EB%8C%80%EB%A5%BC+%EC%9C%84%ED%95%9C%3C%2Fb%3E%3Cbr%3E%EB%86%92%EC%9D%80+%EA%B8%88%EB%A6%AC%EC%99%80+%EB%8B%A4%EC%96%91%ED%95%9C+%EC%84%9C%EB%B9%84%EC%8A%A4&DPID=&TPCD=&IS_FPM=&SELL_STP_YN=&TIT_NM=&FP_MD_CLACD=000000000&MENU_ID=&ib20_wc=MWPFPM200000V10M%3AMWPFPME10000V00M&app_uuid=&preMenuId=MWPFPME000FPM10&ib20.persistent.lang.code=ko&'
-              );
-            },
-          },
-          {
-            text: '취소',
-            style: 'cancel',
-          },
-        ]);
-      }
-    } catch (error) {
-      console.log('AsyncStorage에서 상태를 가져오거나 저장하는 중 오류 발생:', error);
-    }
-  };
-
   const sendPoint = async () => {
     try {
       const access_token = await AsyncStorage.getItem('access_token');
-      const data = { chalid : 3, userid : access_token, point : 500 };
+      const data = { chalid : id, userid : access_token, point : point };
       
-      
-      fetch('http://192.168.0.111:5000/challenge/point', {
+      fetch(`http://${ IP }:5000/challenge/point`, {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
@@ -89,10 +27,15 @@ const Challenge1_3 = () => {
       })
         .then((response) => response.json())
         .then((result) => {
-          console.log(result)
           if (result['msg']){
-            Alert.alert(result['msg']);
-          
+            Alert.alert(result['msg'], '',[
+              {
+                text : '확인',
+                onPress : () => {
+                  Linking.openURL(url);
+                }
+              }
+            ]);
         }
           })
         .catch((error) => {
@@ -102,6 +45,7 @@ const Challenge1_3 = () => {
       console.error('Error:', error);
     }
   };
+
 
 
 
@@ -151,15 +95,10 @@ const Challenge1_3 = () => {
         ✅ 저축과 계획 세우기의 중요성을 배울 수 있으며 자신의 목표 달성 능력을 향상시킬 수 있습니다. {'\n'}
       </Text>
 
-      <TouchableOpacity
-        style={[styles.button, isDisabled ? styles.disabledButton : null]}
-        onPress={handlePress}
-      >
-        <Text style={styles.buttonText}>
-          {isDisabled ? '이미 참여한 챌린지입니다' : '🍀 챌린지 참여하기 🍀'}
-        </Text>
-        {/* <Text style={styles.buttonText}>🍀 챌린지 참여하기 🍀</Text> */}
-      </TouchableOpacity>
+      <TouchableOpacity style={styles.button}
+         onPress={sendPoint}>
+          <Text style={styles.buttonText}>🍀 챌린지 참여하기 🍀</Text>
+      </TouchableOpacity> 
 
       <Text style={styles.text3}>
         이 챌린지에 참여하여 부모님에게 우리의 사랑과 감사를 전하고, 근사한 선물이나 경험을 선사해 보세요!

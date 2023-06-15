@@ -1,20 +1,22 @@
 import React, {useEffect, useState} from 'react';
 import {View, Text, Image , ScrollView, TouchableOpacity, Linking, Alert} from 'react-native';
-import { useNavigation } from '@react-navigation/native';
 import styles from '../styles/Challenge1_1.style'
 import { Divider } from 'react-native-paper';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 
+import { IP } from '../App';
+
+const url = 'https://m.busanbank.co.kr/ib20/mnu/MWPFPM3000FPM10?FPCD=0010100132&ACSYS_FPCD=0&FP_HLV_DVCD=00101&FP_LRG_CLACD=001010102&TRG_BTE_DPO_EGM_NTRT=5.75&FP_NM=2030%EB%B6%80%EC%82%B0%EC%9B%94%EB%93%9C%EC%97%91%EC%8A%A4%ED%8F%AC%EC%A0%81%EA%B8%88&FP_OTL_CNTN=2030%EB%85%84+%EC%9B%94%EB%93%9C%EC%97%91%EC%8A%A4%ED%8F%AC%EC%9D%98+%EB%B6%80%EC%82%B0+%EC%9C%A0%EC%B9%98%EB%A5%BC+%EA%B8%B0%EC%9B%90%ED%95%98%EB%8A%94+%EC%83%81%ED%92%88&DPID=&TPCD=&IS_FPM=&SELL_STP_YN=&TIT_NM=&FP_MD_CLACD=000000000&MENU_ID=&ib20_wc=MWPFPM200000V10M%3AMWPFPM310000V00M&app_uuid=&preMenuId=MWPFPM2100FPM20&ib20.persistent.lang.code=ko&';
+const id = 1;
+const point = 500;
+
 const Challenge1_1 = () => {
-  const navigation = useNavigation();
- 
   const sendPoint = async () => {
     try {
       const access_token = await AsyncStorage.getItem('access_token');
-      const data = { chalid : 1, userid : access_token, point : 500 };
+      const data = { chalid : id, userid : access_token, point : point };
       
-      
-      fetch('http://192.168.0.111:5000/challenge/point', {
+      fetch(`http://${ IP }:5000/challenge/point`, {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
@@ -26,7 +28,14 @@ const Challenge1_1 = () => {
         .then((response) => response.json())
         .then((result) => {
           if (result['msg']){
-            Alert.alert(result['msg']);
+            Alert.alert(result['msg'], '',[
+              {
+                text : '확인',
+                onPress : () => {
+                  Linking.openURL('https://m.busanbank.co.kr/ib20/mnu/MWPFPM3000FPM10?FPCD=0010100132&ACSYS_FPCD=0&FP_HLV_DVCD=00101&FP_LRG_CLACD=001010102&TRG_BTE_DPO_EGM_NTRT=5.75&FP_NM=2030%EB%B6%80%EC%82%B0%EC%9B%94%EB%93%9C%EC%97%91%EC%8A%A4%ED%8F%AC%EC%A0%81%EA%B8%88&FP_OTL_CNTN=2030%EB%85%84+%EC%9B%94%EB%93%9C%EC%97%91%EC%8A%A4%ED%8F%AC%EC%9D%98+%EB%B6%80%EC%82%B0+%EC%9C%A0%EC%B9%98%EB%A5%BC+%EA%B8%B0%EC%9B%90%ED%95%98%EB%8A%94+%EC%83%81%ED%92%88&DPID=&TPCD=&IS_FPM=&SELL_STP_YN=&TIT_NM=&FP_MD_CLACD=000000000&MENU_ID=&ib20_wc=MWPFPM200000V10M%3AMWPFPM310000V00M&app_uuid=&preMenuId=MWPFPM2100FPM20&ib20.persistent.lang.code=ko&');
+                }
+              }
+            ]);
         }
           })
         .catch((error) => {
@@ -36,6 +45,7 @@ const Challenge1_1 = () => {
       console.error('Error:', error);
     }
   };
+
 
 
   return (
@@ -68,11 +78,9 @@ const Challenge1_1 = () => {
         </Text>
 
         <TouchableOpacity style={styles.button}
-         onPress={() => {sendPoint();
-                         Linking.openURL('https://m.busanbank.co.kr/ib20/mnu/MWPFPM3000FPM10?FPCD=0010100132&ACSYS_FPCD=0&FP_HLV_DVCD=00101&FP_LRG_CLACD=001010102&TRG_BTE_DPO_EGM_NTRT=5.75&FP_NM=2030%EB%B6%80%EC%82%B0%EC%9B%94%EB%93%9C%EC%97%91%EC%8A%A4%ED%8F%AC%EC%A0%81%EA%B8%88&FP_OTL_CNTN=2030%EB%85%84+%EC%9B%94%EB%93%9C%EC%97%91%EC%8A%A4%ED%8F%AC%EC%9D%98+%EB%B6%80%EC%82%B0+%EC%9C%A0%EC%B9%98%EB%A5%BC+%EA%B8%B0%EC%9B%90%ED%95%98%EB%8A%94+%EC%83%81%ED%92%88&DPID=&TPCD=&IS_FPM=&SELL_STP_YN=&TIT_NM=&FP_MD_CLACD=000000000&MENU_ID=&ib20_wc=MWPFPM200000V10M%3AMWPFPM310000V00M&app_uuid=&preMenuId=MWPFPM2100FPM20&ib20.persistent.lang.code=ko&')}}>
+         onPress={sendPoint}>
           <Text style={styles.buttonText}>🍀 챌린지 참여하기 🍀</Text>
-         </TouchableOpacity> 
-
+        </TouchableOpacity> 
 
 
         <Text style = {styles.text3}>

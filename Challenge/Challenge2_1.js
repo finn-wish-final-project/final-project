@@ -1,11 +1,54 @@
-import React from 'react';
-import {View, Text, Image , ScrollView, TouchableOpacity, Linking} from 'react-native';
+import React, {useEffect, useState} from 'react';
+import {View, Text, Image , ScrollView, TouchableOpacity, Linking, Alert} from 'react-native';
 import { useNavigation } from '@react-navigation/native';
 import styles from '../styles/Challenge1_1.style'
 import { Divider } from 'react-native-paper';
+import AsyncStorage from '@react-native-async-storage/async-storage';
+
+import { IP } from '../App';
+
+const url = 'https://main.krxverse.co.kr/_contents/ACA/02/02010400/ACA02010400P1.jsp';
+const id = 5;
+const point = 200;
 
 const Challenge2_1 = () => {
-  const navigation = useNavigation();
+  const sendPoint = async () => {
+    try {
+      const access_token = await AsyncStorage.getItem('access_token');
+      const data = { chalid : id, userid : access_token, point : point };
+      
+      fetch(`http://${ IP }:5000/challenge/point`, {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+          'X-CSRFToken': '{{csrf_token}}',
+          'Authorization': `Bearer ${access_token}`
+        },
+        body: JSON.stringify(data)
+      })
+        .then((response) => response.json())
+        .then((result) => {
+          if (result['msg']){
+            Alert.alert(result['msg'], '',[
+              {
+                text : '확인',
+                onPress : () => {
+                  Linking.openURL(url);
+                }
+              }
+            ]);
+        }
+          })
+        .catch((error) => {
+          console.error('Error:', error);
+        });
+    } catch (error) {
+      console.error('Error:', error);
+    }
+  };
+
+
+
   return (
       <ScrollView style = {styles.container}>
         <View style={styles.lineContainer}>
@@ -36,9 +79,11 @@ const Challenge2_1 = () => {
           ✅ 미래를 위한 준비: 금융적인 안목과 투자 지식을 습득하는 것은 미래를 위한 좋은 준비입니다. 재무적인 안정과 경제적인 성공을 위해 지금부터 시작해보세요.
         </Text>
         
-        <TouchableOpacity style={styles.button} onPress={() => Linking.openURL('https://main.krxverse.co.kr/_contents/ACA/02/02010400/ACA02010400P1.jsp')}>
+        <TouchableOpacity style={styles.button}
+         onPress={sendPoint}>
           <Text style={styles.buttonText}>🍀 챌린지 참여하기 🍀</Text>
-        </TouchableOpacity>
+        </TouchableOpacity> 
+
         
         <Text style = {styles.text3}>
         이 챌린지에 참여하여 모의 투자를 경험하고 재무적인 지식을 습득해보세요. 청소년 여러분들의 재무 교육과 성장을 응원합니다. 함께 도전하는 여정에서 많은 성과를 이루시길 바랍니다.
