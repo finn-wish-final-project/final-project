@@ -1,5 +1,5 @@
 import React, { useState,useEffect } from 'react';
-import { View, Text, FlatList, TouchableOpacity, Modal, TextInput, Button, Alert } from 'react-native';
+import { View, Text, FlatList, TouchableOpacity, Modal, Alert } from 'react-native';
 import { Divider } from 'react-native-paper';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 
@@ -10,21 +10,16 @@ const BoardScreen_Education = () => {
   const [newPostTitle, setNewPostTitle] = useState('');
   const [newPostContent, setNewPostContent] = useState('');
   const [userid,setuser_id] = useState('');
-  //게시판
-
   const [boardid, setBoardid] = useState('');
 
-  // console.log('posts',posts);
-  console.log('selectedPost',selectedPost);
+
   
-
-
 
    useEffect(() => {
     sendData_show();
    }, []);
 
-// 게시판 보여주기 글목록들 -clear
+// 게시판 보여주기 글목록들 
 const sendData_show = async () => {
     try {
       const access_token = await AsyncStorage.getItem('access_token');
@@ -41,10 +36,10 @@ const sendData_show = async () => {
       })
         .then((response) => response.json())
         .then((result) => {
-            // console.log(result.map(result));
+
             setuser_id(result['access_token']);
             setPosts(result['result']);
-            // setBoardid(result[0]['boardid'])
+
           })
         .catch((error) => {
           console.error('Error:', error);
@@ -167,7 +162,6 @@ const sendData_show = async () => {
   // 글쓰기
   const handleSavePost = () => {
     const newPost = {
-    //   id: Date.now().toString(),
       userid: userid,
       title: newPostTitle,
       contents: newPostContent,
@@ -216,7 +210,6 @@ const sendData_show = async () => {
         onPress: () => {
           const updatedPosts = posts.filter((post) => post.boardid !== selectedPost.boardid);
 
-          // setBoardid(selectedPost.boardid);
           setPosts(updatedPosts);
           sendData_delete(selectedPost.boardid);
           setSelectedPost(null);
@@ -240,9 +233,6 @@ const sendData_show = async () => {
     <View style={{justifyContent:'center',alignItems:'center'}}>
       <Text style={styles.title}> 교육 챌린지 게시판</Text>
       </View>
-      {/* <TouchableOpacity style={{backgroundColor:'darkgreen',borderRadius:15,height:30,margin:10,marginBottom:40,justifyContent:'center',alignItems:"center"}}  onPress={handleAddPost}>
-        <Text style={{color:'white'}}>게시글 작성</Text>
-        </TouchableOpacity> */}
 
       <FlatList
         data={posts}
@@ -250,8 +240,7 @@ const sendData_show = async () => {
         keyExtractor={(item) => item.id}
         style={styles.postList}
       />
-{/* yellowgreen: '#28794D',
-    green: '#CBE6D7', */}
+
       <Modal visible={!!selectedPost} animationType="slide">
         <View style={styles.modalContainer}>
         <View style={{backgroundColor:'white',borderWidth:1,borderColor:'darkgreen',borderRadius:13,padding:10,height:'90%'}}>
