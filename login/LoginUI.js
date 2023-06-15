@@ -23,7 +23,7 @@ export default function LoginUI ({ setHasToken}) {
 
     const data={email:email, password:password};
     
-      fetch('http://192.168.0.146:5000/signin', {
+      fetch('http://192.168.0.111:5000/signin', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',

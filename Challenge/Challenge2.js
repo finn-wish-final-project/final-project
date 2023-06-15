@@ -11,7 +11,7 @@ const Challenge2 = () => {
        onPress={() => navigation.navigate('Challenge2_1')}>
         <View style = {styles.ChallengeContainer1}>
           <Text style={styles.CardTitle}> 모의 투자 참가하기 </Text>
-          <Text style = {styles.Point}> 300🍀</Text>
+          <Text style = {styles.Point}> 200🍀</Text>
         </View>
         <View style = {styles.ChallengeContainer2}>
             <Image style = {styles.ChallengeImg} source = {require('../static/img/challenge2.jpg')} />

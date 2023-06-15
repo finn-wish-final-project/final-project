@@ -1,4 +1,4 @@
-import React, {useEffect} from 'react';
+import React, {useEffect, useState} from 'react';
 import {View, Text, Image , ScrollView, TouchableOpacity, Linking} from 'react-native';
 import { useNavigation } from '@react-navigation/native';
 import styles from '../styles/Challenge1_1.style'
@@ -6,6 +6,7 @@ import { Divider } from 'react-native-paper';
 
 const Challenge1_1 = () => {
   const navigation = useNavigation();
+  const [chalid, setChalid] = useState('1');
   // const [number, setNumber] = React.useState('1');
   // const [title, setTitle] = React.useState('꿈을 위한 첫 걸음');
 

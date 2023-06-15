@@ -51,7 +51,8 @@ export default StyleSheet.create({
       marginBottom : 20
   },
   Point : {
-    marginLeft:-75,
+    marginLeft: -58,
+    marginTop : -5,
     fontSize : 15
   }
 });

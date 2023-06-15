@@ -1,4 +1,4 @@
-import React, {useState} from 'react';
+import React, {useState, useEffect} from 'react';
 import {View, Text, Image , ScrollView, TouchableOpacity,Linking } from 'react-native';
 import { useNavigation } from '@react-navigation/native';
 import styles from '../styles/Challenge1_1.style'
@@ -9,12 +9,50 @@ import AsyncStorage from '@react-native-async-storage/async-storage';
 
 const Challenge1_3 = () => {
   const navigation = useNavigation();
+  const [chalid, setChalid] = useState('1');
   const [isDisabled, setIsDisabled] = useState(false);
 
-  const handlePress = () => {
-    setIsDisabled(true); // 버튼을 누르면 비활성화 상태로 변경
-    Linking.openURL('https://m.busanbank.co.kr/ib20/mnu/MWPFPME000FPM10?FPCD=0010100172&ACSYS_FPCD=0&FP_HLV_DVCD=00101&FP_LRG_CLACD=001010101&TRG_BTE_DPO_EGM_NTRT=0&FP_NM=%EB%A7%88!%EC%9D%B4%ED%86%B5%EC%9E%A5&FP_OTL_CNTN=%3Cb%3EMZ%EC%84%B8%EB%8C%80%EB%A5%BC+%EC%9C%84%ED%95%9C%3C%2Fb%3E%3Cbr%3E%EB%86%92%EC%9D%80+%EA%B8%88%EB%A6%AC%EC%99%80+%EB%8B%A4%EC%96%91%ED%95%9C+%EC%84%9C%EB%B9%84%EC%8A%A4&DPID=&TPCD=&IS_FPM=&SELL_STP_YN=&TIT_NM=&FP_MD_CLACD=000000000&MENU_ID=&ib20_wc=MWPFPM200000V10M%3AMWPFPME10000V00M&app_uuid=&preMenuId=MWPFPME000FPM10&ib20.persistent.lang.code=ko&');
+  // const handlePress = () => {
+  //   setIsDisabled(true); // 버튼을 누르면 비활성화 상태로 변경
+  //   Linking.openURL('https://m.busanbank.co.kr/ib20/mnu/MWPFPME000FPM10?FPCD=0010100172&ACSYS_FPCD=0&FP_HLV_DVCD=00101&FP_LRG_CLACD=001010101&TRG_BTE_DPO_EGM_NTRT=0&FP_NM=%EB%A7%88!%EC%9D%B4%ED%86%B5%EC%9E%A5&FP_OTL_CNTN=%3Cb%3EMZ%EC%84%B8%EB%8C%80%EB%A5%BC+%EC%9C%84%ED%95%9C%3C%2Fb%3E%3Cbr%3E%EB%86%92%EC%9D%80+%EA%B8%88%EB%A6%AC%EC%99%80+%EB%8B%A4%EC%96%91%ED%95%9C+%EC%84%9C%EB%B9%84%EC%8A%A4&DPID=&TPCD=&IS_FPM=&SELL_STP_YN=&TIT_NM=&FP_MD_CLACD=000000000&MENU_ID=&ib20_wc=MWPFPM200000V10M%3AMWPFPME10000V00M&app_uuid=&preMenuId=MWPFPME000FPM10&ib20.persistent.lang.code=ko&');
+  // };
+
+  useEffect(() => {
+    // 컴포넌트가 마운트될 때 AsyncStorage에서 비활성화 상태를 가져옵니다.
+    getDisabledState();
+  }, []);
+
+  useEffect(() => {
+    // 비활성화 상태가 변경될 때마다 AsyncStorage에 저장합니다.
+    storeDisabledState();
+  }, [isDisabled]);
+
+  const getDisabledState = async () => {
+    try {
+      const disabledState = await AsyncStorage.getItem('isDisabled');
+      if (disabledState !== null) {
+        setIsDisabled(JSON.parse(disabledState));
+      }
+    } catch (error) {
+      console.log('AsyncStorage에서 비활성화 상태를 가져오는 중 오류 발생:', error);
+    }
   };
+
+  const storeDisabledState = async () => {
+    try {
+      await AsyncStorage.setItem('isDisabled', JSON.stringify(isDisabled));
+    } catch (error) {
+      console.log('AsyncStorage에 비활성화 상태를 저장하는 중 오류 발생:', error);
+    }
+  };
+
+  const handlePress = () => {
+    // 버튼을 누르면 비활성화 상태로 변경합니다.
+    Linking.openURL(
+      'https://m.busanbank.co.kr/ib20/mnu/MWPFPME000FPM10?FPCD=0010100172&ACSYS_FPCD=0&FP_HLV_DVCD=00101&FP_LRG_CLACD=001010101&TRG_BTE_DPO_EGM_NTRT=0&FP_NM=%EB%A7%88!%EC%9D%B4%ED%86%B5%EC%9E%A5&FP_OTL_CNTN=%3Cb%3EMZ%EC%84%B8%EB%8C%80%EB%A5%BC+%EC%9C%84%ED%95%9C%3C%2Fb%3E%3Cbr%3E%EB%86%92%EC%9D%80+%EA%B8%88%EB%A6%AC%EC%99%80+%EB%8B%A4%EC%96%91%ED%95%9C+%EC%84%9C%EB%B9%84%EC%8A%A4&DPID=&TPCD=&IS_FPM=&SELL_STP_YN=&TIT_NM=&FP_MD_CLACD=000000000&MENU_ID=&ib20_wc=MWPFPM200000V10M%3AMWPFPME10000V00M&app_uuid=&preMenuId=MWPFPME000FPM10&ib20.persistent.lang.code=ko&'
+    );
+  };
+
 
   return (
     <ScrollView style={styles.container}>

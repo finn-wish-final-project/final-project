@@ -7,7 +7,8 @@ import Store from '../Mypage_Slide/Store';
 import { View,AsyncStorage} from 'react-native';
 import { DrawerContentScrollView,DrawerItem, DrawerItemList } from '@react-navigation/drawer';
 import { NativeModules } from 'react-native';
-
+import Mypage from '../Mypage_Slide/Mypage';
+import My_Store from '../Mypage_Slide/My_Store';
 
 
 const { RNRestart } = NativeModules;
@@ -38,6 +39,7 @@ const TabNavigator1 =({})=> {
       <Drawer.Navigator drawerContent={props=><AppDrawerContent {...props} />}
         screenOptions=
         {{
+        contentContainerStyle : { marginTop : 50},
         drawerActiveBackgroundColor:'#CBE6D7', //커서 올라가있는 칸 전체 색
         drawerActiveTintColor:'#28794D', // 커서 올라가있는 글자색
         }}
@@ -46,6 +48,8 @@ const TabNavigator1 =({})=> {
         <Drawer.Screen name="매점" component={Store} />
         <Drawer.Screen name="뉴스 스크랩" component={News_scrap} />
         <Drawer.Screen name="나의 챌린지" component={My_Challenge} />
+        <Drawer.Screen name = "나의 쿠폰함" component={My_Store} />
+        <Drawer.Screen name="내 정보" component={Mypage} />
       </Drawer.Navigator>
     </>
   ) 
