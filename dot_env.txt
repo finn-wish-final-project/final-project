@@ -1,0 +1,30 @@
+Python-dotenv
+Python 프로그램을 작성하다보면 환경변수나 프로그램 실행에 필요한 설정파일에 옵션값들이 필요할 수 있음
+이럴 경우, 소스내에 하드코딩해두는 것보다 따로 파일을 두어 저장하고 수정하는 법이 좀 더 깔끔할 수 있음
+
+1. 필요 모듈 설치
+pip install python-dotenv
+
+2. .env 파일 생성
+new file > .env
+
+3. 저장할 키 = 값 입력
+key = test
+
+4. 저장한 값 불러오기: os.environ['key']
+from dotenv import load_dotenv
+import os
+
+# load .env
+load_dotenv()
+
+mySecret = os.environ.get('MySecret')
+
+dotenv_file = dotenv.find_dotenv()
+dotenv.load_ditenv(dotenv_file)
+
+print(os.environ["key"]) # 아까 저장한 test가 나옴
+
+5. .env에 저장한 값 수정하는 방법
+dotenv.set_key(dotenv_file, "key", 'new new')
+
