@@ -6,7 +6,7 @@ import Store from '../Mypage_Slide/Store';
 import { View,AsyncStorage} from 'react-native';
 import { DrawerContentScrollView,DrawerItem, DrawerItemList } from '@react-navigation/drawer';
 import { NativeModules } from 'react-native';
-import My_Challenge from '../Mypage_Slide/My_Challenge';
+import Mypage from '../Mypage_Slide/Mypage';
 import Dic from "../Screens/Dictionary";
 
 const { RNRestart } = NativeModules;
@@ -46,7 +46,7 @@ const TabNavigator2 =({navigation })=> {
         <Drawer.Screen name="Home" component={Dic} options={{title: 'FINN WISH', headerTitleAlign: 'center',headerTitleStyle:{color:'darkgreen',fontWeight:'bold',fontSize:25}, }} />
         <Drawer.Screen name="매점" component={Store} />
         <Drawer.Screen name="뉴스 스크랩" component={News_scrap} />
-        <Drawer.Screen name="나의 챌린지" component={My_Challenge} />
+        <Drawer.Screen name="내 정보" component={Mypage} />
       </Drawer.Navigator>
     </>
   ) 

@@ -51,7 +51,7 @@ const CardView = () => {
                 backgroundColor={'#ffffff'}
                 barStyle={'dark-content'}
               />
-    <ScrollView>
+    <ScrollView contentContainerStyle ={styles.Container}>
       {data1.map((entry, index) => (
         <View style={styles.CardContainer} key={index}>
           <Text style={styles.CardTitle}>{entry.title}</Text>

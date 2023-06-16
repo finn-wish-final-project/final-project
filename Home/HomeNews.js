@@ -1,61 +1,9 @@
-// import * as React from 'react';
-// import { Modal, Portal, Text, Button, Provider } from 'react-native-paper';
-// import { StyleSheet,  Pressable} from 'react-native';
-
-// const HomeNews = () => {
-//   const [visible, setVisible] = React.useState(false);
-
-//   const showModal = () => setVisible(true);
-//   const hideModal = () => setVisible(false);
-//   const containerStyle = {backgroundColor: 'white', padding: 100};
-
-//   return (
-//     <Provider>
-//       <Portal>
-//         <Modal animationType="slide" visible={visible} onDismiss={hideModal} contentContainerStyle={containerStyle}>
-//           <Text>여기는 기사 나올 공간</Text>
-//           <Pressable
-//               style={[styles.button, styles.buttonClose]}
-//               onPress={hideModal}>
-//               <Text style={styles.textStyle}>Hide Modal</Text>
-//             </Pressable>
-//         </Modal>
-//       </Portal>
-//       <Button style={{marginTop: 200 }} onPress={showModal}>
-//         오늘의 뉴스 보기
-//       </Button>
-//     </Provider>
-//   );
-// };
-
-// const styles = StyleSheet.create({
-    
-//     button: {
-//       borderRadius: 20,
-//       padding: 10,
-//       elevation: 2,
-//     },
-    
-//     buttonClose: {
-//       backgroundColor: '#CBE6D7',
-//     },
-//     textStyle: {
-//       color: 'white',
-//       fontWeight: 'bold',
-//       textAlign: 'center',
-//     },
-   
-//   });
-  
-// export default HomeNews;
-
 import React, { useState,useEffect } from 'react';
-import { View, ScrollView, Text, SafeAreaView, StatusBar, Button,Pressable,StyleSheet,AsyncStorage } from 'react-native';
+import { View, ScrollView, Text, Pressable, AsyncStorage } from 'react-native';
 import { Dialog, Portal,  Provider,  Divider,Paragraph } from 'react-native-paper';
 import style from '../styles/HomeNews.style'
 
 import "react-native-gesture-handler";
-import { log } from 'react-native-reanimated';
 
 import { IP } from '../App';
 
@@ -63,7 +11,6 @@ const HomeNews = () => {
   const [visible, setVisible] = useState(false);
   const [newsID,setnewsID] = useState('')
   const [news,setData]=useState({title:'', article:''});
-  // const [token, setToken] = useState(null);
 
   const showDialog = () => setVisible(true);
   const hideDialog = () => setVisible(false);
@@ -73,8 +20,6 @@ const HomeNews = () => {
   }, []);
 
   
-
-  // console.log(data1);
   const sendData = async () => {
     try {
       const access_token = await AsyncStorage.getItem('access_token');
@@ -91,10 +36,9 @@ const HomeNews = () => {
       })
         .then((response) => response.json())
         .then((result) => {
-          console.log('1111', result);
           setData(result[0]);
           setnewsID(result[0]['newsid'])
-          console.log(newsID);
+          // console.log(newsID);
         })
         .catch((error) => {
           console.error('Error:', error);

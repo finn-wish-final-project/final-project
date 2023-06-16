@@ -53,7 +53,7 @@ const sendData_show = async () => {
 
 
 
-// 게시글 저장하기 (글 올리기)- 완벽
+// 게시글 저장하기 (글 올리기)
   const sendData = async (newPostContent,newPostTitle) => {
     try {
       const access_token = await AsyncStorage.getItem('access_token');
@@ -297,7 +297,6 @@ const sendData_show = async () => {
         <Text style={{color:'white'}}>{selectedPost ? '수정하기' : '저장하기'}</Text>
         </TouchableOpacity>
 
-       {/* userid */}
         </View>
         </View>
       </Modal>

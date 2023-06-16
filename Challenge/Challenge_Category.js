@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { Text, View, Image, TouchableOpacity } from 'react-native';
+import { Text, View, Image, TouchableOpacity, StatusBar } from 'react-native';
 import styles from '../styles/Challenge_Category.style';
 import { useNavigation } from '@react-navigation/native';
 import { createStackNavigator } from '@react-navigation/stack';
@@ -70,24 +70,12 @@ const Challenge_Category = () => {
 
 const Challenge_Stack = () => {
   return (
-    // <Stack.Navigator>
-    //   <Stack.Screen name="Home" component={Challenge_Category} options={{ headerShown: false }}/>
-    //   <Stack.Screen name="Challenge" component={Challenge} options={{ headerShown: false }} />
-    //   <Stack.Screen name="Challenge2" component={Challenge2} options={{ headerShown: false }} />
-    //   <Stack.Screen name="Challenge3" component={Challenge3} options={{ headerShown: false }} />
-    //   <Stack.Screen name="Challenge_Recommend" component={Challenge_Recommend} options={{ headerShown: false }} />
-
-    //   <Stack.Screen name="Challenge1_1" component={Challenge1_1} options={{ headerShown: false }} />
-    //   <Stack.Screen name="Challenge1_2" component={Challenge1_2} options={{ headerShown: false }} />
-    //   <Stack.Screen name="Challenge1_3" component={Challenge1_3} options={{ headerShown: false }} />
-    //   <Stack.Screen name="Challenge1_4" component={Challenge1_4} options={{ headerShown: false }} />
-    //   <Stack.Screen name="Challenge2_1" component={Challenge2_1} options={{ headerShown: false }} />
-    //   <Stack.Screen name="Challenge3_1" component={Challenge3_1} options={{ headerShown: false }} />
-
-
-    //   <Stack.Screen name="Challenge_link1" component={Challenge_link1} options={{ headerShown: false }} />
-
-    // </Stack.Navigator>
+    <>
+    <StatusBar
+          translucent={true}
+          backgroundColor={'#ffffff'}
+          barStyle={'dark-content'}
+        />             
     <Stack.Navigator>
       <Stack.Screen name="Home" component={Challenge_Category} options={{ headerShown: false }}/>
       <Stack.Screen name="Challenge" component={Challenge} options={{ headerShown: false }} />
@@ -107,7 +95,7 @@ const Challenge_Stack = () => {
       <Stack.Screen name="Challenge3_1" component={Challenge3_1} options={{ headerShown: false }} />
 
     </Stack.Navigator>
-
+    </>
   );
 };
 

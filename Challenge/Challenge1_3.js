@@ -52,7 +52,7 @@ const Challenge1_3 = () => {
   return (
     <ScrollView style={styles.container}>
       <View style={styles.lineContainer}>
-      <Text style={styles.title}>부모님 생신&어버이날 돈 모으기 챌린지</Text>
+      <Text style={styles.title}>부모님 생신&어버이날 돈 모으기 챌린지{"\n"}💐행복한 기념일💐</Text>
 
       <View>
         <Text style={styles.small_title}>🍀 Introduction:</Text>
@@ -87,9 +87,6 @@ const Challenge1_3 = () => {
       </View>
 
       <Text style={styles.small_title}>🍀Why Join?</Text>
-      <Text style={styles.text2}>
-        이 챌린지에 참여함으로써 얻을 수 있는 이점들입니다:{"\n"}
-      </Text>
       <Text style={styles.text}> 
         ✅ 선물이나 이벤트 등을 통해 부모님에게 기쁨을 선사하며 부모님에 대한 감사와 사랑을 표현할 수 있습니다.{'\n'}{"\n"}
         ✅ 저축과 계획 세우기의 중요성을 배울 수 있으며 자신의 목표 달성 능력을 향상시킬 수 있습니다. {'\n'}

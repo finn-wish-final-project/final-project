@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { StyleSheet, Text, View, ScrollView, Alert, Pressable,AsyncStorage } from 'react-native';
+import { StyleSheet, Text, View, ScrollView, Alert, Pressable,AsyncStorage, StatusBar } from 'react-native';
 import { Button } from 'react-native-paper';
 import { useNavigation,NavigationContainer } from '@react-navigation/native';
 import { createStackNavigator,TransitionPresets  } from '@react-navigation/stack';
@@ -91,22 +91,12 @@ const Quiz = () => {
 
 
   return(
-
+  
     <View style={styles.QuizEntireContainer}>
-  <View style={styles.QuizContainer}>
+    <View style={styles.QuizContainer}>
     <Text style={styles.WordQuiz}> 단어 퀴즈 </Text>
     <Text style={styles.QuizContent}> 1.{Quiz} </Text>
-    {/* {answer.map((item,index) => (
-      <Text
-      style={[
-      styles.defaultAnswer,
-      selectedAnswer === 1 && styles.selectedAnswer
-      ]}
-      onPress={() => handleAnswerSelect(1)}
-    >
-      (1) {item} {index}
-    </Text>
-    ))} */}
+
 
     <Text
       style={[
@@ -170,6 +160,12 @@ const Quiz = () => {
 
 const Quiz_Stack1 = () => {
     return (
+      <>
+      <StatusBar
+      translucent={true}
+      backgroundColor={'#ffffff'}
+      barStyle={'dark-content'}
+    />
         <Stack.Navigator 
         screenOptions={{
           headerShown: false,
@@ -181,7 +177,7 @@ const Quiz_Stack1 = () => {
             <Stack.Screen name="Quiz3" component={Quiz3}  options={{ headerShown: false }} />
             <Stack.Screen name="Submit" component={Submit}  options={{ headerShown: false }} />
         </Stack.Navigator>
-   
+        </>
     );
   };
 

@@ -53,7 +53,7 @@ const sendData_show = async () => {
 
 
 
-// 게시글 저장하기 (글 올리기)- 완벽
+// 게시글 저장하기 (글 올리기)
   const sendData = async (newPostContent,newPostTitle) => {
     try {
       const access_token = await AsyncStorage.getItem('access_token');
@@ -256,9 +256,7 @@ const sendData_show = async () => {
             <TouchableOpacity style={styles.Buttons} onPress={handleDeletePost}>
                 <Text style={{color:'black'}}>삭제</Text>
             </TouchableOpacity>
-          {/* <View style={{marginBottom:-40}}>
            
-            </View> */}
             <TouchableOpacity style={{backgroundColor:'#28794D',borderRadius:15,height:30, marginLeft : '-120%',  marginTop:145,justifyContent:'center',alignItems:"center",width:'100%'}} onPress={() => setSelectedPost(null)}>
                 <Text style={{color:'white'}}>닫기</Text>
             </TouchableOpacity>
@@ -296,8 +294,6 @@ const sendData_show = async () => {
         <TouchableOpacity style={styles.Buttons2} onPress={selectedPost ? handleUpdatePost : handleSavePost}>
         <Text style={{color:'white'}}>{selectedPost ? '수정하기' : '저장하기'}</Text>
         </TouchableOpacity>
-
-       {/* userid */}
         </View>
         </View>
       </Modal>
