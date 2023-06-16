@@ -1,40 +1,15 @@
 import React, { useState, useEffect } from 'react';
-import { StyleSheet, Text, View, ScrollView, Alert, Pressable,AsyncStorage } from 'react-native';
+import {  Text, View, Alert, AsyncStorage } from 'react-native';
 import { Button } from 'react-native-paper';
-import { useNavigation,NavigationContainer } from '@react-navigation/native';
+import { useNavigation } from '@react-navigation/native';
 import { createStackNavigator } from '@react-navigation/stack';
-import Quiz from './Quiz'
-import Quiz3 from './Quiz3';
-import Submit from './Submit';
 import styles from '../styles/Quiz.style'
+import { IP } from '../App';
 
 
 
-const Stack = createStackNavigator();
-
-const Quiz2 = () => {
+const Quiz3 = () => {
     const navigation = useNavigation();
-
-    // const [selectedAnswer, setSelectedAnswer] = useState(null);
-
-    // const handleAnswerSelect = (answerIndex) => {
-    //     setSelectedAnswer(answerIndex);
-    // };
-
-    // const checkAnswerAndProceed = () => {
-    //   if (selectedAnswer === 2) {
-    //     // 정답인 경우
-    //     Alert.alert('정답입니다!', '', [
-    //       {
-    //         text: '제출',
-    //         onPress: () => navigation.navigate('Submit')
-    //       }
-    //     ]);
-    //   } else {
-    //     // 오답인 경우
-    //     Alert.alert('틀렸습니다. 다시 선택해주세요.');
-    //   }
-    // };
 
     const [selectedAnswer, setSelectedAnswer] = useState(null);
     const [Quiz,setData] = useState('');
@@ -78,8 +53,8 @@ const Quiz2 = () => {
       try {
         const access_token = await AsyncStorage.getItem('access_token');
         const data = {userid:1};
-    
-        fetch('http://192.168.0.146:5000/home/quiz', {
+        
+        fetch(`http://${IP}:5000/home/quiz`, {
           method: 'POST',
           headers: {
             'Content-Type': 'application/json',
@@ -101,17 +76,15 @@ const Quiz2 = () => {
             setWorid2(result[1]['wordid']);
             setWorid3(result[2]['wordid']);
             setWorid(result[0]['wordid']);
-            console.log(wordid,wordid2,wordid3);
+
           }catch(error){
             alert(error)
           }  
           })
           .catch((error) => {
-            // console.log('@@@@@@@@@');
             console.error('Error:', error);
           });
       } catch (error) {
-        // console.log('!!!!!!!!');
         console.error('Error:', error);
       }
     };
@@ -122,7 +95,7 @@ const Quiz2 = () => {
         const access_token = await AsyncStorage.getItem('access_token');
         const data = {wordid:[wordid,wordid2,wordid3]};
     
-        fetch('http://192.168.0.146:5000/quiz/save', {
+        fetch(`http://${IP}:5000/quiz/save`, {
           method: 'POST',
           headers: {
             'Content-Type': 'application/json',
@@ -138,11 +111,9 @@ const Quiz2 = () => {
             } 
           })
           .catch((error) => {
-            // console.log('@@@@@@@@@');
             console.error('Error:', error);
           });
       } catch (error) {
-        // console.log('!!!!!!!!');
         console.error('Error:', error);
       }
     };
@@ -220,19 +191,4 @@ const Quiz2 = () => {
 };
 
 
-// const Quiz_Stack2 = () => {
-//   return (
-//       <Stack.Navigator >
-//           <Stack.Screen name="Quiz3" component={Quiz3} options={{ headerShown: false }}  />
-//           <Stack.Screen name="Quiz2" component={Quiz2}  options={{ headerShown: false }} />
-//           <Stack.Screen name="Quiz" component={Quiz} options={{ headerShown: false }}  />
-//           <Stack.Screen name="Submit" component={Submit} options={{ headerShown: false }}  />
-          
-//               {/* <Stack.Screen name="Quiz" component={Quiz} /> */}
-//       </Stack.Navigator>
- 
-//   );
-// };
-
-
-export default Quiz2;
+export default Quiz3;

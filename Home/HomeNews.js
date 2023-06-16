@@ -1,13 +1,12 @@
 import React, { useState,useEffect } from 'react';
-// import React from 'react';
+
 import { View, ScrollView, Text, SafeAreaView, StatusBar, Button,Pressable,StyleSheet,AsyncStorage } from 'react-native';
 import { Dialog, Portal,  Provider,  Divider,Paragraph } from 'react-native-paper';
 import style from '../styles/HomeNews.style'
-// import styles2 from './styles/index.style';
-
-// import Icon from 'react-native-vector-icons/FontAwesome';
 import "react-native-gesture-handler";
 import { log } from 'react-native-reanimated';
+import {IP} from '../App';
+
 
 const HomeNews = () => {
   const [visible, setVisible] = useState(false);
@@ -28,9 +27,9 @@ const HomeNews = () => {
   const sendData = async () => {
     try {
       const access_token = await AsyncStorage.getItem('access_token');
-      const data = {userid:1};
+      const data = {access_token:access_token};
   
-      fetch('http://192.168.0.146:5000/home/news', {
+      fetch(`http://${IP}:5000/home/news`, {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
@@ -41,7 +40,6 @@ const HomeNews = () => {
       })
         .then((response) => response.json())
         .then((result) => {
-          console.log('1111', result);
           setData(result[0]);
           setnewsID(result[0]['newsid'])
         })
@@ -58,7 +56,7 @@ const HomeNews = () => {
       const access_token = await AsyncStorage.getItem('access_token');
       const data = {newsid:newsID};
   
-      fetch('http://192.168.0.146:5000/news/save', {
+      fetch(`http://${IP}:5000/news/save`, {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
@@ -69,7 +67,6 @@ const HomeNews = () => {
       })
         .then((response) => response.json())
         .then((result) => {
-          console.log('1111', result);
           alert(result['msg'])
         })
         .catch((error) => {

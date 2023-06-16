@@ -1,8 +1,9 @@
 import React, { useState, useEffect } from 'react';
-import { StyleSheet, Text, View, ScrollView, AsyncStorage } from 'react-native';
+import { Text, View, ScrollView, AsyncStorage, StatusBar } from 'react-native';
 import styles from '../styles/Dictionary.style'
+import { IP } from '../App';
 
-const CardView = () => {
+const CardView = () => {  
   const [data1,setData] = useState([]);
 
   useEffect(() => {
@@ -14,7 +15,7 @@ const CardView = () => {
         const access_token = await AsyncStorage.getItem('access_token');
         const data = {access_token:'access_token'};
     
-        fetch('http://192.168.0.146:5000/dict', {
+        fetch(`http://${ IP }:5000/dict`, {
           method: 'POST',
           headers: {
             'Content-Type': 'application/json',
@@ -25,7 +26,6 @@ const CardView = () => {
         })
           .then((response) => response.json())
           .then((result) => {
-            // console.log('1111', result);
             if (result['msg']){
               alert(result['msg']);
             }
@@ -44,7 +44,13 @@ const CardView = () => {
   
 
   return(
-    <ScrollView>
+    <>
+    <StatusBar
+                translucent={true}
+                backgroundColor={'#ffffff'}
+                barStyle={'dark-content'}
+              />
+    <ScrollView contentContainerStyle ={styles.Container}>
       {data1.map((entry, index) => (
         <View style={styles.CardContainer} key={index}>
           <Text style={styles.CardTitle}>{entry.title}</Text>
@@ -52,6 +58,7 @@ const CardView = () => {
         </View>
       ))}
     </ScrollView>
+    </>
     )
 }
 

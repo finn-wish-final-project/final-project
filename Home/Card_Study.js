@@ -7,7 +7,7 @@ import styles from '../styles/index.style'
 import { ENTRIES1 } from '../static/entries';
 import HomeNews from './HomeNews';
 import { Dialog, Portal,  Provider,  Divider,Paragraph } from 'react-native-paper';
-
+import {IP} from '../App';
 
 const Card_Study = () => {
   const [data1,setData] = useState([]);
@@ -21,28 +21,12 @@ const Card_Study = () => {
     }, []);
     
 
-    // AsyncStorage.getItem('access_token',(err,result)=>{
-    //   setAcessToken(result)
-    //   console.log('!!!!!!!!!!!!!!!!!',access_token);
-    // });
-    
-    // if(AsyncStorage.getItem('access_token')){
-    //   console.log('토큰 존재함');
-    // }else{
-    //   console.log('토큰 없음');
-    // }
-
-    // AsyncStorage.getItem('access_token',(err,result)=>{
-    //   console.log(result);
-    // });
-
-    // AsyncStorage.removeItem('access_token');
     const sendData = async () => {
       try {
         const access_token = await AsyncStorage.getItem('access_token');
-        const data = {userid:1};
+        const data = {access_token:access_token};
     
-        fetch('http://192.168.0.146:5000/home/word', {
+        fetch(`http://${IP}:5000/home/word`, {
           method: 'POST',
           headers: {
             'Content-Type': 'application/json',
@@ -53,7 +37,6 @@ const Card_Study = () => {
         })
           .then((response) => response.json())
           .then((result) => {
-            // console.log('1111', result);
             setData(result);
           })
           .catch((error) => {
@@ -70,9 +53,8 @@ const Card_Study = () => {
       
       const items = data.slice().reverse(); // slice : 복사본 만드는 거. 데이터 역순
 
-      // console.log("layoutExample:",items);
 
-      return ( // 체크 : 바로 밑에 View style에 exampleContainerLight은 없어도 되는거 아냐?
+      return ( 
           <View style={[styles.exampleContainer, styles.exampleContainerLight]}> 
               <Text style={[styles.title, styles.titleDark]}>{`오늘의 끝장단어`}</Text>
               <Carousel
@@ -106,13 +88,7 @@ const Card_Study = () => {
                 barStyle={'dark-content'}
               />
 
-              {/* <View style="flex:1"> */}
-              <View
-                     style={styles.scrollview}
-                     scrollEventThrottle={100}
-                     directionalLockEnabled={false}
-                    
-                   >
+              <View style={styles.scrollview}>
                 { layoutExample(data1) }
               </View>
 

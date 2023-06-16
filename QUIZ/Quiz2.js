@@ -2,12 +2,10 @@ import React, { useState,useEffect } from 'react';
 import { Text, View,Alert,AsyncStorage } from 'react-native';
 import { Button } from 'react-native-paper';
 import { useNavigation } from '@react-navigation/native';
-import { createStackNavigator } from '@react-navigation/stack';
-import styles from '../styles/Quiz.style';
+import styles from '../styles/Quiz.style'
+import { IP } from '../App';
 
 
-
-const Stack = createStackNavigator();
 
 const Quiz2 = () => {
     const navigation = useNavigation();
@@ -49,8 +47,8 @@ const Quiz2 = () => {
       try {
         const access_token = await AsyncStorage.getItem('access_token');
         const data = {userid:1};
-    
-        fetch('http://192.168.0.146:5000/home/quiz', {
+        
+        fetch(`http://${IP}:5000/home/quiz`, {
           method: 'POST',
           headers: {
             'Content-Type': 'application/json',
@@ -62,7 +60,6 @@ const Quiz2 = () => {
           .then((response) => response.json())
           .then((result) => {
             try{
-              console.log('2222', result);
             setData(result[1]['quiz']);
             setAnswer(result[1]['answer']);
             setCol1(result[1]['col1']);
@@ -75,11 +72,9 @@ const Quiz2 = () => {
           }  
           })
           .catch((error) => {
-            // console.log('@@@@@@@@@');
             console.error('Error:', error);
           });
       } catch (error) {
-        // console.log('!!!!!!!!');
         console.error('Error:', error);
       }
     };
@@ -157,8 +152,6 @@ const Quiz2 = () => {
 
 
 export default Quiz2;
-
-
 
 
 

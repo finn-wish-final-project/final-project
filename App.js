@@ -66,10 +66,10 @@ export default function App() {
             activeTintColor: 'darkgreen',
             inactiveTintColor: 'gray',
           }}>
-        <Tab.Screen name="Dictionary" component={TabNavigator2} options={{ headerShown: false }}/>
-        <Tab.Screen  name="Home" component={TabNavigator1} options={{ headerShown: false }} />
-        <Tab.Screen name="Quiz" component={TabNavigator4} options={{ headerShown: false }} />
-        <Tab.Screen name="Challenge" component={TabNavigator3} options={{ headerShown: false }} />
+        <Tab.Screen name="Dictionary" component={TabNavigator2} options={{ unmountOnBlur: true, headerShown: false }}/>
+        <Tab.Screen  name="Home" component={TabNavigator1} options={{ unmountOnBlur: true, headerShown: false }} />
+        <Tab.Screen name="Quiz" component={TabNavigator4} options={{ unmountOnBlur: true, headerShown: false }} />
+        <Tab.Screen name="Challenge" component={TabNavigator3} options={{ unmountOnBlur: true, headerShown: false }} />
       </Tab.Navigator>
         ):(
           // access_token이 없는 경우, 비인증 컴포넌트를 표시
@@ -80,7 +80,11 @@ export default function App() {
 };
 
 
-
+// AsyncStorage.setItem('access_token',
+// "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJmcmVzaCI6ZmFsc2UsImlhdCI6MTY4NjI5MjUyOSwianRpIjoiOTQ1NTY5ZmUtOGY0OC00MWUzLThhNTgtODI0MTg2NTI3YzIwIiwidHlwZSI6ImFjY2VzcyIsInN1YiI6MSwibmJmIjoxNjg2MjkyNTI5fQ.797Z_n9G_20rv2_mQ5dUyJ5kZFuWrKA4gvfuUNhICQ8", 
+// () => {
+//   console.log('유저 닉네임 저장 완료')
+// });
 
 
 

@@ -1,56 +1,23 @@
-import React, { useState, useEffect } from 'react';
+import React  from 'react';
 import { useNavigation } from '@react-navigation/native';
 import { Text, View, ScrollView, Image, TouchableOpacity } from 'react-native';
-import AsyncStorage from '@react-native-async-storage/async-storage';
 import styles from '../styles/Challenge.style'
+
 
 const Challenge = () => {
   const navigation = useNavigation();
-  // const [number, setnumber] = React.useState('');
-  // const [title, settitle] = React.useState('');
-  
-  // useEffect(() => {
-  //   sendData();
-  // }, []);
-
-  // const handleChallenge = () => {
-  //   sendData(number, title); 
-  // }
-  // const sendData = async (number,title) => {
-  //   const data={number:number, title:title};
-    
-   
-  //   fetch('http://192.168.0.146:5000/', {
-  //     method: 'POST',
-  //     headers: {
-  //       'Content-Type': 'application/json',
-  //       'X-CSRFToken': '{{csrf_token}}',
-  //       'Authorization': `Bearer ${access_token}`
-  //     },
-  //     body: JSON.stringify(data)
-  //     })
-  //       .then((response) => response.json())
-  //       .then((result) => {
-  //         console.log('1111', result);
-          
-  //         if (result['access_token']){
-  //           AsyncStorage.setItem('access_token',result['access_token']);
-  //           setHasToken('access_token');
-  //           alert(result['msg']);
-  //         }
-  //         else if ( !result['access_token'] && result['msg'] ){
-  //           alert(result['msg']);
-  //         }
-  //       })
-  //       .catch((error) => {
-  //         console.error('Error:', error);
-  //       });
-
-  //     };
-
 
 
   return(
+    <>    
+    <TouchableOpacity style={{height:40,backgroundColor:'white',marginHorizontal:'5%',marginVertical:15,borderWidth:2,borderColor:'darkgreen',borderRadius:20,justifyContent:'center'}} 
+    onPress={() => navigation.navigate('BoardScreen_Saving')}>
+     <View >
+       <Text style={{textAlign:'center',fontWeight:'bold',color:'black',fontSize:20}} > 저축 게시판 바로가기</Text>
+     
+     </View>
+    
+   </TouchableOpacity>
     <ScrollView>
       <TouchableOpacity style={styles.ChallengeCardContainer} 
        onPress={() => navigation.navigate('Challenge1_1')}>
@@ -113,6 +80,7 @@ const Challenge = () => {
         </View>
       </TouchableOpacity>
     </ScrollView>
+    </>
 
     )
 }

@@ -6,6 +6,7 @@ import { useNavigation } from '@react-navigation/native';
 import styles from '../styles/login.style';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 
+import { IP } from '../App';
 
 export default function Mypage () {
     const navigation = useNavigation();
@@ -21,7 +22,7 @@ export default function Mypage () {
     const access_token = await AsyncStorage.getItem('access_token');
     const data = { access_token:access_token };
   
-    fetch('http://192.168.0.111:5000/mypage', {
+    fetch(`http://${ IP }:5000/mypage`, {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',
@@ -32,7 +33,7 @@ export default function Mypage () {
     })
       .then((response) => response.json())
       .then (async (result) => {
-        console.log(result);
+
         setemail(result[0]['email']);
         setname(result[0]['name']);
         setPoint(result[0]['point']);
@@ -45,17 +46,18 @@ export default function Mypage () {
   // }
 
   return (
+    <View style = {{backgroundColor : 'white', flex:1}}>
       <PaperProvider theme={theme} >
-        <View style={{  display:'flex',justifyContent: 'center',alignItems: 'center',marginTop:"20%",borderWidth:2, borderColor:'darkgreen',borderRadius:20,
-            width:350,marginLeft:30}}>
+        <View style={{  display:'flex',justifyContent: 'center',alignItems: 'center',marginTop:"10%",borderWidth:2, borderColor:'darkgreen',borderRadius:20,
+            width:350, height : 600, marginLeft:30, backgroundColor : 'white'}}>
 
             <Image style={{ width: 150, height: 150 ,marginTop:20,borderRadius:100}} source={require('../static/img/pro_img.jpg')}/> 
-            <Text style={{fontSize:25, alignItems:'center',textAlign:'left',marginTop:25}}>{name}{'\n'} </Text>
+            <Text style={{fontSize:25, alignItems:'center',textAlign:'left',marginTop:25, color : 'black'}}>{name}{'\n'} </Text>
            <Divider style={{ borderWidth: 0.5,borderColor:'darkgreen' }} width={'90%'}/>
-           <Text style={{fontSize:25, alignItems:'center',textAlign:'left',marginBottom:60}}>
+           <Text style={{fontSize:25, alignItems:'center',textAlign:'left',marginBottom:40, color : 'black'}}>
            {'\n'}{email}{'\n'}
 
-           {'\n'}나의 포인트  {point}{'\n'}</Text>
+           {'\n'}나의 포인트 : {point}{'\n'}</Text>
 
 
               <View>
@@ -67,7 +69,7 @@ export default function Mypage () {
 
           </View>
       </PaperProvider>
-
+      </View>
   );
 };
 const theme = {
@@ -76,7 +78,6 @@ const theme = {
     colors: {
       ...DefaultTheme.colors,
       primary: '#30905B',
-      backgroundColor:'red' },
+      backgroundColor:'white' },
     
   };
-

@@ -4,6 +4,7 @@ import { TextInput, DefaultTheme,Provider as PaperProvider,Divider   } from 'rea
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import { useNavigation } from '@react-navigation/native';
 import styles from '../styles/login.style';
+import {IP} from '../App';
 
 
 export default function LoginUI ({ setHasToken}) {
@@ -23,7 +24,7 @@ export default function LoginUI ({ setHasToken}) {
 
     const data={email:email, password:password};
     
-      fetch('http://192.168.0.111:5000/signin', {
+      fetch(`http://${IP}:5000/signin`, {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
@@ -33,7 +34,6 @@ export default function LoginUI ({ setHasToken}) {
       })
         .then((response) => response.json())
         .then((result) => {
-          console.log('1111', result);
           
           if (result['access_token']){
             AsyncStorage.setItem('access_token',result['access_token']);

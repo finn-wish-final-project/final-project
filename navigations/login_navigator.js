@@ -10,7 +10,6 @@ const Stack = createStackNavigator();
 const StackNavigation = ({setHasToken}) => {
     return (
         <Stack.Navigator>
-            {/* <Stack.Screen name='loginUI' component={loginUI} /> */}
             <Stack.Screen name='LoginUI' options={{ headerShown: false }}>
             {props => <LoginUI {...props} setHasToken={setHasToken} />}
         </Stack.Screen>

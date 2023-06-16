@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React from 'react';
 import { useNavigation } from '@react-navigation/native';
 import { Text, View, ScrollView, Image, TouchableOpacity } from 'react-native';
 import styles from '../styles/Challenge.style'

@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { Text, View, Image, TouchableOpacity } from 'react-native';
+import { Text, View, Image, TouchableOpacity,StatusBar } from 'react-native';
 import styles from '../styles/Challenge_Category.style';
 import { useNavigation } from '@react-navigation/native';
 import { createStackNavigator } from '@react-navigation/stack';
@@ -18,7 +18,6 @@ import Challenge1_4 from './Challenge1_4';
 import Challenge2_1 from './Challenge2_1';
 import Challenge3_1 from './Challenge3_1';
 
-import Challenge_link1 from './Challenge_link1';
 
 const Stack = createStackNavigator();
 
@@ -72,6 +71,12 @@ const Challenge_Category = () => {
 
 const Challenge_Stack = () => {
   return (
+    <>
+    <StatusBar
+    translucent={true}
+    backgroundColor={'#ffffff'}
+    barStyle={'dark-content'}
+  />
     <Stack.Navigator>
       <Stack.Screen name="Home" component={Challenge_Category} options={{ headerShown: false }}/>
       <Stack.Screen name="Challenge" component={Challenge} options={{ headerShown: false }} />
@@ -90,9 +95,9 @@ const Challenge_Stack = () => {
       <Stack.Screen name="Challenge3_1" component={Challenge3_1} options={{ headerShown: false }} />
 
 
-      <Stack.Screen name="Challenge_link1" component={Challenge_link1} options={{ headerShown: false }} />
 
     </Stack.Navigator>
+    </>
   );
 };
 

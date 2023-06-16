@@ -1,17 +1,19 @@
 import { StyleSheet } from 'react-native';
 
 export default StyleSheet.create({
+  Container : {
+    backgroundColor : 'white'
+  },
   CardContainer: {
     elevation: 5, // 그림자
     borderRadius: 10,
-    // borderWidth: 0.5,
-    // borderColor: '#d6d7da', 
+
     margin: 20,
-    height : 130,
+    height : 160,
     backgroundColor : '#DBEDE3', //
     display:'flex',
     justifyContent: 'center',
-    // alignItems: 'center',
+
     overflow: 'visible'
   },
   CardTitle: {

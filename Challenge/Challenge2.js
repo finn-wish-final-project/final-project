@@ -1,17 +1,26 @@
-import React, { useState, useEffect } from 'react';
+import React from 'react';
 import { useNavigation } from '@react-navigation/native';
 import { Text, View, ScrollView, Image, TouchableOpacity } from 'react-native';
-import styles from '../styles/Challenge.style'
+import styles from '../styles/Challenge.style';
 
 const Challenge2 = () => {
   const navigation = useNavigation();
   return(
+    <>    
+    <TouchableOpacity style={{height:40,backgroundColor:'white',marginHorizontal:'5%',marginVertical:15,borderWidth:2,borderColor:'darkgreen',borderRadius:20,justifyContent:'center'}} 
+    onPress={() => navigation.navigate('BoardScreen_Invest')}>
+     <View >
+       <Text style={{textAlign:'center',fontWeight:'bold',color:'black',fontSize:20}} > 투자 게시판 바로가기</Text>
+     
+     </View>
+    
+   </TouchableOpacity>
     <ScrollView>
       <TouchableOpacity style={styles.ChallengeCardContainer} 
        onPress={() => navigation.navigate('Challenge2_1')}>
         <View style = {styles.ChallengeContainer1}>
           <Text style={styles.CardTitle}> 모의 투자 참가하기 </Text>
-          <Text style = {styles.Point}> 300🍀</Text>
+          <Text style = {styles.Point}> 200🍀</Text>
         </View>
         <View style = {styles.ChallengeContainer2}>
             <Image style = {styles.ChallengeImg} source = {require('../static/img/challenge2.jpg')} />
@@ -22,7 +31,7 @@ const Challenge2 = () => {
         </View>
       </TouchableOpacity>
     </ScrollView>
-
+</>
     )
 }
 

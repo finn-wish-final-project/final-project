@@ -1,13 +1,13 @@
 import React, { useState, useEffect } from 'react';
-import { StyleSheet, Text, View, ScrollView, Alert, Pressable,AsyncStorage } from 'react-native';
+import {  Text, View , Alert, AsyncStorage,StatusBar } from 'react-native';
 import { Button } from 'react-native-paper';
-import { useNavigation,NavigationContainer } from '@react-navigation/native';
+import { useNavigation } from '@react-navigation/native';
 import { createStackNavigator,TransitionPresets  } from '@react-navigation/stack';
 import Quiz2 from './Quiz2';
 import Quiz3 from './Quiz3';
 import Submit from './Submit';
-import styles from '../styles/Quiz.style';
-
+import styles from '../styles/Quiz.style'
+import { IP } from '../App';
 
 const Stack = createStackNavigator();
 
@@ -52,8 +52,8 @@ const Quiz = () => {
       try {
         const access_token = await AsyncStorage.getItem('access_token');
         const data = {userid:1};
-    
-        fetch('http://192.168.0.146:5000/home/quiz', {
+        
+        fetch(`http://${IP}:5000/home/quiz`, {
           method: 'POST',
           headers: {
             'Content-Type': 'application/json',
@@ -65,7 +65,6 @@ const Quiz = () => {
           .then((response) => response.json())
           .then((result) => {
             try{
-              console.log('2222', result);
             setData(result[0]['quiz']);
             setAnswer(result[0]['answer']);
             setCol1(result[0]['col1']);
@@ -78,11 +77,9 @@ const Quiz = () => {
           }  
           })
           .catch((error) => {
-            // console.log('@@@@@@@@@');
             console.error('Error:', error);
           });
       } catch (error) {
-        // console.log('!!!!!!!!');
         console.error('Error:', error);
       }
     };
@@ -90,22 +87,16 @@ const Quiz = () => {
 
 
   return(
-
+  //   <>
+  //   <StatusBar
+  //   translucent={true}
+  //   backgroundColor={'#ffffff'}
+  //   barStyle={'dark-content'}
+  // />
     <View style={styles.QuizEntireContainer}>
   <View style={styles.QuizContainer}>
     <Text style={styles.WordQuiz}> 단어 퀴즈 </Text>
     <Text style={styles.QuizContent}> 1.{Quiz} </Text>
-    {/* {answer.map((item,index) => (
-      <Text
-      style={[
-      styles.defaultAnswer,
-      selectedAnswer === 1 && styles.selectedAnswer
-      ]}
-      onPress={() => handleAnswerSelect(1)}
-    >
-      (1) {item} {index}
-    </Text>
-    ))} */}
 
     <Text
       style={[
@@ -159,7 +150,7 @@ const Quiz = () => {
   </View>
 </View>
 
-
+// </>
     );
 };
 
@@ -169,6 +160,12 @@ const Quiz = () => {
 
 const Quiz_Stack1 = () => {
     return (
+      <>
+      <StatusBar
+      translucent={true}
+      backgroundColor={'#ffffff'}
+      barStyle={'dark-content'}
+    />
         <Stack.Navigator 
         screenOptions={{
           headerShown: false,
@@ -180,7 +177,7 @@ const Quiz_Stack1 = () => {
             <Stack.Screen name="Quiz3" component={Quiz3}  options={{ headerShown: false }} />
             <Stack.Screen name="Submit" component={Submit}  options={{ headerShown: false }} />
         </Stack.Navigator>
-   
+   </>
     );
   };
 

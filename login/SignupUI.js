@@ -4,6 +4,7 @@ import { TextInput, DefaultTheme,Provider as PaperProvider   } from 'react-nativ
 import { useNavigation } from '@react-navigation/native';
 import { NavigationContainer } from "@react-navigation/native";
 import styles from '../styles/login.style';
+import {IP} from '../App';
 
 
 export default function SignupUI () {
@@ -28,7 +29,7 @@ export default function SignupUI () {
       phone: phone
     };
   
-    fetch('http://192.168.225.123:5000/signup', {
+    fetch(`http://${IP}:5000/signup`, {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',
@@ -40,7 +41,6 @@ export default function SignupUI () {
       .then (async (result) => {
         // 화원가입 완료
         if (result['msg']){
-          console.log('2222', result);
           alert(result['msg']);
           navigation.navigate('LoginUI'); // 회원가입 후 로그인화면 이동
         }
