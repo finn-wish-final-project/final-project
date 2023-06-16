@@ -30,9 +30,7 @@ export default StyleSheet.create({
     },
     scrollview:{
         flex:1,
-        backgroundColor:'black'
     },
-
     exampleContainer: {
         paddingVertical: 30,
     },

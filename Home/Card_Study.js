@@ -258,12 +258,7 @@ const Card_Study = () => {
               />
 
               {/* <View style="flex:1"> */}
-              <View
-                     style={styles.scrollview}
-                     scrollEventThrottle={100}
-                     directionalLockEnabled={false}
-                    
-                   >
+              <View style={styles.scrollview}>
                 { layoutExample(data1) }
               </View>
 

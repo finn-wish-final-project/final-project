@@ -69,13 +69,13 @@ export default function App() {
             activeTintColor: 'darkgreen',
             inactiveTintColor: 'gray',
           }}>
-        <Tab.Screen name="Dictionary" component={TabNavigator2} options={{ headerShown: false }}/>
-        <Tab.Screen  name="Home" component={TabNavigator1} options={{ headerShown: false }} />
-        <Tab.Screen name="Quiz" component={TabNavigator4} options={{ headerShown: false }} />
-        <Tab.Screen name="Challenge" component={TabNavigator3} options={{ headerShown: false }} />
+        <Tab.Screen name="Dictionary" component={TabNavigator2} options={{ unmountOnBlur: true, headerShown: false }}/>
+        <Tab.Screen  name="Home" component={TabNavigator1} options={{ unmountOnBlur: true, headerShown: false }} />
+        <Tab.Screen name="Quiz" component={TabNavigator4} options={{ unmountOnBlur: true, headerShown: false }} />
+        <Tab.Screen name="Challenge" component={TabNavigator3} options={{ unmountOnBlur: true, headerShown: false }} />
       </Tab.Navigator>
         ):(
-          // access_token이 없는 경우, 비인증 컴포넌트를 표시
+          // access_token이 없는 경우, 비인증 컴포넌트를 표시 
           <StackNavigation setHasToken={setHasToken}/>
         )}      
       </NavigationContainer>

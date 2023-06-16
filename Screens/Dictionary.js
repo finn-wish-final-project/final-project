@@ -1,9 +1,9 @@
 import React, { useState, useEffect } from 'react';
-import { StyleSheet, Text, View, ScrollView, AsyncStorage } from 'react-native';
+import { StyleSheet, Text, View, ScrollView, AsyncStorage, StatusBar } from 'react-native';
 import styles from '../styles/Dictionary.style'
 import { IP } from '../App';
 
-const CardView = () => {
+const CardView = () => {  
   const [data1,setData] = useState([]);
 
   useEffect(() => {
@@ -45,6 +45,12 @@ const CardView = () => {
   
 
   return(
+    <>
+    <StatusBar
+                translucent={true}
+                backgroundColor={'#ffffff'}
+                barStyle={'dark-content'}
+              />
     <ScrollView>
       {data1.map((entry, index) => (
         <View style={styles.CardContainer} key={index}>
@@ -53,6 +59,7 @@ const CardView = () => {
         </View>
       ))}
     </ScrollView>
+    </>
     )
 }
 
