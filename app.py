@@ -302,24 +302,26 @@ def save_word() :
 
   connection= pymysql.connect(host=host, user=user, password=password, database=database)
   conn=connection.cursor(pymysql.cursors.DictCursor)
-  query=f'select dict from useract where userid="{cur_user}";'
+  query=f'select point,dict from useract where userid="{cur_user}";'
   conn.execute(query)
   result=conn.fetchall()
 
   dict_list=result[0]['dict']
+  point=result[0]['point']
 
   if dict_list==None:
-    query2=f'update useract set dict="{word_data}" where userid={cur_user};'
+    query2=f'update useract set dict="{word_data}",point={30} where userid={cur_user};'
     conn.execute(query2)
     connection.commit()
     connection.close()
     return jsonify(msg="단어가 사전에 저장되었습니다.")
   else:
+    point=point+30
     dict_list=ast.literal_eval(dict_list)
     update_dict_list=dict_list+word_data
     update_dict_list=set(update_dict_list)
     update_dict_list=list(update_dict_list)
-    query1=f'update useract set dict="{update_dict_list}" where userid={cur_user};'
+    query1=f'update useract set dict="{update_dict_list}",point={point} where userid={cur_user};'
     conn.execute(query1)
     connection.commit()
     connection.close()
@@ -519,7 +521,8 @@ def app_home():
     # print(result_word)
     return jsonify(result_word)
   else:
-    dict_list=int(result[0]['dict'][-2])
+    dict_list=ast.literal_eval(result[0]['dict'])
+    dict_list=dict_list[-1]
     query2=f'select title,subtitle from dict where wordid>{dict_list} limit 3;'
     conn.execute(query2)
     result_word=conn.fetchall()
