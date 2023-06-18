@@ -13,6 +13,9 @@ import StackNavigation from './navigations/login_navigator';
 
 export const IP = '192.168.0.111';
 
+console.disableYellowBox = true;
+console.warn = () => {};
+
 
 const Tab = createBottomTabNavigator();
 // AsyncStorage.clear()
