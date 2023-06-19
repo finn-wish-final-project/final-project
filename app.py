@@ -4,32 +4,104 @@ from flask_jwt_extended import JWTManager, create_access_token
 from flask_jwt_extended import jwt_required,get_jwt_identity
 import pymysql
 from datetime import timedelta
+from dotenv import load_dotenv
+import os
 
 from validation import *
 
-default_image = './default_image.png'
+load_dotenv()
 
 app = Flask(__name__)
-# jsonify 한글 인코딩이 변경되어 비정상 출력 문제 해결 코드
 app.config['JSON_AS_ASCII'] = False
-
-app.config['JWT_SECRET_KEY'] = 'SECRET_KEY'
-app.config['JWT_ACCESS_TOKEN_EXPIRES'] = timedelta(hours=1)
+# jsonify 한글 인코딩이 변경되어 비정상 출력 문제 해결 코드
+app.config['JWT_SECRET_KEY'] = os.environ.get('JWT_SECRET_KEY')
+# JWT 암호화에 사용할 키 설정
+app.config['JWT_ACCESS_TOKEN_EXPIRES'] = timedelta(hours=2)
 # JWT 토큰의 만료 시간 설정
+app.config['BCRYPT_LEVEL'] = 10 # 기본값
+# Bcrypt 사용 시 해시 함수 작업량 10 설정하여 비밀번호 보안 강화 역할
 
-app.config['BCRYPT_LEVEL'] = 10
-
+HOST = os.environ.get('HOST')
+USER = os.environ.get('USER')
+PASSWD = os.environ.get('PASSWD')
+DATABASE = os.environ.get('DB')
+CHARSET = os.environ.get('CHARSET')
+PORT = 3306
 bcrypt = Bcrypt(app)
 jwt = JWTManager(app)
+
+default_image = './default_image.png'
+
+# 퀴즈 풀면 사전에 저장하는 기능
+@app.route('/quiz/save', methods=['GET','POST'])
+@jwt_required()
+def quiz_save():
+    word_data = request.get_json()
+    print(word_data)
+    save_word =  [item['WORD_NUM'] for item in word_data]
+    print(save_word)
+    current_user = get_jwt_identity()
+    connection = pymysql.connect(host=HOST, port=PORT, db=DATABASE, user=USER, passwd=PASSWD, charset=CHARSET)      
+    cursor = connection.cursor(pymysql.cursors.DictCursor)
+
+    dict_sql = f'SELECT USER_DICT FROM USER_ACT WHERE USER_NUM={current_user}'
+    cursor.execute(dict_sql)
+    dict_data = cursor.fetchall()
+
+    if dict_data[0]['USER_DICT'] == None:
+        save_sql = f'UPDATE USER_ACT SET USER_DICT = "{save_word}" WHERE USER_NUM={current_user}'
+        cursor.execute(save_sql)
+        connection.commit()
+        connection.close()     
+        return jsonify({"message": "정답입니다~"})   
+    else:
+        print(dict_data[0])
+        print(dict_data[0]['USER_DICT'])
+        list_dict = dict_data[0]['USER_DICT']
+        print(list_dict)
+        print(save_word)
+        add_data = eval(list_dict) + save_word
+        add_sql = f'UPDATE USER_ACT SET USER_DICT = "{add_data}" WHERE USER_NUM={current_user}'  
+        cursor.execute(add_sql)
+        connection.commit()
+        connection.close()
+        return jsonify({"message": "정답입니다~~"})    
+
+# 뉴스 스크랩 하면 스크랩에 저장하는 기능
+@app.route('/news/save', methods=['GET','POST'])
+@jwt_required()
+def news_save():
+    news_data = request.get_json()
+    save_news=  news_data[0]['NEWS_NUM']
+    current_user = get_jwt_identity()
+    connection = pymysql.connect(host=HOST, port=PORT, db=DATABASE, user=USER, passwd=PASSWD, charset=CHARSET)      
+    cursor = connection.cursor(pymysql.cursors.DictCursor)
+
+    dict_sql = f'SELECT USER_SCRAP FROM USER_ACT WHERE USER_NUM={current_user}'
+    cursor.execute(dict_sql)
+    dict_data = cursor.fetchall()
+
+    if dict_data[0]['USER_SCRAP'] == None:
+        save_sql = f'UPDATE USER_ACT SET USER_SCRAP = "{save_news}" WHERE USER_NUM={current_user}'
+        cursor.execute(save_sql)
+        connection.commit()
+        connection.close()     
+        return jsonify({"message": "뉴스가 스크랩 되었습니다."})   
+    else:
+        add_data = [dict_data[0]['USER_SCRAP']] + save_news
+        add_sql = f'UPDATE USER_ACT SET USER_SCRAP = "{add_data}" WHERE USER_NUM={current_user}'  
+        cursor.execute(add_sql)
+        connection.commit()
+        connection.close()
+        return jsonify({"message": "뉴스가 스크랩 되었습니다."})   
 
 # 유저의 MYPAGE 데이터 모음 기능 구현 - USER_NAME, USER_POINT ...
 @app.route('/mypage', methods=['POST'])
 @jwt_required()
 def mypage():
     current_user = get_jwt_identity()
-    connection = pymysql.connect(host='localhost', port=3306, db='finnwish', user='root', passwd='1807992102', charset='utf8')
+    connection = pymysql.connect(host=HOST, port=PORT, db=DATABASE, user=USER, passwd=PASSWD, charset=CHARSET)
     cursor = connection.cursor(pymysql.cursors.DictCursor)
-
     join_sql = f"""SELECT USER_LOGIN.*, USER_ACT.* FROM USER_LOGIN 
     INNER JOIN USER_ACT ON USER_LOGIN.USER_NUM = USER_ACT.USER_NUM WHERE USER_LOGIN.USER_NUM={current_user}"""
     cursor.execute(join_sql)
@@ -52,27 +124,26 @@ def mypage():
 # 퀴즈 문제 던져주는 기능 구현
 @app.route('/quiz', methods=['GET','POST'])
 @jwt_required()
-def quiz_save():
+def send_quiz():
     current_user = get_jwt_identity()
-    connection = pymysql.connect(host='localhost', port=3306, db='finnwish', user='root', passwd='1807992102', charset='utf8')
+    connection = pymysql.connect(host=HOST, port=PORT, db=DATABASE, user=USER, passwd=PASSWD, charset=CHARSET)
     cursor = connection.cursor(pymysql.cursors.DictCursor)
 
-    quiz_sql = f'SELECT QUIZ, ANSWER FROM DICTIONARY WHERE WORD_NUM={current_user}'
-    cursor.execute(quiz_sql)
-    quiz_data = cursor.fetchall()
-    print(quiz_data)
-    return jsonify(quiz_data)
-
-    if word_data[0]['USER_DICT'] == None:
-        dict_sql = 'SELECT WORD_NUM, WORD, EXPLAINATION FROM DICTIONARY LIMIT 3;'
-        cursor.execute(dict_sql)
+    
+    sql = f'SELECT USER_DICT FROM USER_ACT WHERE USER_NUM={current_user}'
+    cursor.execute(sql)
+    data = cursor.fetchall()
+    
+    if data[0]['USER_DICT'] == None:
+        quiz_sql = 'SELECT WORD_NUM, QUIZ, ANSWER FROM DICTIONARY LIMIT 3;'
+        cursor.execute(quiz_sql)
         result = cursor.fetchall()
         connection.close()
         return jsonify(result)
     else:
-        max_word = word_data[0]['USER_DICT'][-2]
-        add_sql = f"SELECT WORD, EXPLAINATION FROM DICTIONARY WHERE WORD_NUM > {max_word} LIMIT 3;"
-        cursor.execute(add_sql)
+        max_quiz = data[0]['USER_DICT'][-2]
+        quiz_sql2 = f"SELECT WORD_NUM, QUIZ, ANSWER FROM DICTIONARY WHERE WORD_NUM > {max_quiz} LIMIT 3;"
+        cursor.execute(quiz_sql2)
         result = cursor.fetchall()
         connection.close()
         return jsonify(result)
@@ -87,7 +158,7 @@ def quiz_save():
 def home_news():
     current_user = get_jwt_identity()
 
-    connection = pymysql.connect(host='localhost', port=3306, db='finnwish', user='root', passwd='1807992102', charset='utf8')
+    connection = pymysql.connect(host=HOST, port=PORT, db=DATABASE, user=USER, passwd=PASSWD, charset=CHARSET)
     cursor = connection.cursor(pymysql.cursors.DictCursor)
 
     news_sql = f'SELECT USER_SCRAP FROM USER_ACT WHERE USER_NUM={current_user};'
@@ -95,14 +166,15 @@ def home_news():
     news_data = cursor.fetchall()
     # print(news_data) # [{'USER_SCRAP': None}]
     if news_data[0]['USER_SCRAP'] == None:
-        news_sql = 'SELECT NEWS_TITLE, ARTICLE, NEWS_IMAGE FROM NEWS LIMIT 1;'
+        news_sql = 'SELECT NEWS_NUM, NEWS_TITLE, ARTICLE, NEWS_IMAGE FROM NEWS LIMIT 1;'
         cursor.execute(news_sql)
         result = cursor.fetchall()
+        print(result)
         connection.close()
         return jsonify(result)
     else:
         max_word = news_data[0]['USER_SCRAP'][-2]
-        add_sql = f"SELECT NEWS_TITLE, ARTICLE, NEWS_IMAGE FROM NEWS WHERE NEWS_NUM > {max_word} LIMIT 1;"
+        add_sql = f"SELECT NEWS_NUM, NEWS_TITLE, ARTICLE, NEWS_IMAGE FROM NEWS WHERE NEWS_NUM > {max_word} LIMIT 1;"
         cursor.execute(add_sql)
         result = cursor.fetchall()
         connection.close()
@@ -115,22 +187,22 @@ def home_news():
 def home_word():
     current_user = get_jwt_identity()
 
-    connection = pymysql.connect(host='localhost', port=3306, db='finnwish', user='root', passwd='1807992102', charset='utf8')
+    connection = pymysql.connect(host=HOST, port=PORT, db=DATABASE, user=USER, passwd=PASSWD, charset=CHARSET)
     cursor = connection.cursor(pymysql.cursors.DictCursor)
 
     word_sql = f'SELECT USER_DICT FROM USER_ACT WHERE USER_NUM={current_user};'
     cursor.execute(word_sql)
     word_data = cursor.fetchall()
-
+    
     if word_data[0]['USER_DICT'] == None:
-        dict_sql = 'SELECT WORD_NUM, WORD, EXPLAINATION FROM DICTIONARY LIMIT 3;'
+        dict_sql = 'SELECT WORD_NUM, WORD_NUM, WORD, EXPLAINATION FROM DICTIONARY LIMIT 3;'
         cursor.execute(dict_sql)
         result = cursor.fetchall()
         connection.close()
         return jsonify(result)
     else:
         max_word = word_data[0]['USER_DICT'][-2]
-        add_sql = f"SELECT WORD, EXPLAINATION FROM DICTIONARY WHERE WORD_NUM > {max_word} LIMIT 3;"
+        add_sql = f"SELECT WORD_NUM, WORD, EXPLAINATION FROM DICTIONARY WHERE WORD_NUM > {max_word} LIMIT 3;"
         cursor.execute(add_sql)
         result = cursor.fetchall()
         connection.close()
@@ -153,7 +225,7 @@ def signup():
     
     # 유효성 검사 
     if email_validation(user_id) and email_overlap(user_id) and pw_validation(user_pw) and name_validation(user_name) and birth_validation(user_birth) and phone_validation(user_phone):
-        connection = pymysql.connect(host='localhost', port=3306, db='finnwish', user='root', passwd='1807992102', charset='utf8')
+        connection = pymysql.connect(host=HOST, port=PORT, db=DATABASE, user=USER, passwd=PASSWD, charset=CHARSET)
         # pymysql.connect : MySQL 데이터베이스에 연결
         cursor = connection.cursor(pymysql.cursors.DictCursor)
         # connection.cursor : 연결된 데이터베이스에 대한 커서 객체 생성
@@ -194,9 +266,8 @@ def signup():
 # 로그인 API 엔드포인트
 @app.route('/login', methods=['POST'])
 def login():
-    connection = pymysql.connect(host='localhost', port=3306, db='finnwish', user='root', passwd='1807992102', charset='utf8')
+    connection = pymysql.connect(host=HOST, port=PORT, db=DATABASE, user=USER, passwd=PASSWD, charset=CHARSET)
     cursor = connection.cursor(pymysql.cursors.DictCursor)
-
     data = request.get_json()
     user_id = data['EMAIL']
     user_pw = data['PASSWORD']
@@ -242,7 +313,7 @@ def login():
         return jsonify({'message': '아이디를 다시 입력해주세요.'})
     # jsonify 함수는 키-값 쌍을 가진 딕셔너리를 인자로 받아 JSON 형식으로 반환해주는 함수
 if __name__ == "__main__":
-    app.run(host='localhost', port='5000', debug=True)
+    app.run(host='localhost', port=5000, debug=True)
 ## 이거는 마지막에서만 선언
 
 # 코드를 작성한 파일을 실행하거나 flask run 명령을 사용하여 Flask 애플리케이션을 실행합니다.
@@ -250,3 +321,4 @@ if __name__ == "__main__":
 # 회원가입에는 POST 요청을 /signup 엔드포인트로 보내고 필요한 데이터를 JSON 형식으로 전송합니다.
 # 로그인에는 POST 요청을 /login 엔드포인트로 보내고 필요한 데이터를 JSON 형식으로 전송합니다.
 # 각 API 엔드포인트는 요청을 받아 처리하고 응답으로 JSON 데이터를 반환합니다. 응답을 확인하여 예상된 메시지가 올바르게 반환되는지 확인할 수 있습니다.
+
