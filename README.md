@@ -2,7 +2,7 @@
 
 <div align=center>
 	<h3>:raised_hands: Introduction</h3>
-	<h5>안녕하십니까!ㅣ<br>
+	<h5>안녕하십니까!<br>
 	금융을 뜻하는 FINANCE와 소망을 뜻하는 WISH를 합쳐<br>
 	청소년들이 금융 교육을 통해 목표에 도달할 수 있도록 학습친구 FINNWISH입니다.<br>
 	저희 앱은 이론 공부와 금융 활동을 병행할 수 있는 참여유도형 앱입니다.<br>
