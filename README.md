@@ -35,6 +35,6 @@
 </div>
 
 
-![finnwish-포스터](https://github.com/finn-wish-final-project/final-project/assets/99310356/6411a245-1d7e-4cd3-9231-128675f67505)
+![finnwish-포스터](https://github.com/finn-wish-final-project/final-project/assets/99310356/2d0a8de8-9129-44d6-8a07-945328e48928)
 
 
