@@ -30,4 +30,11 @@
 	<img src="https://img.shields.io/badge/jupyter-F37626?style=flat&logo=jupyter&logoColor=white" />
 	<img src="https://img.shields.io/badge/Scikitlearn-F7931E?style=flat&logo=scikitlearn&logoColor=white" />
 	<img src="https://img.shields.io/badge/Postman-FF6C37?style=flat&logo=postman&logoColor=white" />
+	<br>
+	<br>
 </div>
+
+
+![finnwish-포스터](https://github.com/finn-wish-final-project/final-project/assets/99310356/6411a245-1d7e-4cd3-9231-128675f67505)
+
+
