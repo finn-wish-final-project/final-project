@@ -10,15 +10,22 @@ import TabNavigator3 from './navigations/tab_navigator3';
 import TabNavigator4 from './navigations/tab_navigator4';
 import Loading from './login/Loading';
 import StackNavigation from './navigations/login_navigator';
+// import QRCode from 'react-native-qrcode-svg';
 
 
-export const IP = '192.168.0.111';
+
+export const IP = '192.168.0.171';
+
+console.disableYellowBox = true;
+console.warn = () => {};
 
 const Tab = createBottomTabNavigator();
 
 export default function App() {
   const [loading, setLoading] = useState(true);
   const [hasToken, setHasToken] = useState('');
+
+  // const appSchema = 'finnwish://host.finance.com/app'; // 앱의 스키마
 
   useEffect(() => {
     // 3초 후에 로딩 상태를 false로 변경

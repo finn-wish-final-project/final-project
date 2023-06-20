@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { useNavigation } from '@react-navigation/native';
-import { Text,  ScrollView} from 'react-native';
+import { Text, View, ScrollView, Image, TouchableOpacity } from 'react-native';
 import styles from '../styles/Challenge_Recommend.style'
 import Challenge1_1 from './Challenge1_1';
 import Challenge1_2 from './Challenge1_2';
@@ -9,7 +9,7 @@ import Challenge1_4 from './Challenge1_4';
 import Challenge2_1 from './Challenge2_1';
 import Challenge3_1 from './Challenge3_1';
 import AsyncStorage from '@react-native-async-storage/async-storage';
-
+import { IP } from '../App';
 
 const Challenge_Recommend = () => {
   const navigation = useNavigation();
@@ -25,7 +25,7 @@ const Challenge_Recommend = () => {
         const access_token = await AsyncStorage.getItem('access_token');
         const data = {userid : access_token};
     
-        fetch('http://192.168.0.111:5000/challenge', {
+        fetch(`http://${IP}:5000/challenge`, {
           method: 'POST',
           headers: {
             'Content-Type': 'application/json',
@@ -37,6 +37,7 @@ const Challenge_Recommend = () => {
           .then((response) => response.json())
           .then((result) => {
             const { username, chalid } = result;
+            console.log('뭐받옴', result)
             setName(username);
             setChalid(chalid)
           })

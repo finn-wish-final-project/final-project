@@ -232,7 +232,7 @@ const sendData_show = async () => {
     <View style={{backgroundColor:'white',flex:1}}>
     <View style={styles.container}>
     <View style={{justifyContent:'center',alignItems:'center'}}>
-      <Text style={styles.title}> 투자 챌린지 게시판</Text>
+      <Text style={styles.title}> 저축 챌린지 게시판</Text>
       </View>
 
       <FlatList

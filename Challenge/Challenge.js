@@ -38,7 +38,7 @@ const Challenge = () => {
        onPress={() => navigation.navigate('Challenge1_2')}>
         <View style = {styles.ChallengeContainer1}>
           <Text style={styles.CardTitle}> 우물 안 개구리 벗어나기 </Text>
-          <Text style = {styles.Point}> 1000🍀</Text>
+          <Text style = {styles.Point}> 500🍀</Text>
         </View>
         <View style = {styles.ChallengeContainer2}>
             <Image style = {styles.ChallengeImg} source = {require('../static/img/challenge1_1.jpg')} />
@@ -53,7 +53,7 @@ const Challenge = () => {
        onPress={() => navigation.navigate('Challenge1_3')}>
         <View style = {styles.ChallengeContainer1}>
           <Text style={styles.CardTitle}> 효도 챌린지 </Text>
-          <Text style = {styles.Point}> 300🍀</Text>
+          <Text style = {styles.Point}> 500🍀</Text>
         </View>
         <View style = {styles.ChallengeContainer2}>
             <Image style = {styles.ChallengeImg} source = {require('../static/img/challenge1_2.jpg')} />
@@ -69,7 +69,7 @@ const Challenge = () => {
        onPress={() => navigation.navigate('Challenge1_4')}>
         <View style = {styles.ChallengeContainer1}>
           <Text style={styles.CardTitle}> 내 집 마련하자 </Text>
-          <Text style = {styles.Point}> 300🍀</Text>
+          <Text style = {styles.Point}> 100🍀</Text>
         </View>
         <View style = {styles.ChallengeContainer2}>
             <Image style = {styles.ChallengeImg} source = {require('../static/img/challenge1_4.jpg')} />
